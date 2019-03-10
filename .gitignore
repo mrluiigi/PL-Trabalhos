@@ -1,3 +1,5 @@
 # Don't track content of these folders
 citacoes
-lex.yy.c
+proverbios
+lex1.yy.c
+lex2.yy.c
