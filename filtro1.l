@@ -22,7 +22,7 @@ GSList* lista = NULL;
 											lista = g_slist_prepend(lista, yytext);
 
 										}
-<*>.|\next								{;}
+<*>.|\n							{;}
 
 %%
 
