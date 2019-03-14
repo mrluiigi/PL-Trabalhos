@@ -3,36 +3,61 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-GSList* lista = NULL;
+GSList* lista;
+GSList* auxQ;
+char* str = "";
+char* nome = "";
+
+typedef struct{
+	char* autor;
+	GSList* citacoes;
+} QuotesAuthor;
+
 %}
 
 %x PAGE
+%x QUOT
 
 %%
-"<page>"								{BEGIN PAGE;}
+"<page>"								{	BEGIN PAGE;}
 
-<PAGE></page>							{BEGIN INITIAL;}
+<PAGE><\/page>							{	
+											QuotesAuthor* qa = (QuotesAuthor*)malloc(sizeof(QuotesAuthor));
+											qa->autor = nome;
+											qa->citacoes = auxQ;
+											lista = g_slist_append(lista, qa);
+											qa = NULL;
+											BEGIN INITIAL;
+										}
+								
 <PAGE>"Author:"[^\n]+					{	
 											yytext[yyleng-1] = '\0';
-											printf("%s\n", yytext+7);
+											nome = malloc(strlen(yytext-7)+1);
+											strcpy(nome, yytext+7);
 										}
-<PAGE>[&]"quot"[;].+[&]"quot"[;]		{
-											yytext[yyleng-6] = '\0';
-											printf("%s\n", yytext+6);
-											lista = g_slist_prepend(lista, yytext);
 
-										}
-<*>.|\n							{;}
+<PAGE>"&quot;"							{BEGIN QUOT;}
+<QUOT>"&quot;"							{BEGIN PAGE;}
+
+<QUOT>[|]								{printf(" ");}
+<QUOT>"["|"]"|"'''"		 				{;}
+<QUOT>.|\n 								{ECHO;}
+
+
+
+<*>.|\n									{;}
 
 %%
 
-//ACABAR PARTE DE INSERIR NA LISTA
 
 void showList(){
-	GSList *l;
+	GSList *l, *t;
 	for(l = lista; l; l = l->next){
-		char *s = (char *) l->data;
-		printf("%s\n", s);
+		QuotesAuthor *q = (QuotesAuthor*) l->data;
+		printf("AUTOR: %s\nCITAÇÕES: \n", q->autor);
+		for(t = q->citacoes; t; t = t->next){
+			printf("-->%s\n", (char*) t->data);
+		}
 	}
 }
 
@@ -42,6 +67,8 @@ int yywrap(){
 }
 
 int main(){
+	lista = NULL;
+	auxQ = NULL;
 	yylex();
 	//showList();
 	return 0;
