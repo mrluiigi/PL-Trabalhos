@@ -5,8 +5,13 @@
 
 GSList* lista;
 GSList* auxQ;
-char* str = "";
+
+char str[1];
 char* nome = "";
+
+char* imprime = "";
+
+char* quote;
 
 typedef struct{
 	char* autor;
@@ -19,16 +24,10 @@ typedef struct{
 %x QUOT
 
 %%
-"<page>"								{	BEGIN PAGE;}
+"<page>"								{
+											printf("InicioPage\n");
+											BEGIN PAGE;}
 
-<PAGE><\/page>							{	
-											QuotesAuthor* qa = (QuotesAuthor*)malloc(sizeof(QuotesAuthor));
-											qa->autor = nome;
-											qa->citacoes = auxQ;
-											lista = g_slist_append(lista, qa);
-											qa = NULL;
-											BEGIN INITIAL;
-										}
 								
 <PAGE>"Author:"[^\n]+					{	
 											yytext[yyleng-1] = '\0';
@@ -36,14 +35,51 @@ typedef struct{
 											strcpy(nome, yytext+7);
 										}
 
-<PAGE>"&quot;"							{BEGIN QUOT;}
-<QUOT>"&quot;"							{BEGIN PAGE;}
 
+<PAGE>\*" "*"'"*"&quot;"				{	
+											printf("InicioQuote\n");
+											BEGIN QUOT;
+										}
+
+
+<PAGE><\/page>							{	
+											printf("FimPage\n");
+											QuotesAuthor* qa = (QuotesAuthor*)malloc(sizeof(QuotesAuthor));
+											qa->autor = nome;
+											qa->citacoes = auxQ;
+											lista = g_slist_append(lista, qa);
+											qa = NULL;
+
+											QuotesAuthor* teste = (QuotesAuthor*)malloc(sizeof(QuotesAuthor));
+											teste = lista->data;
+											
+
+											GSList* quotes = malloc(sizeof(teste->citacoes));
+											quotes = teste->citacoes;
+											while(quotes != NULL){
+												printf("quotes: %s\n", (char*)quotes->data);
+												printf("autor: %s\n", teste->autor);
+												quotes = quotes->next;
+											}
+											printf("123\n");
+											BEGIN INITIAL;
+										}
+
+<QUOT>"&quot;"							{
+											//printf("FimQuote\n %s\n", quote);
+											auxQ = g_slist_append (auxQ, quote);
+											quote = malloc(10000);
+											BEGIN PAGE;
+										}
+										
 <QUOT>[|]								{printf(" ");}
+
 <QUOT>"["|"]"|"'''"		 				{;}
-<QUOT>.|\n 								{ECHO;}
 
-
+<QUOT>.|\n								{ 
+											strcpy(str, yytext);
+											strcat(quote, str); 
+										}
 
 <*>.|\n									{;}
 
@@ -67,6 +103,7 @@ int yywrap(){
 }
 
 int main(){
+	quote = malloc(10000);
 	lista = NULL;
 	auxQ = NULL;
 	yylex();
