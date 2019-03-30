@@ -1,4 +1,4 @@
-<page>
+  <page>
     <title>Martin Luther King Junior</title>
     <ns>0</ns>
     <id>23</id>

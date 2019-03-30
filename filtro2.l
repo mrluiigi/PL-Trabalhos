@@ -4,23 +4,58 @@
 #include <stdlib.h>
 
 //INDICAR LISTA ONDE SE VAI POR OS PROVERBIOS
+GSList* listaProverbios;
+GSList* auxProverbios;
+
+char str[1];
+char* proverbio;
+
 
 %}
 
-%x STR
+%x PAGE
+%x PROVERBIO
 
 %%
 
 "<title>Provérbios".+"</title>"	{
 									yytext[yyleng-8] = '\0';
 									printf("%s\n", yytext+7);
-									BEGIN STR;
+									BEGIN PAGE;
 								}
-<STR>"</page"					{	BEGIN INITIAL;}
-<STR>[*].+[\n]					{
-									yytext[yyleng-2] = '\0';
-									printf("%s\n", yytext+2);	
-}
+
+
+<PAGE><\/page>					{										
+									while(listaProverbios != NULL){
+										printf("Provérbio: %s\n", (char*)listaProverbios->data);
+										listaProverbios = listaProverbios->next;
+									}
+										
+									BEGIN INITIAL;
+								}
+				
+
+<PAGE>\*+" "*"'"*"&quot;"		{
+									BEGIN PROVERBIO;
+								}
+
+
+<PROVERBIO>.					{
+									strcpy(str, yytext);
+									strcat(proverbio, str);
+								}
+
+
+<PROVERBIO>"["+|"]"+			{;}
+<PROVERBIO>"'"+					{;}
+<PROVERBIO>" "*"'"*"&quot;"		{;}
+
+
+<PROVERBIO>\n					{
+									listaProverbios = g_slist_append (listaProverbios, proverbio);
+									proverbio = malloc(10000);
+									BEGIN PAGE;
+								}								
 
 <*>.|\n							{;}
 
@@ -34,6 +69,8 @@ int yywrap(){
 }
 
 int main(){
+	proverbio = malloc(100000);
+	listaProverbios = NULL;
 	yylex();
 	return 0;
 }
