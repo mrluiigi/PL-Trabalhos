@@ -67,16 +67,18 @@ typedef struct{
 											BEGIN INITIAL;
 										}
 
-<QUOT>"&quot;"|\n						{
+<QUOT>"&quot;"|\n|"[https://"			{
 											//printf("FimQuote\n %s\n", quote);
 											auxQuote = g_slist_append (auxQuote, quote);
 											quote = malloc(10000);
 											BEGIN PAGE;
 										}
-										
-<QUOT>[|]								{printf(" ");}
 
-<QUOT>"["|"]"|"'''"		 				{;}
+<QUOT>"&lt".*"&gt;".*"&lt;".*"&gt;"		{;}
+
+<QUOT>[|]								{strcat(quote," ");}
+
+<QUOT>"["|"]"|"'"*						{;}
 
 <QUOT>.									{
 											strcpy(str, yytext);
