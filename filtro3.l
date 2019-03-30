@@ -3,66 +3,98 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//INDICAR LISTA ONDE SE VAI POR OS PROVERBIOS
-GSList* listaAdulterados;
+GSList* listaAdulteracoes;
+GSList* auxAdulterado;
 
 char str[1];
-char* original;
-char* anterior;
+char* proverbio;
 char* adulterado;
 
+typedef struct{
+	char* original;
+	GSList* adulterados;
+} Adulteracao;
 
 %}
 
-%x 
-%x 
+%x PAGE
+%x ADULTERACAO
+%x QUOT
+%x PROVERBIO
 
 %%
 
 "<title>Provérbios".+"</title>"	{
-									yytext[yyleng-8] = '\0';
-									printf("%s\n", yytext+7);
 									BEGIN PAGE;
 								}
 
-
-<PAGE><\/page>					{										
-									
-								}
-				
-
-<PAGE>\*+" "*"'"*"&quot;"		{
-									
+<PAGE><\/page>					{
+									BEGIN INITIAL;
 								}
 
-
-<PROVERBIO>.					{
-									
+<PAGE>^"*"" "*"&quot;"			{
+									proverbio = malloc(100000);
+									BEGIN PROVERBIO;
 								}
 
+<PAGE>"'''Adulteração:'''"		{
+									BEGIN ADULTERACAO;
+								}
 
-<PROVERBIO>"["+|"]"+			{;}
-<PROVERBIO>"'"+					{;}
-<PROVERBIO>" "*"'"*"&quot;"		{;}
+<PROVERBIO>"&quot;"|\n			{	
+									BEGIN PAGE;
+								}
 
+<PROVERBIO>[^&]*				{
+									strcpy(proverbio, yytext);
+								}
 
-<PROVERBIO>\n					{
-									
-								}								
+<ADULTERACAO>^"*"" "*			{	
+									Adulteracao* ad = (Adulteracao*)malloc(sizeof(Adulteracao));
+									ad->original = proverbio;
+
+									ad->adulterados = auxAdulterado;
+									listaAdulteracoes = g_slist_append(listaAdulteracoes, ad);
+									auxAdulterado = NULL;
+									BEGIN PAGE;
+								}
+
+<ADULTERACAO>^"***"" "*"&quot;"	{
+									adulterado = malloc(100000);
+									BEGIN QUOT;
+								}
+
+<QUOT>"&quot;"|\n				{	
+									auxAdulterado = g_slist_append (auxAdulterado, adulterado);
+									BEGIN ADULTERACAO;
+								}
+
+<QUOT>[^&]* 					{
+									strcpy(adulterado, yytext);
+								}
 
 <*>.|\n							{;}
 
 %%
 
-
+void showList(){
+	GSList *l, *t;
+	for(l = listaAdulteracoes; l; l = l->next){
+		Adulteracao *q = (Adulteracao*) l->data;
+		printf("Original: %s\n", q->original);
+		for(t = q->adulterados; t; t = t->next){
+			printf("	%s\n", (char*) t->data);
+		}
+	}
+}
 
 int yywrap(){
 	return 1;
 }
 
 int main(){
-	proverbio = malloc(100000);
-	listaProverbios = NULL;
+	auxAdulterado = NULL;
 	yylex();
+	showList();
 	return 0;
 }
