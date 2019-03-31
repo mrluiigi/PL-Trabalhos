@@ -6,15 +6,15 @@
 GSList* lista;
 GSList* auxQuote;
 
-char str[1];
-char* nome = "";
+gchar str[1];
+gchar* nome = "";
 
-char* imprime = "";
+gchar* imprime = "";
 
-char* quote;
+gchar* quote;
 
 typedef struct{
-	char* autor;
+	gchar* autor;
 	GSList* citacoes;
 } QuotesAuthor;
 
@@ -31,18 +31,19 @@ typedef struct{
 								
 <PAGE>"Author:"[^\n]+					{	
 											yytext[yyleng] = '\0';
-											nome = malloc(strlen(yytext-7)+1);
+											nome = malloc(strlen(yytext)-7+1);
 											strcpy(nome, yytext+7);
 										}
 
 
-<PAGE>\*" "*"'"*"&quot;"				{	
+<PAGE>^\*" "*"'"*"&quot;"				{	
 											//printf("InicioQuote\n");
 											BEGIN QUOT;
 										}
 
 
 <PAGE><\/page>							{	
+											//printf("antes\n");
 											QuotesAuthor* qa = (QuotesAuthor*)malloc(sizeof(QuotesAuthor));
 
 											if(auxQuote != NULL){
@@ -54,7 +55,7 @@ typedef struct{
 												lista = g_slist_append(lista, qa);
 																				
 												while(auxQuote != NULL){
-													printf("quotes: %s\n", (char*)auxQuote->data);
+													printf("quotes: %s\n", (gchar*)auxQuote->data);
 													if(qa->autor != ""){
 														printf("autor: %s\n", qa->autor);
 													}
@@ -62,6 +63,8 @@ typedef struct{
 												}
 												
 											}
+											//printf("depois\n");
+
 											//printf("123\n");
 
 											BEGIN INITIAL;
@@ -70,19 +73,20 @@ typedef struct{
 <QUOT>"&quot;"|\n|"[https://"			{
 											//printf("FimQuote\n %s\n", quote);
 											auxQuote = g_slist_append (auxQuote, quote);
-											quote = malloc(10000);
+											//printf("antes\n");
+											quote = malloc(100);
+											//printf("depois\n");
 											BEGIN PAGE;
 										}
 
 <QUOT>"&lt".*"&gt;".*"&lt;".*"&gt;"		{;}
 
-<QUOT>[|]								{strcat(quote," ");}
+<QUOT>[|]								{quote = g_strconcat(quote," ", NULL);}
 
-<QUOT>"["|"]"|"'"*						{;}
+<QUOT>"["|"]"|"'"*|\**					{;}
 
 <QUOT>.									{
-											strcpy(str, yytext);
-											strcat(quote, str); 
+											quote = g_strconcat(quote, yytext, NULL); 
 										}
 
 <*>.|\n									{;}
@@ -96,7 +100,7 @@ void showList(){
 		QuotesAuthor *q = (QuotesAuthor*) l->data;
 		printf("AUTOR: %s\nCITAÇÕES: \n", q->autor);
 		for(t = q->citacoes; t; t = t->next){
-			printf("-->%s\n", (char*) t->data);
+			printf("-->%s\n", (gchar*) t->data);
 		}
 	}
 }
@@ -107,7 +111,7 @@ int yywrap(){
 }
 
 int main(){
-	quote = malloc(100000);
+	quote = malloc(100);
 	lista = NULL;
 	auxQuote = NULL;
 	yylex();
