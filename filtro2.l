@@ -18,46 +18,61 @@ char* proverbio;
 
 %%
 
-"<title>Provérbios".+"</title>"	{
-									yytext[yyleng-8] = '\0';
-									printf("%s\n", yytext+7);
-									BEGIN PAGE;
-								}
+"<title>Provérbios".+"</title>"					{
+													yytext[yyleng-8] = '\0';
+													printf("%s\n", yytext+7);
+													BEGIN PAGE;
+												}
 
 
-<PAGE><\/page>					{										
-									while(listaProverbios != NULL){
-										printf("Provérbio: %s\n", (char*)listaProverbios->data);
-										listaProverbios = listaProverbios->next;
-									}
-										
-									BEGIN INITIAL;
-								}
-				
+<PAGE><\/page>									{										
+													while(listaProverbios != NULL){
+														printf("Provérbio: %s\n", (char*)listaProverbios->data);
+														listaProverbios = listaProverbios->next;
+													}
+														
+													BEGIN INITIAL;
+												}
 
-<PAGE>\*+" "*"'"*"&quot;"		{
-									BEGIN PROVERBIO;
-								}
+<PAGE>\*" "+"[http://"|"* Ver também"			{;}
+<PAGE>"* Veja também:"							{;}		
+
+<PAGE>^\*+" "*"'"*"&quot;"						{
+													BEGIN PROVERBIO;
+												}
+
+<PAGE>^\*" "+"'"*|":'''&quot;"|^"'''"			{
+													BEGIN PROVERBIO;
+												}
+
+<PAGE>^"'''"									{
+													BEGIN PROVERBIO;
+												}
+
+<PAGE>^"*''"									{
+													BEGIN PROVERBIO;
+												}												
 
 
-<PROVERBIO>.					{
-									strcpy(str, yytext);
-									strcat(proverbio, str);
-								}
+<PROVERBIO>.									{
+													strcat(proverbio, yytext);
+												}
 
 
-<PROVERBIO>"["+|"]"+			{;}
-<PROVERBIO>"'"+					{;}
-<PROVERBIO>" "*"'"*"&quot;"		{;}
+<PROVERBIO>"["+|"]"+							{;}
+<PROVERBIO>"'"+									{;}
+<PROVERBIO>" "*"'"*"&quot;"						{;}
+<PROVERBIO>"&lt".*"&gt;".*"&lt;".*"&gt;"		{;}
+<PROVERBIO>"&lt".*"&gt;"						{;}
 
 
-<PROVERBIO>\n					{
-									listaProverbios = g_slist_append (listaProverbios, proverbio);
-									proverbio = malloc(10000);
-									BEGIN PAGE;
-								}								
+<PROVERBIO>\n									{
+													listaProverbios = g_slist_append (listaProverbios, proverbio);
+													proverbio = malloc(10000);
+													BEGIN PAGE;
+												}								
 
-<*>.|\n							{;}
+<*>.|\n											{;}
 
 %%
 
