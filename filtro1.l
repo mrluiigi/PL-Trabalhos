@@ -8,10 +8,7 @@ GSList* auxQuote;
 
 gchar str[1];
 gchar* nome = "";
-
-gchar* imprime = "";
-
-gchar* quote;
+gchar* quote = "";
 
 typedef struct{
 	gchar* autor;
@@ -22,60 +19,54 @@ typedef struct{
 
 %x PAGE
 %x QUOT
+%x AUTOR
 
 %%
 "<page>"								{
-											//printf("InicioPage\n");
 											BEGIN PAGE;}
 
-								
-<PAGE>"Author:"[^\n|"}}"]+				{	
-											yytext[yyleng] = '\0';
-											nome = malloc(strlen(yytext)-7+1);
-											strcpy(nome, yytext+7);
+<PAGE>"| Nome"" "*"=" 					{	
+											BEGIN AUTOR;
+										}
+										
+<AUTOR>\n|"|"							{	BEGIN PAGE;}
+<AUTOR>[^|\n]*							{	
+											nome = malloc(yyleng+1);
+											strcpy(nome, yytext);
 										}
 
-
 <PAGE>^\*" "*"'"*"&quot;"				{	
-											//printf("InicioQuote\n");
 											BEGIN QUOT;
 										}
 
-
 <PAGE><\/page>							{	
-											//printf("antes\n");
 											QuotesAuthor* qa = (QuotesAuthor*)malloc(sizeof(QuotesAuthor));
+											
+											qa->autor = nome;
+											nome = "";
+											qa->citacoes = auxQuote;
+											lista = g_slist_append(lista, qa);
 
-											if(auxQuote != NULL){
-												//printf("FimPage\n");
-
-												qa->autor = nome;
-												nome = "";
-												qa->citacoes = auxQuote;
-												lista = g_slist_append(lista, qa);
-																				
+											if(qa->autor != ""){
+												printf("Autor: %s\n", qa->autor);
 												while(auxQuote != NULL){
-													printf("quotes: %s\n", (gchar*)auxQuote->data);
-													if(qa->autor != ""){
-														printf("autor: %s\n", qa->autor);
-													}
+													printf("	Quote: %s\n", (gchar*)auxQuote->data);
 													auxQuote = auxQuote->next;
 												}
-												
 											}
-											//printf("depois\n");
-
-											//printf("123\n");
+											else{
+												while(auxQuote != NULL){
+													printf("Quote: %s\n", (gchar*)auxQuote->data);
+													auxQuote = auxQuote->next;
+												}
+											}
 
 											BEGIN INITIAL;
 										}
 
 <QUOT>"&quot;"|\n|"[https://"			{
-											//printf("FimQuote\n %s\n", quote);
 											auxQuote = g_slist_append (auxQuote, quote);
-											//printf("antes\n");
 											quote = malloc(100);
-											//printf("depois\n");
 											BEGIN PAGE;
 										}
 
@@ -93,19 +84,6 @@ typedef struct{
 
 %%
 
-
-void showList(){
-	GSList *l, *t;
-	for(l = lista; l; l = l->next){
-		QuotesAuthor *q = (QuotesAuthor*) l->data;
-		printf("AUTOR: %s\nCITAÇÕES: \n", q->autor);
-		for(t = q->citacoes; t; t = t->next){
-			printf("-->%s\n", (gchar*) t->data);
-		}
-	}
-}
-
-
 int yywrap(){
 	return 1;
 }
@@ -115,6 +93,5 @@ int main(){
 	lista = NULL;
 	auxQuote = NULL;
 	yylex();
-	//showList();
 	return 0;
 }
