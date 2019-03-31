@@ -16,5 +16,7 @@ run:
 clean: 
 	rm -f lex1.yy.c
 	rm -f lex2.yy.c
+	rm -f lex3.yy.c
 	rm -f citacoes
 	rm -f proverbios
+	rm -f adulterados
