@@ -29,7 +29,7 @@ typedef struct{
 											BEGIN PAGE;}
 
 								
-<PAGE>"Author:"[^\n]+					{	
+<PAGE>"Author:"[^\n|"}}"]+				{	
 											yytext[yyleng] = '\0';
 											nome = malloc(strlen(yytext)-7+1);
 											strcpy(nome, yytext+7);
