@@ -7,14 +7,13 @@ GSList* listaAdulteracoes;
 GSList* auxAdulterado;
 
 #define N 10
-char str[1];
-char* proverbio;
-char* adulterado;
+gchar* proverbio;
+gchar* adulterado;
 
-char conta[N];
+int conta[N];
 
 typedef struct{
-	char* original;
+	gchar* original;
 	GSList* adulterados;
 } Adulteracao;
 
@@ -36,7 +35,7 @@ typedef struct{
 								}
 
 <PAGE>^"*"" "*"&quot;"			{
-									proverbio = malloc(10000);
+									proverbio = malloc(100);
 									BEGIN PROVERBIO;
 								}
 
@@ -49,7 +48,7 @@ typedef struct{
 								}
 
 <PROVERBIO>[^&]*				{
-									strcpy(proverbio, yytext);
+									proverbio = g_strconcat(proverbio, yytext, NULL);
 								}
 
 <ADULTERACAO>^"*"|^"**"			{	
@@ -65,7 +64,7 @@ typedef struct{
 								}
 
 <ADULTERACAO>^"***"" "*"&quot;"	{
-									adulterado = malloc(10000);
+									adulterado = malloc(100);
 									BEGIN QUOT;
 								}
 
@@ -75,7 +74,7 @@ typedef struct{
 								}
 
 <QUOT>[^&]* 					{
-									strcpy(adulterado, yytext);
+									adulterado = g_strconcat(adulterado, yytext, NULL);
 								}
 
 <*>.|\n							{;}
@@ -88,7 +87,7 @@ void showList(){
 		Adulteracao *q = (Adulteracao*) l->data;
 		printf("Original: %s\n", q->original);
 		for(t = q->adulterados; t; t = t->next){
-			printf("	%s\n", (char*) t->data);
+			printf("	%s\n", (gchar*) t->data);
 		}
 	}
 }

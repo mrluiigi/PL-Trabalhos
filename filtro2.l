@@ -3,11 +3,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//INDICAR LISTA ONDE SE VAI POR OS PROVERBIOS
+GSList* lista;
 GSList* listaProverbios;
 
+gchar* title;
 gchar* proverbio;
 
+typedef struct{
+	gchar* title;
+	GSList* proverbios;
+} Prov;
 
 %}
 
@@ -17,18 +22,21 @@ gchar* proverbio;
 %%
 
 "<title>Provérbios".+"</title>"					{
+													title = malloc(1000);
 													yytext[yyleng-8] = '\0';
-													printf("%s\n", yytext+7);
+													title = g_strconcat(title, yytext+7, NULL);
+													listaProverbios = NULL;
+													
 													BEGIN PAGE;
 												}
 
 
-<PAGE><\/page>									{										
-													while(listaProverbios != NULL){
-														printf("Provérbio: %s\n", (gchar*)listaProverbios->data);
-														listaProverbios = listaProverbios->next;
-													}
-														
+<PAGE><\/page>									{				
+													Prov* p = (Prov*)malloc(sizeof(Prov));
+													p->title = title;
+													p->proverbios = listaProverbios;
+													lista = g_slist_append(lista, p);
+
 													BEGIN INITIAL;
 												}
 
@@ -66,7 +74,7 @@ gchar* proverbio;
 
 <PROVERBIO>\n									{
 													listaProverbios = g_slist_append (listaProverbios, proverbio);
-													proverbio = malloc(10000);
+													proverbio = malloc(100);
 													BEGIN PAGE;
 												}								
 
@@ -74,16 +82,36 @@ gchar* proverbio;
 
 %%
 
-//Será preciso adicionar o caso de ter de ser dentro de um <page> para inicial STR?
+void showList(){
+	GSList *l, *t;
+	for(l = lista; l; l = l->next){
+		Prov *p = (Prov*) l->data;
+		printf("%s:\n", p->title);
+		for(t = p->proverbios; t; t = t->next){
+			printf("	%s\n", (char*) t->data);
+		}
+	}
+}
 
+void showEstatistics(){
+	GSList *l, *t;
+	for(l = lista; l; l = l->next){
+		Prov *p = (Prov*) l->data;
+		printf("%s contém %d provérbios\n", p->title, g_slist_length(p->proverbios));
+	}
+}
 
 int yywrap(){
 	return 1;
 }
 
 int main(){
-	proverbio = malloc(100000);
+	proverbio = malloc(100);
 	listaProverbios = NULL;
 	yylex();
+	showList();
+
+	printf("\n---------Estatísticas---------\n");
+	showEstatistics();
 	return 0;
 }
