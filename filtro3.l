@@ -33,7 +33,7 @@ typedef struct{
 								}
 
 <PAGE>^"*"" "*"&quot;"			{
-									proverbio = malloc(100000);
+									proverbio = malloc(10000);
 									BEGIN PROVERBIO;
 								}
 
@@ -49,7 +49,7 @@ typedef struct{
 									strcpy(proverbio, yytext);
 								}
 
-<ADULTERACAO>^"*"" "*			{	
+<ADULTERACAO>^"*"|^"**"			{	
 									Adulteracao* ad = (Adulteracao*)malloc(sizeof(Adulteracao));
 									ad->original = proverbio;
 
@@ -60,7 +60,7 @@ typedef struct{
 								}
 
 <ADULTERACAO>^"***"" "*"&quot;"	{
-									adulterado = malloc(100000);
+									adulterado = malloc(10000);
 									BEGIN QUOT;
 								}
 
@@ -93,6 +93,7 @@ int yywrap(){
 }
 
 int main(){
+	listaAdulteracoes = NULL;
 	auxAdulterado = NULL;
 	yylex();
 	showList();
