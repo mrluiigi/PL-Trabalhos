@@ -5,10 +5,8 @@
 
 //INDICAR LISTA ONDE SE VAI POR OS PROVERBIOS
 GSList* listaProverbios;
-GSList* auxProverbios;
 
-char str[1];
-char* proverbio;
+gchar* proverbio;
 
 
 %}
@@ -27,7 +25,7 @@ char* proverbio;
 
 <PAGE><\/page>									{										
 													while(listaProverbios != NULL){
-														printf("Provérbio: %s\n", (char*)listaProverbios->data);
+														printf("Provérbio: %s\n", (gchar*)listaProverbios->data);
 														listaProverbios = listaProverbios->next;
 													}
 														
@@ -55,7 +53,7 @@ char* proverbio;
 
 
 <PROVERBIO>.									{
-													strcat(proverbio, yytext);
+													proverbio = g_strconcat(proverbio, yytext, NULL);
 												}
 
 
