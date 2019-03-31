@@ -6,9 +6,12 @@
 GSList* listaAdulteracoes;
 GSList* auxAdulterado;
 
+#define N 10
 char str[1];
 char* proverbio;
 char* adulterado;
+
+char conta[N];
 
 typedef struct{
 	char* original;
@@ -52,8 +55,10 @@ typedef struct{
 <ADULTERACAO>^"*"|^"**"			{	
 									Adulteracao* ad = (Adulteracao*)malloc(sizeof(Adulteracao));
 									ad->original = proverbio;
-
 									ad->adulterados = auxAdulterado;
+									
+									conta[g_slist_length(auxAdulterado)]++;		//conta o número de adulterados
+
 									listaAdulteracoes = g_slist_append(listaAdulteracoes, ad);
 									auxAdulterado = NULL;
 									BEGIN PAGE;
@@ -88,6 +93,11 @@ void showList(){
 	}
 }
 
+void printStatistics(){
+	for(int i = 1; i < N; i++)
+		printf("	Existem %d adulterados para %d originais\n", i, conta[i]);
+}
+
 int yywrap(){
 	return 1;
 }
@@ -97,5 +107,7 @@ int main(){
 	auxAdulterado = NULL;
 	yylex();
 	showList();
+	printf("---------------------\nEstatísticas: \n");
+	printStatistics();
 	return 0;
 }
