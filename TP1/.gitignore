@@ -1,0 +1,7 @@
+# Don't track content of these folders
+citacoes
+proverbios
+adulterados
+lex1.yy.c
+lex2.yy.c
+lex3.yy.c
