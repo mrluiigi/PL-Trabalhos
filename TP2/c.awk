@@ -10,7 +10,7 @@ NR > 1	{
 		}
 
 END		{
-			print "Tipos de processo -> correspondestes ocorrências";
+			print "Tipo de processo -> número de processos correspondestes";
 			for(tipo in contaTipos){
 				print tipo " -> " contaTipos[tipo];
 			}
