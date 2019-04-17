@@ -2,7 +2,7 @@
 Trabalho Prático nº2 (GAWK)
 
 ## Relatorio
-Loading...
+[Link do Relatório](https://www.overleaf.com/5756466445pjgxyrqqrwws)
 
 
 ## Executar ficheiro AWK
@@ -29,7 +29,7 @@ Loading...
 
 	Abrir d.pdf para visualizar o grafo.
 
-##### Cores
+##### Cores do grafo
 	Verde -> Código
 	Vermelho -> Diplomas jurídico-administrativos REF
 	Azul claro -> Diplomas jurídico-administrativos complementar
