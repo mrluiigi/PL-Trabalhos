@@ -3,6 +3,8 @@ BEGIN 		{
 				RS=";\n\n+"
 
 				print "digraph{" > "donos.dot"
+
+				c = 0
 			}
 
 
@@ -39,12 +41,28 @@ NR > 1		{
 
 
 
+
+NR > 1		{
+				if($20 != ""){
+					prazos[$2] = $20;
+				}
+			}
+
+
+
 END			{
 				for(dim in dimensao){
 					print dimensao[dim] " processos com dimensão qualitativa " dim;
 				}
 
 
+
 				print "}" > "donos.dot";
+
+				print "\nCódigo de processo -> Prazo de conservação administrativa: "
+				for(i in prazos){
+					print i " -> " prazos[i];	
+				}
+
 
 			}
