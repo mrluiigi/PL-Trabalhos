@@ -1,4 +1,3 @@
-#O resultado não parece bem.
 #Quais são as notas a pôr?
 #O RS está a ";\n\n+" porque há pelo meio de records \n
 
@@ -11,11 +10,11 @@ BEGIN 	{
 
 
 NR > 1 && $2 !~/""/		{
-							print "Código: " $2 " Título: " $3 " Descrição: " $4 " Nota: " $27 "\n" ; 
+							print "\nCÓDIGO: " $2 "\nTÍTULO: " $3 "\nDESCRIÇÃO: " $4 "\nNOTA: " $27 ; 
 							conta ++;
 						}
 
 
 END						{
-							print "Existem " conta " registos que contém um Código";
+							print "\n\nExistem " conta " registos que contém um Código";
 						}
