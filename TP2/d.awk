@@ -4,20 +4,16 @@ BEGIN 		{
 					
 				#rankdir = LR para que o grafo se faça da esquerda para a direita
 				print "digraph{\n 	rankdir=LR;" > "d.dot"
-				print "	\"Código\" [style=filled, color=\".7 .3 1.0\"];" > "d.dot";
 			}
 
 
 NR > 1		{
-				print "	\"Código\" ->" " \"" $2 "\";" > "d.dot";
 				print "	\"" $2 "\" " "[style=filled, color=\".3 .4 .8\"];" > "d.dot";
-
 
 
 				#Separa todos os diplomas, estes estão entre "#"
 				n = split($8, diplomasREF, "#\n");
 				#Todos os diplomas estão entre aspas, logo isto faz com que se separe o primeiro diploma da primeira aspa.
-				split(diplomasREF[1], primeiro, "\"");
 				primeiroREF = substr(diplomasREF[1], 2);						
 				if(primeiroREF != "") 	{
 					print "	\"" primeiroREF "\" " "[style=filled, color=\"1.0 .6 1.0\"];" > "d.dot";
@@ -42,5 +38,8 @@ NR > 1		{
 
 
 END			{
-				print "}"	> "d.dot"
+				print "}" > "d.dot"
 			}
+
+
+			

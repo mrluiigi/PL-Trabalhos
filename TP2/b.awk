@@ -8,10 +8,12 @@ BEGIN 	{
 			conta = 0;
 		}
 
-
-NR > 1 && $2 !~/""/		{
+#Começa depois do registo 1 porque este apenas contém a informação dos campos de cada registo.
+NR > 1					{
 							print "\nCÓDIGO: " $2 "\nTÍTULO: " $3 "\nDESCRIÇÃO: " $4 "\nNOTA: " $27 ; 
-							conta ++;
+							if($2 != ""){
+								conta ++;
+							}
 						}
 
 

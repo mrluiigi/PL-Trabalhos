@@ -13,8 +13,6 @@ Trabalho Prático nº2 (GAWK)
 
 	Ficheiro depois da limpeza chama-se "processado.txt"
 
-	Também gera o ficheiro "meta.txt" que contém a posição de cada campo num record. 
-
 
 ### Alínea d)
 	
