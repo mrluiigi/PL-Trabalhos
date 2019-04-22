@@ -5,25 +5,32 @@ Trabalho Prático nº2 (GAWK)
 [Link do Relatório](https://www.overleaf.com/5756466445pjgxyrqqrwws)
 
 
-## Executar ficheiro AWK
-	gawk -f <Programa AWK> <Input>
-
-
 ### Alínea a)
+
+	$ make a
 
 	Ficheiro depois da limpeza chama-se "processado.txt"
 
 
+### Alínea b)
+
+	Comando para executar programa(apresenta o resultado no terminal):
+
+	$ make b
+
+
+### Alínea c)
+
+	Comando para executar programa(apresenta o resultado no terminal):
+
+	$ make c
+
+
 ### Alínea d)
 	
-	Aplicar o programa awk ao ficheiro processado.txt:
+	Aplica o programa awk ao ficheiro processado.txt e gera o grafo (em DOT):
 
-		$ gawk -f d.awk processado.txt
-	
-
-	Gerar o grafo (em DOT):
-		$ dot -Tpdf d.dot > d.pdf
-
+	$ make d
 
 	Abrir d.pdf para visualizar o grafo.
 
