@@ -13,6 +13,10 @@ d: d.awk processado.txt
 	gawk -f d.awk processado.txt	
 	dot -Tpdf d.dot > d.pdf
 
+extras: extras.awk processado.txt
+	gawk -f extras.awk processado.txt
+	dot -Tpdf donos.dot > donos.pdf
+
 clean:
 	rm -f processado.txt
 	rm -f *.dot

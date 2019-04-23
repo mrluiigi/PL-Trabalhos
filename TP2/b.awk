@@ -9,11 +9,10 @@ BEGIN 	{
 		}
 
 #Começa depois do registo 1 porque este apenas contém a informação dos campos de cada registo.
-NR > 1					{
-							print "\nCÓDIGO: " $2 "\nTÍTULO: " $3 "\nDESCRIÇÃO: " $4 "\nNOTA: " $27 ; 
-							if($2 != ""){
-								conta ++;
-							}
+NR > 1 && $2 !~/""/		{
+							print "\nCÓDIGO: " $2 "\nTÍTULO: " $3 "\nDESCRIÇÃO: " $4 "\nNOTAS: " $27 ; 
+							
+							conta ++;
 						}
 
 
