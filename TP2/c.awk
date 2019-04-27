@@ -12,6 +12,11 @@ NR > 1	{
 END		{
 			print "Tipo de processo -> número de processos correspondestes";
 			for(tipo in contaTipos){
-				print tipo " -> " contaTipos[tipo];
+				if(tipo != ""){
+					print tipo " -> " contaTipos[tipo];
+				}
+				else {
+					print "Sem tipo -> " contaTipos[tipo];
+				}
 			}
 		}

@@ -30,8 +30,8 @@ NR > 1		{
 
 				#Põe os diplomas que não são vazios
 				if($9 != ""){
-					print "	\"" $9 "\" " "[style=filled, color=\".5 .5 1.0\"];" > "d.dot";
-					print "	\"" $2 "\" ->"  " \"" $9 "\";" > "d.dot";
+					print "	\"" substr($9, 1, length($9)-1) "\" " "[style=filled, color=\".5 .5 1.0\"];" > "d.dot";
+					print "	\"" $2 "\" ->"  " \"" substr($9, 1, length($9)-1) "\";" > "d.dot";
 				}				
 			}
 
