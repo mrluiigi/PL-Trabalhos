@@ -1,0 +1,16 @@
+ARTISTA "babas" {
+	aa = "aa"
+	ab = "aa123"
+	ac = "
+
+	"
+}
+
+
+ARTISTA "babas2" {
+	aa = "aa"
+	ab = "aa123"
+	ac = "
+
+	"
+}
