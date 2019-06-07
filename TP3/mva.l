@@ -5,12 +5,18 @@
 	
 %}
 
+
 %%
 
 ARTISTA 	    {return ART;}
-[{}=]			{return yytext[0];}
-\"[^"]*\"	    {return VALOR;}
-[a-zA-Z]+		{return PALAVRA;}
+[{}="]			{return yytext[0];}
+\"[^"]*\"	    {	yytext[yyleng -	1] = '\0';
+					yylval.string = strdup(yytext+1);
+	           		return VALOR;
+	        	}
+
+[a-zA-Z]+		{yylval.string = strdup(yytext);
+	             return PALAVRA;}
 
 %%
 

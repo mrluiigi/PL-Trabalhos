@@ -25,14 +25,17 @@
 
  AtributoStruct ats;
 
+ FILE* fileDescriptor = NULL;
+ char* fileName = NULL;
+
 %}
 
 %union { char* VARNAME; int CONSTINT; char* string;}
 
 %token ART
 
-%token <VARNAME> VALOR
-%token <VARNAME> PALAVRA
+%token <string> VALOR
+%token <string> PALAVRA
 
 
 
@@ -49,7 +52,9 @@ Entidades : Entidades Entidade
 Entidade : Artista                               
          ;
 
-Artista : ART VALOR '{' ArtistaInfo '}'          
+Artista : ART VALOR '{' ArtistaInfo '}'                                        {  asprintf(&fileName, "%s.html", $2);
+                                                                                  printf("%s\n", $2);
+                                                                                  fileDescriptor = fopen(fileName,"w");}
         ;
 
 ArtistaInfo : Atributos                                                       
@@ -74,6 +79,22 @@ int yyerror (char *s) {
 }
 
 int main() {
+    printf("/*\n * @command = dot\n* @imageurl = TRUE\n *\n*/\ndigraph g {\n");
     yyparse();
     return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
