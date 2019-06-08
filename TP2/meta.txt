@@ -1,0 +1,34 @@
+1->Estado
+2->Código
+3->Título
+4->Descrição
+5->Notas de aplicação
+6->Exemplo NA
+7->Notas de exclusão
+8->Diplomas jurídico-administrativos REF
+9->Diplomas jurídico-administrativos complementar
+10->Tipo de processo
+11->Processo transversal (S/N)
+12->Dono do processo
+13->Participante no processo
+14->Tipo de intervenção do participante
+15->Código do processo relacionado
+16->Título do processo relacionado
+17->Tipo de relação entre processos
+18->Dimensão qualitativa do processo
+19->Uniformização do processo
+20->Prazo de conservação administrativa
+21->Nota ao PCA
+22->Justificação PCA
+23->Forma de contagem do PCA normalizada
+24->Forma de contagem do prazo de cons. adm.
+25->Destino final
+26->Justificação DF
+27->Notas
+28->
+29->
+30->
+31->
+32->
+33->
+34->

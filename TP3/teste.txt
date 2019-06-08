@@ -1,12 +1,13 @@
 ARTISTA "Banksy" {
-	NomeCompleto = "Anónimo"
+	Nome Completo = "Anónimo"
 	Pais = "Reino Unido"
 	Seculo = "XXI"
 	Periodo =  "Contemporâneo ; Arte de rua" 
+	participou = {"Balloon Girl Shredding"}
 }
 
 ARTISTA "Verrocchio" {
-	NomeCompleto = "Andrea del Verrocchio"
+	Nome Completo = "Andrea del Verrocchio"
 	Pais = "Itália"
 	Seculo = "XV"
 	Periodo = "Renascentismo"
@@ -14,9 +15,43 @@ ARTISTA "Verrocchio" {
 }
 
 ARTISTA "da Vinci" {
-	NomeCompleto = "Leonardo da Vinci"
+	Nome Completo = "Leonardo da Vinci"
 	Pais = "Itália"
 	Seculo = "XV/XVI"
 	Periodo = "Renascentismo"
 	aprendeuCom = {"Verrocchio"}
+	produziu = {"Mona lisa"}
 }
+
+ARTISTA "Van Gogh" {
+	Nome Completo = "Vincent Van Gogh"
+	Pais = "Holanda"
+	Seculo = "XIX"
+	Periodo = "Renascentista/Pós-Impressionismo"
+}
+
+OBRA "Mona lisa" {
+	Nome = "Mona lisa"
+	Ano = "1503"
+	Tecnica = "Tinta a óleo" 
+	Valor = "2,5 mil milhões"
+	Local Exposicao = "Museu do Louvre"
+}
+
+
+OBRA "The Starry Night" {
+	Nome = "The Starry Night"
+	Ano = "1889"
+	Tecnica = "Tinta a óleo" 
+	Valor = "indeterminado"
+	Local Exposicao = "Museu de Arte Moderna"
+}
+
+
+EVENTO "Balloon Girl Shredding" {
+	Tipo = "Leilão"
+	Localizacao = "Inglaterra"
+	Data = "2018"
+}
+
+	

@@ -2,7 +2,7 @@ BEGIN 		{
 				FS=";"
 				RS=";\n\n+"
 
-				print "digraph{" > "donos.dot"
+				print "digraph{\n rankdir=LR;"  > "donos.dot"
 
 				c = 0
 			}
@@ -63,7 +63,8 @@ END			{
 
 				print "}" > "donos.dot";
 
-				print "\nCódigo de processo -> Prazo de conservação administrativa: "
+
+				print "\nCódigo de processo -> Prazo de conservação admnistrativa: "
 				for(i in prazos){
 					print i " -> " prazos[i];	
 				}

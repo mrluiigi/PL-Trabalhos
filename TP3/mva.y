@@ -15,15 +15,21 @@
 
 
     typedef struct artistaStruct{
-      char* nome;
-      GSList* listaAtributos;
-      GSList* listaEnsinou;
-      GSList* listaAprendeu;
-      GSList* listaColaborou;
+		char* nome;
+		GSList* listaAtributos;
+		GSList* listaEnsinou;
+		GSList* listaAprendeu;
+		GSList* listaColaborou;
+		GSList* listaProduziu;
+		GSList* listaParticipou;
     } *ArtistaStruct;
 
     GHashTable* artistasEncontrados = NULL;
     GSList* artistasEsperados = NULL;
+
+    GHashTable* obrasEncontradas = NULL;
+
+    GHashTable* eventosEncontrados = NULL;
 
 
     GSList* listaAtributos;
@@ -35,6 +41,9 @@
     GSList* listaEnsinou = NULL;
     GSList* listaAprendeu = NULL;
     GSList* listaColaborou = NULL;
+
+    GSList* listaProduziu = NULL;
+    GSList* listaParticipou = NULL;
 
 
 
@@ -90,8 +99,50 @@
           }    
         }
 
-        fwrite("</body>\n</html>" , 1 , 15, fd );
+        if(listaProduziu != NULL){
+          temp = listaProduziu;
+          fwrite("<h2>Produziu:</h2>\n",1,19, fd);
+          while(temp != NULL){
+          	outraEntidade = (char*)temp->data;
+            printf("\"%s\" -> \"%s\" [label=\"produziu\"]\n", title, outraEntidade);
+            asprintf(&href,"<a href=\"Obra %s.html\">%s</a>\n", outraEntidade, outraEntidade);
+            fwrite(href,1,strlen(href), fd);
+            temp = temp->next;
+          }    
         }
+
+        if(listaParticipou != NULL){
+          temp = listaParticipou;
+          fwrite("<h2>Participou:</h2>\n",1,20, fd);
+          while(temp != NULL){
+          	outraEntidade = (char*)temp->data;
+            printf("\"%s\" -> \"%s\" [label=\"participou\"]\n", title, outraEntidade);
+            asprintf(&href,"<a href=\"Evento %s.html\">%s</a>\n", outraEntidade,outraEntidade);
+            fwrite(href,1,strlen(href), fd);
+            temp = temp->next;
+          }    
+        }
+
+
+
+        fwrite("</body>\n</html>" , 1 , 15, fd );
+    }
+
+
+    void writeObraHtml(char* title, char* body) {
+        char* fileName;
+
+        asprintf(&fileName, "Obra %s.html", title);
+
+        FILE* fd = fopen(fileName,"w");
+
+        fwrite("<!DOCTYPE html>\n<html>\n<head>\n<h1>" , 1 , 34, fd );
+        fwrite(title, 1, strlen(title), fd);
+        fwrite("</h1>\n</head>\n<body>" , 1 , 20, fd );
+        fwrite(body, 1, strlen(body), fd);
+        fwrite("</body>\n</html>" , 1 , 15, fd );
+    }
+
 
     void writeDotArtista(char* nome){
         printf("\"%s\" [URL=\"file:Artista %s.html\"]\n", nome, nome);
@@ -103,15 +154,23 @@
 %union { char* VARNAME; int CONSTINT; char* string;}
 
 %token ART
+%token OBRAKEYWORD
+%token EVENTOKEYWORD
+
 
 %token ENSINOU
 %token APRENDEU
 %token COLABOROU
 
-%token <string> VALOR
-%token <string> PALAVRA
+%token PRODUZIU
+%token PARTICIPOU
 
-%type <string> Atributo Atributos ArtistaInfo
+%token <string> VALOR
+%token <string> ATRIBUTOARTISTA
+%token <string> ATRIBUTOOBRA
+%token <string> ATRIBUTOEVENTO
+
+%type <string> Atributo Atributos ArtistaInfo ObraInfo AtributoObra AtributosObra EventoInfo AtributosEvento AtributoEvento
 
 %%
 
@@ -123,7 +182,9 @@ Entidades : Entidades Entidade
 
 
 
-Entidade : Artista                               
+Entidade : Artista 
+		 | Obra   
+		 | Evento                           
          ;
 
 Artista : ART VALOR '{' ArtistaInfo '}'                                        	{  	
@@ -138,7 +199,10 @@ Artista : ART VALOR '{' ArtistaInfo '}'                                        	
                                                                                     ats->listaAtributos = listaAtributos;
                                                                                     ats->listaEnsinou = listaEnsinou;	
                                                                                     ats->listaAprendeu = listaAprendeu;   
-                                                                                    ats->listaColaborou = listaColaborou;   	 
+                                                                                    ats->listaColaborou = listaColaborou;
+                                                                                    ats->listaProduziu = listaProduziu;
+                                                                                    ats->listaParticipou = listaParticipou;
+
 
                                                                                     writeDotArtista($2);
                                                                                   	writeHtml($2, $4);
@@ -146,38 +210,145 @@ Artista : ART VALOR '{' ArtistaInfo '}'                                        	
                                                                                     listaAtributos = NULL;
                                                                                   	listaEnsinou = NULL;
                                                                                   	listaAprendeu = NULL;
-                                                                                  	listaColaborou = NULL;                                                                                  	
+                                                                                  	listaColaborou = NULL;  
+                                                                                  	listaProduziu = NULL;
+                                                                                  	listaParticipou = NULL;                                                                                	
                                                                                	}
         ;
 
 ArtistaInfo : Atributos Relacoes                                       			{
 																					asprintf(&$$, "<table>\n<tr>\n<th>Atributo</th>\n<th>Valor</th>\n</tr>%s</table>", $1);
-																					//printf("Chega bem?: %s\n", $1);
 																				}
             ;
 
 Atributos : Atributos Atributo   	                                         	{
 																					asprintf(&$$, "%s\n%s", $1, $2);
-																					//printf("Atributos: %s Atributo: %s\n", $1, $2);
 																					listaAtributos = g_slist_append(listaAtributos, ats);
 																				}
           | %empty                                                           	{
           																			$$ = "";
-          																			//asprintf(&$$, "%s", $1);
-          																			//printf("Primeiro%s", $1);
-          																			//listaAtributos = g_slist_append(listaAtributos, ats);
           																		}
           ;
 
-Atributo : PALAVRA '=' VALOR                                                  {	
+Atributo : ATRIBUTOARTISTA '=' VALOR                                         {	
 																				asprintf(&$$, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", $1, $3);
 																				ats = malloc(sizeof(struct atributoStruct));
                                                                                 ats->atribNome = $1;  
                                                                                 ats->atribValor = $3;
-                                                                                //printf("%s\n", $1);
-                                                                            //  asprintf(ats->atribNome, "%s\n%s\n", $1, $2);
                                                                               }
          ;
+
+
+
+
+Obra : OBRAKEYWORD VALOR '{' ObraInfo '}'                                   {  	
+                                                                                gboolean naoExistia = g_hash_table_insert(obrasEncontradas, $2, $2);
+																			    if(naoExistia == FALSE){
+                                                                                   	char * mensagemErro;
+                                                                                    asprintf(&mensagemErro, "Obra %s repetida\n", $2);
+                                                                                    yyerror(mensagemErro);
+                                                                                }
+                                                                                /*ArtistaStruct ats = malloc(sizeof(struct artistaStruct));
+                                                                                ats->nome = $2;
+                                                                                ats->listaAtributos = listaAtributos;
+                                                                                ats->listaEnsinou = listaEnsinou;	
+                                                                                ats->listaAprendeu = listaAprendeu;   
+                                                                                ats->listaColaborou = listaColaborou; 
+                                                                                */  	 
+
+                                                                                writeDotArtista($2);
+                                                                              	writeObraHtml($2, $4);
+                                                                              	/*
+                                                                                listaAtributos = NULL;
+                                                                              	listaEnsinou = NULL;
+                                                                              	listaAprendeu = NULL;
+                                                                              	listaColaborou = NULL; */                                                                                 	
+                                                                            }
+        ;
+
+
+
+
+ObraInfo : AtributosObra Relacoes                                       	{
+																				asprintf(&$$, "<table>\n<tr>\n<th>Atributo</th>\n<th>Valor</th>\n</tr>%s</table>", $1);
+																			}
+            ;
+
+AtributosObra : AtributosObra AtributoObra   	                           	{
+																				asprintf(&$$, "%s\n%s", $1, $2);
+																				listaAtributos = g_slist_append(listaAtributos, ats);
+																			}
+          		| %empty                                                   	{
+          																			$$ = "";
+          																	}
+          ;
+
+AtributoObra : ATRIBUTOOBRA '=' VALOR                                         {	
+																				asprintf(&$$, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", $1, $3);
+																				ats = malloc(sizeof(struct atributoStruct));
+                                                                                ats->atribNome = $1;  
+                                                                                ats->atribValor = $3;
+                                                                              }
+         ;
+
+
+
+
+
+
+Evento : EVENTOKEYWORD VALOR '{' EventoInfo '}'                              {  	
+                                                                                gboolean naoExistia = g_hash_table_insert(eventosEncontrados, $2, $2);
+																			    if(naoExistia == FALSE){
+                                                                                   	char * mensagemErro;
+                                                                                    asprintf(&mensagemErro, "Obra %s repetida\n", $2);
+                                                                                    yyerror(mensagemErro);
+                                                                                }
+                                                                                /*ArtistaStruct ats = malloc(sizeof(struct artistaStruct));
+                                                                                ats->nome = $2;
+                                                                                ats->listaAtributos = listaAtributos;
+                                                                                ats->listaEnsinou = listaEnsinou;	
+                                                                                ats->listaAprendeu = listaAprendeu;   
+                                                                                ats->listaColaborou = listaColaborou; 
+                                                                                */  	 
+
+                                                                                writeDotArtista($2);
+                                                                              	writeHtml($2, $4);
+                                                                              	/*
+                                                                                listaAtributos = NULL;
+                                                                              	listaEnsinou = NULL;
+                                                                              	listaAprendeu = NULL;
+                                                                              	listaColaborou = NULL; */                                                                                 	
+                                                                            }
+        ;
+
+
+
+
+EventoInfo : AtributosEvento Relacoes                                       	{
+																				asprintf(&$$, "<table>\n<tr>\n<th>Atributo</th>\n<th>Valor</th>\n</tr>%s</table>", $1);
+																			}
+            ;
+
+AtributosEvento : AtributosEvento AtributoEvento   	                           	{
+																				asprintf(&$$, "%s\n%s", $1, $2);
+																				listaAtributos = g_slist_append(listaAtributos, ats);
+																			}
+          		| %empty                                                   	{
+          																			$$ = "";
+          																	}
+          ;
+
+AtributoEvento : ATRIBUTOEVENTO '=' VALOR                                     {	
+																				asprintf(&$$, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", $1, $3);
+																				ats = malloc(sizeof(struct atributoStruct));
+                                                                                ats->atribNome = $1;  
+                                                                                ats->atribValor = $3;
+                                                                              }
+         ;
+
+
+
+
 
 Relacoes : Relacoes Relacao   	                                         	{
 																				
@@ -200,6 +371,14 @@ Relacao : ENSINOU '=' '{' ListaEntidades '}'                                {
         | COLABOROU '=' '{' ListaEntidades '}'                              {	
                                                                                 artistasEsperados = g_slist_concat(artistasEsperados, listaRelacoesTemp);
         																		listaColaborou = g_slist_concat(listaColaborou, listaRelacoesTemp);
+        																		listaRelacoesTemp = NULL;
+        																	}
+        | PRODUZIU '=' '{' ListaEntidades '}' 								{
+        																		listaProduziu = g_slist_concat(listaProduziu, listaRelacoesTemp);
+        																		listaRelacoesTemp = NULL;
+        																	}
+        | PARTICIPOU '=' '{' ListaEntidades '}' 							{
+        																		listaParticipou = g_slist_concat(listaParticipou, listaRelacoesTemp);
         																		listaRelacoesTemp = NULL;
         																	}
         ;
@@ -245,6 +424,8 @@ void testeArtistasEsperados(){
 
 int main() {
     artistasEncontrados = g_hash_table_new(g_str_hash,g_str_equal);
+    obrasEncontradas = g_hash_table_new(g_str_hash,g_str_equal);
+    eventosEncontrados = g_hash_table_new(g_str_hash,g_str_equal);
     writeDotBeginning();
     yyparse();
     printf("}");
