@@ -1,9 +1,7 @@
 ARTISTA "babas" {
 	aa = "aa"
 	ab = "aa123"
-	ac = "
-
-	"
+	ac = "1234567890'«dfcvbgnhm,.-xzsdfc gv bhnjmk,l.ç-c fghbjnkml,ç."
 }
 
 
