@@ -52,6 +52,18 @@ void writeDotArtista(char* nome){
   printf("%s [URL=\"file:%s.html\"]\n", nome, nome);
 }
 
+void writeRelacoes(){
+	if(listaEnsinou != NULL){
+		printf("%s\n", (char*)listaEnsinou->data);
+	}
+	if(listaAprendeu != NULL){
+		printf("%s\n", (char*)listaAprendeu->data);
+	}
+	if(listaColaborou != NULL){
+		printf("%s\n", (char*)listaColaborou->data);
+	}
+}
+
 %}
 
 %union { char* VARNAME; int CONSTINT; char* string;}
@@ -83,8 +95,10 @@ Entidade : Artista
 Artista : ART VALOR '{' ArtistaInfo '}'                                        	{  	
 																					writeDotArtista($2);
                                                                                   	writeHtml($2, $4);
-                                                                                  	printf("%s\n", (char*)listaEnsinou->data);
-                                                                                  	
+                                                                                  	writeRelacoes();
+                                                                                  	listaEnsinou = NULL;
+                                                                                  	listaAprendeu = NULL;
+                                                                                  	listaColaborou = NULL;                                                                                  	
                                                                                	}
         ;
 
@@ -123,17 +137,19 @@ Relacoes : Relacoes Relacao   	                                         	{
       	 | %empty                                                           {
       																			
       																		}
-          ;
+         ;
 
-Relacao : ENSINOU '=' "{" ListaEntidades "}"                                {	
+Relacao : ENSINOU '=' '{' ListaEntidades '}'                                {	
 																				listaEnsinou = g_slist_concat(listaEnsinou, listaRelacoesTemp);
-																				while(1){printf("1\n");}
+																				listaRelacoesTemp = NULL;
                                                                             }
-        | APRENDEU '=' "{" ListaEntidades "}"                               {	
+        | APRENDEU '=' '{' ListaEntidades '}'                               {	
 																				listaAprendeu = g_slist_concat(listaAprendeu, listaRelacoesTemp);
+																				listaRelacoesTemp = NULL;
                                                                             }
-        | COLABOROU '=' "{" ListaEntidades "}"                              {	
+        | COLABOROU '=' '{' ListaEntidades '}'                              {	
         																		listaColaborou = g_slist_concat(listaColaborou, listaRelacoesTemp);
+        																		listaRelacoesTemp = NULL;
         																	}
         ;
 
