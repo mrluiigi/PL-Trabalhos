@@ -1,68 +1,102 @@
 %{
-  #define _GNU_SOURCE
-  #include <stdio.h>
-  #include <ctype.h>
-  #include <string.h>
-  #include <glib.h>
-  #include "lex.yy.c"
-  int yylex();
-  int yyerror(char *s);
+    #define _GNU_SOURCE
+    #include <stdio.h>
+    #include <ctype.h>
+    #include <string.h>
+    #include <glib.h>
+    #include "lex.yy.c"
+    int yylex();
+    int yyerror(char *s);
 
- typedef struct atributoStruct{
-    char* atribNome;
-    char* atribValor;
- } *AtributoStruct;
+    typedef struct atributoStruct{
+        char* atribNome;
+        char* atribValor;
+    } *AtributoStruct;
 
-/*
- typedef struct artistaStruct{
-    char* id;
+
+    typedef struct artistaStruct{
+      char* nome;
+      GSList* listaAtributos;
+      GSList* listaEnsinou;
+      GSList* listaAprendeu;
+      GSList* listaColaborou;
+    } *ArtistaStruct;
+
+    GHashTable* artistasEncontrados = NULL;
+    GSList* artistasEsperados = NULL;
+
+
     GSList* listaAtributos;
- } *ArtistaStruct;
 
- GSList* listaArtistas;
-*/
- GSList* listaAtributos;
+    AtributoStruct ats;
 
- AtributoStruct ats;
+    GSList* listaRelacoesTemp = NULL;
 
- GSList* listaRelacoesTemp = NULL;
+    GSList* listaEnsinou = NULL;
+    GSList* listaAprendeu = NULL;
+    GSList* listaColaborou = NULL;
 
- GSList* listaEnsinou = NULL;
- GSList* listaAprendeu = NULL;
- GSList* listaColaborou = NULL;
 
- //char* tabelaAtributos;
- //char* relacao;
 
-void writeHtml(char* title, char* body) {
-	char* fileName;
+    //char* tabelaAtributos;
+    //char* relacao;
 
-	asprintf(&fileName, "%s.html", title);
+    void writeHtml(char* title, char* body) {
+        char* fileName;
 
-	FILE* fd = fopen(fileName,"w");
-	
-	fwrite("<!DOCTYPE html>\n<html>\n<head>\n<h1>" , 1 , 34, fd );
-	fwrite(title, 1, strlen(title), fd);
-	fwrite("</h1>\n</head>\n<body>" , 1 , 20, fd );
-	fwrite(body, 1, strlen(body), fd);
-	fwrite("</body>\n</html>" , 1 , 15, fd );
-}
+        asprintf(&fileName, "Artista %s.html", title);
 
-void writeDotArtista(char* nome){
-  printf("%s [URL=\"file:%s.html\"]\n", nome, nome);
-}
+        FILE* fd = fopen(fileName,"w");
 
-void writeRelacoes(){
-	if(listaEnsinou != NULL){
-		printf("%s\n", (char*)listaEnsinou->data);
-	}
-	if(listaAprendeu != NULL){
-		printf("%s\n", (char*)listaAprendeu->data);
-	}
-	if(listaColaborou != NULL){
-		printf("%s\n", (char*)listaColaborou->data);
-	}
-}
+        fwrite("<!DOCTYPE html>\n<html>\n<head>\n<h1>" , 1 , 34, fd );
+        fwrite(title, 1, strlen(title), fd);
+        fwrite("</h1>\n</head>\n<body>" , 1 , 20, fd );
+        fwrite(body, 1, strlen(body), fd);
+
+        GSList* temp;
+        char * href;
+        char* outraEntidade;
+        if(listaEnsinou != NULL){
+          temp = listaEnsinou;
+          fwrite("<h2>Ensinou:</h2>\n",1,18, fd);
+          while(temp != NULL){
+            outraEntidade = (char*)temp->data;
+            printf("%s -> %s [label=\"ensinou\"]\n", title, outraEntidade);
+            asprintf(&href,"<a href=\"Artista %s.html\">%s</a>\n", outraEntidade,outraEntidade);
+            fwrite(href,1,strlen(href), fd);
+            temp = temp->next;
+          } 
+        }
+        if(listaAprendeu != NULL){
+          temp = listaAprendeu;
+          fwrite("<h2>Aprendeu com:</h2>\n",1,23, fd);
+          while(temp != NULL){
+            outraEntidade = (char*)temp->data;
+            printf("%s -> %s [label=\"aprendeu com\"]\n", title, outraEntidade);
+            asprintf(&href,"<a href=\"Artista %s.html\">%s</a>\n", outraEntidade,outraEntidade);
+            fwrite(href,1,strlen(href), fd);
+            temp = temp->next;
+          }
+        }
+        if(listaColaborou != NULL){
+          temp = listaColaborou;
+          fwrite("<h2>Colaborou com:</h2>\n",1,24, fd);
+          while(temp != NULL){
+            outraEntidade = (char*)temp->data;
+            printf("%s -> %s [label=\"colaborou\"]\n", title, outraEntidade);
+            asprintf(&href,"<a href=\"Artista %s.html\">%s</a>\n", outraEntidade,outraEntidade);
+            fwrite(href,1,strlen(href), fd);
+            temp = temp->next;
+          }    
+        }
+
+        fwrite("</body>\n</html>" , 1 , 15, fd );
+        }
+
+    void writeDotArtista(char* nome){
+        printf("%s [URL=\"file:Artista %s.html\"]\n", nome, nome);
+    }
+
 
 %}
 
@@ -93,9 +127,23 @@ Entidade : Artista
          ;
 
 Artista : ART VALOR '{' ArtistaInfo '}'                                        	{  	
-																					writeDotArtista($2);
+                                                                                    gboolean naoExistia = g_hash_table_insert(artistasEncontrados, $2, $2);
+																			        if(naoExistia == FALSE){
+                                                                                        char * mensagemErro;
+                                                                                        asprintf(&mensagemErro, "Artista %s repetido\n", $2);
+                                                                                        yyerror(mensagemErro);
+                                                                                    }
+                                                                                    ArtistaStruct ats = malloc(sizeof(struct artistaStruct));
+                                                                                    ats->nome = $2;
+                                                                                    ats->listaAtributos = listaAtributos;
+                                                                                    ats->listaEnsinou = listaEnsinou;	
+                                                                                    ats->listaAprendeu = listaAprendeu;   
+                                                                                    ats->listaColaborou = listaColaborou;   	 
+
+                                                                                    writeDotArtista($2);
                                                                                   	writeHtml($2, $4);
-                                                                                  	writeRelacoes();
+                                                                                  //	writeRelacoes($2);
+                                                                                    listaAtributos = NULL;
                                                                                   	listaEnsinou = NULL;
                                                                                   	listaAprendeu = NULL;
                                                                                   	listaColaborou = NULL;                                                                                  	
@@ -140,14 +188,17 @@ Relacoes : Relacoes Relacao   	                                         	{
          ;
 
 Relacao : ENSINOU '=' '{' ListaEntidades '}'                                {	
+                                                                                artistasEsperados = g_slist_concat(artistasEsperados, listaRelacoesTemp);
 																				listaEnsinou = g_slist_concat(listaEnsinou, listaRelacoesTemp);
 																				listaRelacoesTemp = NULL;
                                                                             }
         | APRENDEU '=' '{' ListaEntidades '}'                               {	
+                                                                                artistasEsperados = g_slist_concat(artistasEsperados, listaRelacoesTemp);
 																				listaAprendeu = g_slist_concat(listaAprendeu, listaRelacoesTemp);
 																				listaRelacoesTemp = NULL;
                                                                             }
         | COLABOROU '=' '{' ListaEntidades '}'                              {	
+                                                                                artistasEsperados = g_slist_concat(artistasEsperados, listaRelacoesTemp);
         																		listaColaborou = g_slist_concat(listaColaborou, listaRelacoesTemp);
         																		listaRelacoesTemp = NULL;
         																	}
@@ -167,8 +218,8 @@ ListaEntidades : ListaEntidades ';' VALOR 									{
 %%
 
 int yyerror (char *s) {
-    printf("ERRO SINTATICO %s \n", s);
-    return 1;
+    printf("ERRO: %s \n", s);
+    exit(1);
 }
 
 void writeDotBeginning() {
@@ -176,12 +227,28 @@ void writeDotBeginning() {
 }
 
 
+void testeArtistasEsperados(){
+    GSList* temp = artistasEsperados;
+    while(temp != NULL){
+    char* esperado = (char*)temp->data;
+    gpointer res = g_hash_table_lookup (artistasEncontrados,esperado);
+    if(res == NULL){
+        char * mensagemErro;
+        asprintf(&mensagemErro, "Esperado encontrar artista %s\n", esperado);
+        yyerror(mensagemErro);
+    }
+    temp = temp->next;
+    }     
+}
+
 
 
 int main() {
+    artistasEncontrados = g_hash_table_new(g_str_hash,g_str_equal);
     writeDotBeginning();
     yyparse();
     printf("}");
+    testeArtistasEsperados();
     return 0;
 }
 

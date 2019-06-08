@@ -2,7 +2,7 @@ ARTISTA "babas" {
 	aa = "aa"
 	ab = "aa123"
 	ac = "1234567890'«dfcvbgnhm,.-xzsdfc gv bhnjmk,l.ç-c fghbjnkml,ç."
-	ensinouCom = { "babas3" }
+	ensinouCom = { "babas2" }
 }
 
 
