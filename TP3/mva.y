@@ -25,6 +25,15 @@
 
  AtributoStruct ats;
 
+ GSList* listaRelacoesTemp = NULL;
+
+ GSList* listaEnsinou = NULL;
+ GSList* listaAprendeu = NULL;
+ GSList* listaColaborou = NULL;
+
+ //char* tabelaAtributos;
+ //char* relacao;
+
 void writeHtml(char* title, char* body) {
 	char* fileName;
 
@@ -49,6 +58,10 @@ void writeDotArtista(char* nome){
 
 %token ART
 
+%token ENSINOU
+%token APRENDEU
+%token COLABOROU
+
 %token <string> VALOR
 %token <string> PALAVRA
 
@@ -68,27 +81,29 @@ Entidade : Artista
          ;
 
 Artista : ART VALOR '{' ArtistaInfo '}'                                        	{  	
-																					                                          writeDotArtista($2);
+																					writeDotArtista($2);
                                                                                   	writeHtml($2, $4);
+                                                                                  	printf("%s\n", (char*)listaEnsinou->data);
                                                                                   	
                                                                                	}
         ;
 
-ArtistaInfo : Atributos                                                       	{
+ArtistaInfo : Atributos Relacoes                                       			{
 																					asprintf(&$$, "<table>\n<tr>\n<th>Atributo</th>\n<th>Valor</th>\n</tr>%s</table>", $1);
 																					//printf("Chega bem?: %s\n", $1);
 																				}
             ;
 
-Atributos : Atributos Atributo                                                 	{
+Atributos : Atributos Atributo   	                                         	{
 																					asprintf(&$$, "%s\n%s", $1, $2);
 																					//printf("Atributos: %s Atributo: %s\n", $1, $2);
 																					listaAtributos = g_slist_append(listaAtributos, ats);
 																				}
-          | Atributo                                                           	{
-          																			asprintf(&$$, "%s", $1);
+          | %empty                                                           	{
+          																			$$ = "";
+          																			//asprintf(&$$, "%s", $1);
           																			//printf("Primeiro%s", $1);
-          																			listaAtributos = g_slist_append(listaAtributos, ats);
+          																			//listaAtributos = g_slist_append(listaAtributos, ats);
           																		}
           ;
 
@@ -101,6 +116,37 @@ Atributo : PALAVRA '=' VALOR                                                  {
                                                                             //  asprintf(ats->atribNome, "%s\n%s\n", $1, $2);
                                                                               }
          ;
+
+Relacoes : Relacoes Relacao   	                                         	{
+																				
+																			}
+      	 | %empty                                                           {
+      																			
+      																		}
+          ;
+
+Relacao : ENSINOU '=' "{" ListaEntidades "}"                                {	
+																				listaEnsinou = g_slist_concat(listaEnsinou, listaRelacoesTemp);
+																				while(1){printf("1\n");}
+                                                                            }
+        | APRENDEU '=' "{" ListaEntidades "}"                               {	
+																				listaAprendeu = g_slist_concat(listaAprendeu, listaRelacoesTemp);
+                                                                            }
+        | COLABOROU '=' "{" ListaEntidades "}"                              {	
+        																		listaColaborou = g_slist_concat(listaColaborou, listaRelacoesTemp);
+        																	}
+        ;
+
+ListaEntidades : ListaEntidades ';' VALOR 									{
+																				listaRelacoesTemp = g_slist_append(listaRelacoesTemp, $3);
+
+																			}
+			   | VALOR 														{
+			   																	listaRelacoesTemp = g_slist_append(listaRelacoesTemp, $1);
+
+			   																}
+			   ;
+
 
 %%
 
