@@ -1,15 +1,22 @@
-ARTISTA "babas" {
-	aa = "aa"
-	ab = "aa123"
-	ac = "1234567890'«dfcvbgnhm,.-xzsdfc gv bhnjmk,l.ç-c fghbjnkml,ç."
-	ensinouCom = { "babas2" }
+ARTISTA "Banksy" {
+	NomeCompleto = "Anónimo"
+	Pais = "Reino Unido"
+	Seculo = "XXI"
+	Periodo =  "Contemporâneo ; Arte de rua" 
 }
 
+ARTISTA "Verrocchio" {
+	NomeCompleto = "Andrea del Verrocchio"
+	Pais = "Itália"
+	Seculo = "XV"
+	Periodo = "Renascentismo"
+	ensinouCom = {"da Vinci"}
+}
 
-ARTISTA "babas2" {
-	aa = "aa"
-	ab = "aa123"
-	ac = "
-
-	"
+ARTISTA "da Vinci" {
+	NomeCompleto = "Leonardo da Vinci"
+	Pais = "Itália"
+	Seculo = "XV/XVI"
+	Periodo = "Renascentismo"
+	aprendeuCom = {"Verrocchio"}
 }

@@ -61,7 +61,7 @@
           fwrite("<h2>Ensinou:</h2>\n",1,18, fd);
           while(temp != NULL){
             outraEntidade = (char*)temp->data;
-            printf("%s -> %s [label=\"ensinou\"]\n", title, outraEntidade);
+            printf("\"%s\" -> \"%s\" [label=\"ensinou\"]\n", title, outraEntidade);
             asprintf(&href,"<a href=\"Artista %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
             temp = temp->next;
@@ -72,7 +72,7 @@
           fwrite("<h2>Aprendeu com:</h2>\n",1,23, fd);
           while(temp != NULL){
             outraEntidade = (char*)temp->data;
-            printf("%s -> %s [label=\"aprendeu com\"]\n", title, outraEntidade);
+            printf("\"%s\" -> \"%s\" [label=\"aprendeu com\"]\n", title, outraEntidade);
             asprintf(&href,"<a href=\"Artista %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
             temp = temp->next;
@@ -83,7 +83,7 @@
           fwrite("<h2>Colaborou com:</h2>\n",1,24, fd);
           while(temp != NULL){
             outraEntidade = (char*)temp->data;
-            printf("%s -> %s [label=\"colaborou\"]\n", title, outraEntidade);
+            printf("\"%s\" -> \"%s\" [label=\"colaborou\"]\n", title, outraEntidade);
             asprintf(&href,"<a href=\"Artista %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
             temp = temp->next;
@@ -94,7 +94,7 @@
         }
 
     void writeDotArtista(char* nome){
-        printf("%s [URL=\"file:Artista %s.html\"]\n", nome, nome);
+        printf("\"%s\" [URL=\"file:Artista %s.html\"]\n", nome, nome);
     }
 
 
@@ -251,18 +251,3 @@ int main() {
     testeArtistasEsperados();
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
