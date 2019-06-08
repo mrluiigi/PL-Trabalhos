@@ -38,6 +38,11 @@ void writeHtml(char* title, char* body) {
 	fwrite(body, 1, strlen(body), fd);
 	fwrite("</body>\n</html>" , 1 , 15, fd );
 }
+
+void writeDotArtista(char* nome){
+  printf("%s [URL=\"file:%s.html\"]\n", nome, nome);
+}
+
 %}
 
 %union { char* VARNAME; int CONSTINT; char* string;}
@@ -63,8 +68,7 @@ Entidade : Artista
          ;
 
 Artista : ART VALOR '{' ArtistaInfo '}'                                        	{  	
-																					
-                                                                                  	printf("%s\n", $2);
+																					                                          writeDotArtista($2);
                                                                                   	writeHtml($2, $4);
                                                                                   	
                                                                                	}
@@ -105,13 +109,17 @@ int yyerror (char *s) {
     return 1;
 }
 
+void writeDotBeginning() {
+  printf("/*\n* @command = dot\n* @imageurl = TRUE\n *\n*/\ndigraph g {\n");
+}
 
 
 
 
 int main() {
-    printf("/*\n * @command = dot\n* @imageurl = TRUE\n *\n*/\ndigraph g {\n");
+    writeDotBeginning();
     yyparse();
+    printf("}");
     return 0;
 }
 
