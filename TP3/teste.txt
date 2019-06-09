@@ -78,6 +78,7 @@ EVENTO "Balloon Girl Shredding" {
 	Data = "2018"
 }
 
+
 EVENTO "Exposição no museu do Louvre" {
 	Tipo = "Exposição"
 	Localizacao = "França"

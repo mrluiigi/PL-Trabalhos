@@ -15,13 +15,13 @@
 
 
     typedef struct artistaStruct{
-		char* nome;
-		GSList* listaAtributos;
-		GSList* listaEnsinou;
-		GSList* listaAprendeu;
-		GSList* listaColaborou;
-		GSList* listaProduziu;
-		GSList* listaParticipou;
+        char* nome;
+        GSList* listaAtributos;
+        GSList* listaEnsinou;
+        GSList* listaAprendeu;
+        GSList* listaColaborou;
+        GSList* listaProduziu;
+        GSList* listaParticipou;
     } *ArtistaStruct;
 
     GHashTable* artistasEncontrados = NULL;
@@ -50,10 +50,10 @@
 
     GSList* listaParticipou = NULL;
 
-	GSList* listaExposta = NULL;
-	GSList* listaExpoe = NULL;
+    GSList* listaExposta = NULL;
+    GSList* listaExpoe = NULL;
 
-	
+    
 
 
 
@@ -110,7 +110,7 @@
           temp = listaProduziu;
           fwrite("<h2>Produziu:</h2>\n",1,19, fd);
           while(temp != NULL){
-          	outraEntidade = (char*)temp->data;
+            outraEntidade = (char*)temp->data;
             printf("\"%s\" -> \"%s\" [label=\"produziu\"]\n", title, outraEntidade);
             asprintf(&href,"<a href=\"Obra %s.html\">%s</a>\n", outraEntidade, outraEntidade);
             fwrite(href,1,strlen(href), fd);
@@ -122,7 +122,7 @@
           temp = listaParticipou;
           fwrite("<h2>Participou:</h2>\n",1,20, fd);
           while(temp != NULL){
-          	outraEntidade = (char*)temp->data;
+            outraEntidade = (char*)temp->data;
             printf("\"%s\" -> \"%s\" [label=\"participou\"]\n", title, outraEntidade);
             asprintf(&href,"<a href=\"Evento %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
@@ -164,7 +164,7 @@
         }
         if(listaProduzida != NULL){
           temp = listaProduzida;
-          fwrite("<h2>Produzida:</h2>\n",1,18, fd);
+          fwrite("<h2>Produzida:</h2>\n",1,20, fd);
           while(temp != NULL){
             outraEntidade = (char*)temp->data;
             printf("\"%s\" -> \"%s\" [label=\"Produzida por\"]\n", title, outraEntidade);
@@ -282,13 +282,13 @@ Entidades : Entidades Entidade
 
 
 Entidade : Artista 
-		 | Obra   
-		 | Evento                           
+         | Obra   
+         | Evento                           
          ;
 
-Artista : ART VALOR '{' ArtistaInfo '}'                                        	{  	
+Artista : ART VALOR '{' ArtistaInfo '}'                                         {   
                                                                                     gboolean naoExistia = g_hash_table_insert(artistasEncontrados, $2, $2);
-																			        if(naoExistia == FALSE){
+                                                                                    if(naoExistia == FALSE){
                                                                                         char * mensagemErro;
                                                                                         asprintf(&mensagemErro, "Artista %s repetido\n", $2);
                                                                                         yyerror(mensagemErro);
@@ -296,7 +296,7 @@ Artista : ART VALOR '{' ArtistaInfo '}'                                        	
                                                                                     ArtistaStruct ats = malloc(sizeof(struct artistaStruct));
                                                                                     ats->nome = $2;
                                                                                     ats->listaAtributos = listaAtributos;
-                                                                                    ats->listaEnsinou = listaEnsinou;	
+                                                                                    ats->listaEnsinou = listaEnsinou;   
                                                                                     ats->listaAprendeu = listaAprendeu;   
                                                                                     ats->listaColaborou = listaColaborou;
                                                                                     ats->listaProduziu = listaProduziu;
@@ -304,34 +304,34 @@ Artista : ART VALOR '{' ArtistaInfo '}'                                        	
 
 
                                                                                     writeDotArtista($2);
-                                                                                  	writeHtml($2, $4);
+                                                                                    writeHtml($2, $4);
 
                                                                                     listaAtributos = NULL;
-                                                                                  	listaEnsinou = NULL;
-                                                                                  	listaAprendeu = NULL;
-                                                                                  	listaColaborou = NULL;  
-                                                                                  	listaProduziu = NULL;
-                                                                                  	listaParticipou = NULL;                                                                                	
-                                                                               	}
+                                                                                    listaEnsinou = NULL;
+                                                                                    listaAprendeu = NULL;
+                                                                                    listaColaborou = NULL;  
+                                                                                    listaProduziu = NULL;
+                                                                                    listaParticipou = NULL;                                                                                 
+                                                                                }
         ;
 
-ArtistaInfo : Atributos Relacoes                                       			{
-																					asprintf(&$$, "<table>\n<tr>\n<th>Atributo</th>\n<th>Valor</th>\n</tr>%s</table>", $1);
-																				}
+ArtistaInfo : Atributos Relacoes                                                {
+                                                                                    asprintf(&$$, "<table>\n<tr>\n<th>Atributo</th>\n<th>Valor</th>\n</tr>%s</table>", $1);
+                                                                                }
             ;
 
-Atributos : Atributos Atributo   	                                         	{
-																					asprintf(&$$, "%s\n%s", $1, $2);
-																					listaAtributos = g_slist_append(listaAtributos, ats);
-																				}
-          | %empty                                                           	{
-          																			$$ = "";
-          																		}
+Atributos : Atributos Atributo                                                  {
+                                                                                    asprintf(&$$, "%s\n%s", $1, $2);
+                                                                                    listaAtributos = g_slist_append(listaAtributos, ats);
+                                                                                }
+          | %empty                                                              {
+                                                                                    $$ = "";
+                                                                                }
           ;
 
-Atributo : TipoAtributoArtista'=' VALOR                                         {	
-																				asprintf(&$$, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", $1, $3);
-																				ats = malloc(sizeof(struct atributoStruct));
+Atributo : TipoAtributoArtista'=' VALOR                                         {   
+                                                                                asprintf(&$$, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", $1, $3);
+                                                                                ats = malloc(sizeof(struct atributoStruct));
                                                                                 ats->atribNome = $1;  
                                                                                 ats->atribValor = $3;
                                                                               }
@@ -345,18 +345,18 @@ TipoAtributoArtista : NOMECOMPLETO                                              
                     ;
 
 
-Obra : OBRAKEYWORD VALOR '{' ObraInfo '}'                                   {  	
+Obra : OBRAKEYWORD VALOR '{' ObraInfo '}'                                   {   
                                                                                 gboolean naoExistia = g_hash_table_insert(obrasEncontradas, $2, $2);
-																			    if(naoExistia == FALSE){
-                                                                                   	char * mensagemErro;
+                                                                                if(naoExistia == FALSE){
+                                                                                    char * mensagemErro;
                                                                                     asprintf(&mensagemErro, "Obra %s repetida\n", $2);
                                                                                     yyerror(mensagemErro);
-                                                                                } 	 
+                                                                                }    
 
                                                                                 writeDotObra($2);
-                                                                              	writeHtmlObra($2, $4);
-                                                                              	listaExposta = NULL;
-                                                                              	listaProduzida = NULL;
+                                                                                writeHtmlObra($2, $4);
+                                                                                listaExposta = NULL;
+                                                                                listaProduzida = NULL;
                                                                             }
         ;
 
@@ -364,22 +364,22 @@ Obra : OBRAKEYWORD VALOR '{' ObraInfo '}'                                   {
 
 
 ObraInfo : AtributosObra RelacoesObra                                      {
-																				asprintf(&$$, "<table>\n<tr>\n<th>Atributo</th>\n<th>Valor</th>\n</tr>%s</table>", $1);
-																			}
+                                                                                asprintf(&$$, "<table>\n<tr>\n<th>Atributo</th>\n<th>Valor</th>\n</tr>%s</table>", $1);
+                                                                            }
             ;
 
-AtributosObra : AtributosObra AtributoObra   	                           	{
-																				asprintf(&$$, "%s\n%s", $1, $2);
-																				listaAtributos = g_slist_append(listaAtributos, ats);
-																			}
-          		| %empty                                                   	{
-          																			$$ = "";
-          																	}
+AtributosObra : AtributosObra AtributoObra                                  {
+                                                                                asprintf(&$$, "%s\n%s", $1, $2);
+                                                                                listaAtributos = g_slist_append(listaAtributos, ats);
+                                                                            }
+                | %empty                                                    {
+                                                                                    $$ = "";
+                                                                            }
           ;
 
-AtributoObra : TipoAtributoObra '=' VALOR                                   {	
-																				asprintf(&$$, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", $1, $3);
-																				ats = malloc(sizeof(struct atributoStruct));
+AtributoObra : TipoAtributoObra '=' VALOR                                   {   
+                                                                                asprintf(&$$, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", $1, $3);
+                                                                                ats = malloc(sizeof(struct atributoStruct));
                                                                                 ats->atribNome = $1;  
                                                                                 ats->atribValor = $3;
                                                                             }
@@ -396,17 +396,17 @@ TipoAtributoObra : NOME                                                         
 
 
 
-Evento : EVENTOKEYWORD VALOR '{' EventoInfo '}'                             {  	
+Evento : EVENTOKEYWORD VALOR '{' EventoInfo '}'                             {   
                                                                                 gboolean naoExistia = g_hash_table_insert(eventosEncontrados, $2, $2);
-																			    if(naoExistia == FALSE){
-                                                                                   	char * mensagemErro;
-                                                                                    asprintf(&mensagemErro, "Obra %s repetida\n", $2);
+                                                                                if(naoExistia == FALSE){
+                                                                                    char * mensagemErro;
+                                                                                    asprintf(&mensagemErro, "Evento %s repetido\n", $2);
                                                                                     yyerror(mensagemErro);
-                                                                                }	 
+                                                                                }    
 
                                                                                 writeDotEvento($2);
-                                                                              	writeHtmlEvento($2, $4);
-                                                                              	listaExpoe = NULL;                                                                             	
+                                                                                writeHtmlEvento($2, $4);
+                                                                                listaExpoe = NULL;                                                                              
                                                                             }
         ;
 
@@ -414,25 +414,25 @@ Evento : EVENTOKEYWORD VALOR '{' EventoInfo '}'                             {
 
 
 EventoInfo : AtributosEvento RelacoesEvento                                 {
-																				asprintf(&$$, "<table>\n<tr>\n<th>Atributo</th>\n<th>Valor</th>\n</tr>%s</table>", $1);
-																			}
+                                                                                asprintf(&$$, "<table>\n<tr>\n<th>Atributo</th>\n<th>Valor</th>\n</tr>%s</table>", $1);
+                                                                            }
             ;
 
-AtributosEvento : AtributosEvento AtributoEvento   	                        {
-																				asprintf(&$$, "%s\n%s", $1, $2);
-																				listaAtributos = g_slist_append(listaAtributos, ats);
-																			}
-          		| %empty                                                   	{
-          																			$$ = "";
-          																	}
+AtributosEvento : AtributosEvento AtributoEvento                            {
+                                                                                asprintf(&$$, "%s\n%s", $1, $2);
+                                                                                listaAtributos = g_slist_append(listaAtributos, ats);
+                                                                            }
+                | %empty                                                    {
+                                                                                    $$ = "";
+                                                                            }
           ;
 
-AtributoEvento : TipoAtributoEvento '=' VALOR                                     {	
-																				asprintf(&$$, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", $1, $3);
-																				ats = malloc(sizeof(struct atributoStruct));
+AtributoEvento : TipoAtributoEvento '=' VALOR                               { 
+                                                                                asprintf(&$$, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", $1, $3);
+                                                                                ats = malloc(sizeof(struct atributoStruct));
                                                                                 ats->atribNome = $1;  
                                                                                 ats->atribValor = $3;
-                                                                              }
+                                                                            }
          ;
 
 
@@ -443,83 +443,91 @@ TipoAtributoEvento : TIPO                                                      {
 
 
 
-Relacoes : Relacoes Relacao   	                                         	{
-																				
-																			}
-      	 | %empty                                                           {
-      																			
-      																		}
+Relacoes : Relacoes Relacao                                                 {
+                                                                                
+                                                                            }
+         | %empty                                                           {
+                                                                                
+                                                                            }
          ;
 
-Relacao : ENSINOU '=' '{' ListaEntidades '}'                                {	
-                                                                                artistasEsperados = g_slist_concat(artistasEsperados, listaRelacoesTemp);
-																				listaEnsinou = g_slist_concat(listaEnsinou, listaRelacoesTemp);
-																				listaRelacoesTemp = NULL;
+Relacao : ENSINOU '=' '{' ListaEntidades '}'                                {   
+                                                                                GSList * l = g_slist_copy(listaRelacoesTemp);
+                                                                                artistasEsperados = g_slist_concat(artistasEsperados, l);
+                                                                                listaEnsinou = g_slist_concat(listaEnsinou, listaRelacoesTemp);
+                                                                                listaRelacoesTemp = NULL;
                                                                             }
-        | APRENDEU '=' '{' ListaEntidades '}'                               {	
-                                                                                artistasEsperados = g_slist_concat(artistasEsperados, listaRelacoesTemp);
-																				listaAprendeu = g_slist_concat(listaAprendeu, listaRelacoesTemp);
-																				listaRelacoesTemp = NULL;
+        | APRENDEU '=' '{' ListaEntidades '}'                               {   
+                                                                                GSList * l = g_slist_copy(listaRelacoesTemp);
+                                                                                artistasEsperados = g_slist_concat(artistasEsperados, l);
+                                                                                listaAprendeu = g_slist_concat(listaAprendeu, listaRelacoesTemp);
+                                                                                listaRelacoesTemp = NULL;
                                                                             }
-        | COLABOROU '=' '{' ListaEntidades '}'                              {	
-                                                                                artistasEsperados = g_slist_concat(artistasEsperados, listaRelacoesTemp);
-        																		listaColaborou = g_slist_concat(listaColaborou, listaRelacoesTemp);
-        																		listaRelacoesTemp = NULL;
-        																	}
-        | PRODUZIU '=' '{' ListaEntidades '}' 								{
-        																		listaProduziu = g_slist_concat(listaProduziu, listaRelacoesTemp);
-        																		listaRelacoesTemp = NULL;
-        																	}
-        | PARTICIPOU '=' '{' ListaEntidades '}' 							{
-        																		listaParticipou = g_slist_concat(listaParticipou, listaRelacoesTemp);
-        																		listaRelacoesTemp = NULL;
-        																	}
+        | COLABOROU '=' '{' ListaEntidades '}'                              {   
+                                                                                GSList * l = g_slist_copy(listaRelacoesTemp);
+                                                                                artistasEsperados = g_slist_concat(artistasEsperados, l);
+                                                                                listaColaborou = g_slist_concat(listaColaborou, listaRelacoesTemp);
+                                                                                listaRelacoesTemp = NULL;
+                                                                            }
+        | PRODUZIU '=' '{' ListaEntidades '}'                               {
+                                                                                GSList * l = g_slist_copy(listaRelacoesTemp);
+                                                                                obrasEsperadas = g_slist_concat(obrasEsperadas, l);
+                                                                                listaProduziu = g_slist_concat(listaProduziu, listaRelacoesTemp);
+                                                                                listaRelacoesTemp = NULL;
+                                                                            }
+        | PARTICIPOU '=' '{' ListaEntidades '}'                             {
+                                                                                GSList * l = g_slist_copy(listaRelacoesTemp);
+                                                                                eventosEsperados = g_slist_concat(eventosEsperados, l);
+                                                                                listaParticipou = g_slist_concat(listaParticipou, listaRelacoesTemp);
+                                                                                listaRelacoesTemp = NULL;
+                                                                            }
         ;
 
-RelacoesObra : RelacoesObra RelacaoObra   	                                {
-																				
-																			}
-      	 	 | %empty                                                       {
-      																			
-      																		}
-         	 ;
-
-RelacaoObra : EXPOSTA '=' '{' ListaEntidades '}'                            {	
-                                                                                eventosEsperados = g_slist_concat(eventosEsperados, listaRelacoesTemp);
-																				listaExposta = g_slist_concat(listaExposta, listaRelacoesTemp);
-																				listaRelacoesTemp = NULL;
+RelacoesObra : RelacoesObra RelacaoObra                                     {
+                                                                                
                                                                             }
-            | PRODUZIDA '=' '{' ListaEntidades '}'							{	
-                                                                                artistasEsperados = g_slist_concat(artistasEsperados, listaRelacoesTemp);
-																				listaProduzida = g_slist_concat(listaProduzida, listaRelacoesTemp);
-																				listaRelacoesTemp = NULL;
+             | %empty                                                       {
+                                                                                
                                                                             }
-       		;
+             ;
 
-RelacoesEvento : RelacoesEvento RelacaoEvento   	                        {
-																				
-																			}
-      	 	 | %empty                                                       {
-      																			
-      																		}
-         	 ;
-
-RelacaoEvento : EXPOE '=' '{' ListaEntidades '}'                            {	
-                                                                                obrasEsperadas = g_slist_concat(obrasEsperadas, listaRelacoesTemp);
-																				listaExpoe = g_slist_concat(listaExpoe, listaRelacoesTemp);
-																				listaRelacoesTemp = NULL;
+RelacaoObra : EXPOSTA '=' '{' ListaEntidades '}'                            {   
+                                                                                GSList * l = g_slist_copy(listaRelacoesTemp);
+                                                                                eventosEsperados = g_slist_concat(eventosEsperados, l);
+                                                                                listaExposta = g_slist_concat(listaExposta, listaRelacoesTemp);
+                                                                                listaRelacoesTemp = NULL;
                                                                             }
-       		;
+            | PRODUZIDA '=' '{' ListaEntidades '}'                          {   
+                                                                                GSList * l = g_slist_copy(listaRelacoesTemp);
+                                                                                artistasEsperados = g_slist_concat(artistasEsperados, l);
+                                                                                listaProduzida = g_slist_concat(listaProduzida, listaRelacoesTemp);
+                                                                                listaRelacoesTemp = NULL;
+                                                                            }
+            ;
 
-ListaEntidades : ListaEntidades ';' VALOR 									{
-																				listaRelacoesTemp = g_slist_append(listaRelacoesTemp, $3);
+RelacoesEvento : RelacoesEvento RelacaoEvento                               {
+                                                                                
+                                                                            }
+             | %empty                                                       {
+                                                                                
+                                                                            }
+             ;
 
-																			}
-			   | VALOR 														{
-			   																	listaRelacoesTemp = g_slist_append(listaRelacoesTemp, $1);
+RelacaoEvento : EXPOE '=' '{' ListaEntidades '}'                            {   
+                                                                                GSList * l = g_slist_copy(listaRelacoesTemp);
+                                                                                obrasEsperadas = g_slist_concat(obrasEsperadas, l);
+                                                                                listaExpoe = g_slist_concat(listaExpoe, listaRelacoesTemp);
+                                                                                listaRelacoesTemp = NULL;
+                                                                            }
+            ;
 
-			   																}
-			   ;
+ListaEntidades : ListaEntidades ';' VALOR                                   {
+                                                                                listaRelacoesTemp = g_slist_append(listaRelacoesTemp, $3);
+                                                                            }
+               | VALOR                                                      {
+                                                                                listaRelacoesTemp = g_slist_append(listaRelacoesTemp, $1);
+                                                                            }
+               ;
 
 
 %%
@@ -549,6 +557,34 @@ void testeArtistasEsperados(){
 }
 
 
+void testeObrasEsperadas(){
+    GSList* temp = obrasEsperadas;
+    while(temp != NULL){
+    char* esperado = (char*)temp->data;
+    gpointer res = g_hash_table_lookup (obrasEncontradas,esperado);
+    if(res == NULL){
+        char * mensagemErro;
+        asprintf(&mensagemErro, "Esperado encontrar obra %s\n", esperado);
+        yyerror(mensagemErro);
+    }
+    temp = temp->next;
+    }     
+}
+
+
+void testeEventosEsperados(){
+    GSList* temp = eventosEsperados;
+    while(temp != NULL){
+    char* esperado = (char*)temp->data;
+    gpointer res = g_hash_table_lookup (eventosEncontrados,esperado);
+    if(res == NULL){
+        char * mensagemErro;
+        asprintf(&mensagemErro, "Esperado encontrar evento %s\n", esperado);
+        yyerror(mensagemErro);
+    }
+    temp = temp->next;
+    }     
+}
 
 int main() {
     artistasEncontrados = g_hash_table_new(g_str_hash,g_str_equal);
@@ -558,5 +594,7 @@ int main() {
     yyparse();
     printf("}");
     testeArtistasEsperados();
+    testeObrasEsperadas();
+    testeEventosEsperados();
     return 0;
 }
