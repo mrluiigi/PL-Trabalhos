@@ -165,12 +165,29 @@
 %token PRODUZIU
 %token PARTICIPOU
 
+%token NOMECOMPLETO
+%token PAIS
+%token SECULO
+%token PERIODO
+
+
+%token NOME
+%token DATA
+%token TECNICA
+%token VALORMONETARIO
+%token LOCALEXPOSICAO
+%token TIPO
+%token LOCALIZACAO
+
+
+
+
+
 %token <string> VALOR
-%token <string> ATRIBUTOARTISTA
 %token <string> ATRIBUTOOBRA
 %token <string> ATRIBUTOEVENTO
 
-%type <string> Atributo Atributos ArtistaInfo ObraInfo AtributoObra AtributosObra EventoInfo AtributosEvento AtributoEvento
+%type <string> Atributo Atributos ArtistaInfo ObraInfo AtributoObra AtributosObra EventoInfo AtributosEvento AtributoEvento TipoAtributoArtista TipoAtributoObra TipoAtributoEvento
 
 %%
 
@@ -230,7 +247,7 @@ Atributos : Atributos Atributo   	                                         	{
           																		}
           ;
 
-Atributo : ATRIBUTOARTISTA '=' VALOR                                         {	
+Atributo : TipoAtributoArtista'=' VALOR                                         {	
 																				asprintf(&$$, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", $1, $3);
 																				ats = malloc(sizeof(struct atributoStruct));
                                                                                 ats->atribNome = $1;  
@@ -239,6 +256,11 @@ Atributo : ATRIBUTOARTISTA '=' VALOR                                         {
          ;
 
 
+TipoAtributoArtista : NOMECOMPLETO                                              {$$ = "Nome completo";}
+                    | PAIS                                                      {$$ = "País";}
+                    | SECULO                                                    {$$ = "Século";}
+                    | PERIODO                                                   {$$ = "Período";}                                                              
+                    ;
 
 
 Obra : OBRAKEYWORD VALOR '{' ObraInfo '}'                                   {  	
@@ -283,7 +305,7 @@ AtributosObra : AtributosObra AtributoObra   	                           	{
           																	}
           ;
 
-AtributoObra : ATRIBUTOOBRA '=' VALOR                                         {	
+AtributoObra : TipoAtributoObra '=' VALOR                                         {	
 																				asprintf(&$$, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", $1, $3);
 																				ats = malloc(sizeof(struct atributoStruct));
                                                                                 ats->atribNome = $1;  
@@ -292,6 +314,12 @@ AtributoObra : ATRIBUTOOBRA '=' VALOR                                         {
          ;
 
 
+TipoAtributoObra : NOME                                                         {$$ = "Nome";}
+                 | DATA                                                         {$$ = "Data";}
+                 | TECNICA                                                      {$$ = "Técnica";}
+                 | VALORMONETARIO                                               {$$ = "Valor";}                                                              
+                 | LOCALEXPOSICAO                                               {$$ = "Local de exposição";}   
+                 ;
 
 
 
@@ -338,7 +366,7 @@ AtributosEvento : AtributosEvento AtributoEvento   	                           	
           																	}
           ;
 
-AtributoEvento : ATRIBUTOEVENTO '=' VALOR                                     {	
+AtributoEvento : TipoAtributoEvento '=' VALOR                                     {	
 																				asprintf(&$$, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", $1, $3);
 																				ats = malloc(sizeof(struct atributoStruct));
                                                                                 ats->atribNome = $1;  
@@ -347,6 +375,10 @@ AtributoEvento : ATRIBUTOEVENTO '=' VALOR                                     {
          ;
 
 
+TipoAtributoEvento : TIPO                                                      {$$ = "Tipo";}
+                   | LOCALIZACAO                                               {$$ = "Localização";}
+                   | DATA                                                      {$$ = "Data";} 
+                   ;
 
 
 

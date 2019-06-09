@@ -9,26 +9,25 @@
 
 ARTISTA 	    	{return ART;}
 
-Nome" "Completo		{yylval.string = strdup(yytext); return ATRIBUTOARTISTA;}
-Pais				{yylval.string = strdup(yytext); return ATRIBUTOARTISTA;}
-Seculo				{yylval.string = strdup(yytext); return ATRIBUTOARTISTA;}
-Periodo				{yylval.string = strdup(yytext); return ATRIBUTOARTISTA;}
+Nome" "Completo		{yylval.string = strdup(yytext); return NOMECOMPLETO;}
+Pais				{yylval.string = strdup(yytext); return PAIS;}
+Seculo				{yylval.string = strdup(yytext); return SECULO;}
+Periodo				{yylval.string = strdup(yytext); return PERIODO;}
 
 
 OBRA				{return OBRAKEYWORD;}
 
-Nome				{yylval.string = strdup(yytext); return ATRIBUTOOBRA;}
-Ano					{yylval.string = strdup(yytext); return ATRIBUTOOBRA;}
-Tecnica				{yylval.string = strdup(yytext); return ATRIBUTOOBRA;}
-Valor				{yylval.string = strdup(yytext); return ATRIBUTOOBRA;}
-Local" "Exposicao 	{yylval.string = strdup(yytext); return ATRIBUTOOBRA;}
+Nome				{yylval.string = strdup(yytext); return NOME;}
+Data				{yylval.string = strdup(yytext); return DATA;}
+Tecnica				{yylval.string = strdup(yytext); return TECNICA;}
+Valor				{yylval.string = strdup(yytext); return VALORMONETARIO;}
+Local" "Exposicao 	{yylval.string = strdup(yytext); return LOCALEXPOSICAO;}
 
 
 EVENTO				{return EVENTOKEYWORD;}
 
-Tipo				{yylval.string = strdup(yytext); return ATRIBUTOEVENTO;}
-Localizacao			{yylval.string = strdup(yytext); return ATRIBUTOEVENTO;}
-Data				{yylval.string = strdup(yytext); return ATRIBUTOEVENTO;}
+Tipo				{yylval.string = strdup(yytext); return TIPO;}
+Localizacao			{yylval.string = strdup(yytext); return LOCALIZACAO;}
 
 
 

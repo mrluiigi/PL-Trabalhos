@@ -32,7 +32,7 @@ ARTISTA "Van Gogh" {
 
 OBRA "Mona lisa" {
 	Nome = "Mona lisa"
-	Ano = "1503"
+	Data = "1503"
 	Tecnica = "Tinta a óleo" 
 	Valor = "2,5 mil milhões"
 	Local Exposicao = "Museu do Louvre"
@@ -41,7 +41,7 @@ OBRA "Mona lisa" {
 
 OBRA "The Starry Night" {
 	Nome = "The Starry Night"
-	Ano = "1889"
+	Data = "1889"
 	Tecnica = "Tinta a óleo" 
 	Valor = "indeterminado"
 	Local Exposicao = "Museu de Arte Moderna"
