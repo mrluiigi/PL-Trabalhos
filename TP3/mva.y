@@ -28,8 +28,11 @@
     GSList* artistasEsperados = NULL;
 
     GHashTable* obrasEncontradas = NULL;
+    GSList* obrasEsperadas = NULL;
+
 
     GHashTable* eventosEncontrados = NULL;
+    GSList* eventosEsperados = NULL;
 
 
     GSList* listaAtributos;
@@ -45,10 +48,12 @@
     GSList* listaProduziu = NULL;
     GSList* listaParticipou = NULL;
 
+	GSList* listaExposta = NULL;
+	GSList* listaExpoe = NULL;
+
+	
 
 
-    //char* tabelaAtributos;
-    //char* relacao;
 
     void writeHtml(char* title, char* body) {
         char* fileName;
@@ -129,7 +134,7 @@
     }
 
 
-    void writeObraHtml(char* title, char* body) {
+    void writeHtmlObra(char* title, char* body) {
         char* fileName;
 
         asprintf(&fileName, "Obra %s.html", title);
@@ -140,12 +145,70 @@
         fwrite(title, 1, strlen(title), fd);
         fwrite("</h1>\n</head>\n<body>" , 1 , 20, fd );
         fwrite(body, 1, strlen(body), fd);
+
+        GSList* temp;
+        char * href;
+        char* outraEntidade;
+        if(listaExposta != NULL){
+          temp = listaExposta;
+          fwrite("<h2>Ensinou:</h2>\n",1,18, fd);
+          while(temp != NULL){
+            outraEntidade = (char*)temp->data;
+            printf("\"%s\" -> \"%s\" [label=\"Exposta em\"]\n", title, outraEntidade);
+            asprintf(&href,"<a href=\"Evento %s.html\">%s</a>\n", outraEntidade,outraEntidade);
+            fwrite(href,1,strlen(href), fd);
+            temp = temp->next;
+          } 
+        }
+
         fwrite("</body>\n</html>" , 1 , 15, fd );
+
+
+    }
+
+    void writeHtmlEvento(char* title, char* body) {
+        char* fileName;
+
+        asprintf(&fileName, "Evento %s.html", title);
+
+        FILE* fd = fopen(fileName,"w");
+
+        fwrite("<!DOCTYPE html>\n<html>\n<head>\n<h1>" , 1 , 34, fd );
+        fwrite(title, 1, strlen(title), fd);
+        fwrite("</h1>\n</head>\n<body>" , 1 , 20, fd );
+        fwrite(body, 1, strlen(body), fd);
+
+        GSList* temp;
+        char * href;
+        char* outraEntidade;
+        if(listaExpoe != NULL){
+          temp = listaExpoe;
+          fwrite("<h2>Expoe:</h2>\n",1,18, fd);
+          while(temp != NULL){
+            outraEntidade = (char*)temp->data;
+            printf("\"%s\" -> \"%s\" [label=\"Expoe\"]\n", title, outraEntidade);
+            asprintf(&href,"<a href=\"Obra %s.html\">%s</a>\n", outraEntidade,outraEntidade);
+            fwrite(href,1,strlen(href), fd);
+            temp = temp->next;
+          } 
+        }
+
+        fwrite("</body>\n</html>" , 1 , 15, fd );
+
+
     }
 
 
     void writeDotArtista(char* nome){
         printf("\"%s\" [URL=\"file:Artista %s.html\"]\n", nome, nome);
+    }
+
+    void writeDotObra(char* nome){
+        printf("\"%s\" [URL=\"file:Obra %s.html\"]\n", nome, nome);
+    }
+
+    void writeDotEvento(char* nome){
+        printf("\"%s\" [URL=\"file:Evento %s.html\"]\n", nome, nome);
     }
 
 
@@ -164,6 +227,10 @@
 
 %token PRODUZIU
 %token PARTICIPOU
+
+%token EXPOSTA
+
+%token EXPOE
 
 %token NOMECOMPLETO
 %token PAIS
@@ -223,7 +290,7 @@ Artista : ART VALOR '{' ArtistaInfo '}'                                        	
 
                                                                                     writeDotArtista($2);
                                                                                   	writeHtml($2, $4);
-                                                                                  //	writeRelacoes($2);
+
                                                                                     listaAtributos = NULL;
                                                                                   	listaEnsinou = NULL;
                                                                                   	listaAprendeu = NULL;
@@ -269,29 +336,18 @@ Obra : OBRAKEYWORD VALOR '{' ObraInfo '}'                                   {
                                                                                    	char * mensagemErro;
                                                                                     asprintf(&mensagemErro, "Obra %s repetida\n", $2);
                                                                                     yyerror(mensagemErro);
-                                                                                }
-                                                                                /*ArtistaStruct ats = malloc(sizeof(struct artistaStruct));
-                                                                                ats->nome = $2;
-                                                                                ats->listaAtributos = listaAtributos;
-                                                                                ats->listaEnsinou = listaEnsinou;	
-                                                                                ats->listaAprendeu = listaAprendeu;   
-                                                                                ats->listaColaborou = listaColaborou; 
-                                                                                */  	 
+                                                                                } 	 
 
-                                                                                writeDotArtista($2);
-                                                                              	writeObraHtml($2, $4);
-                                                                              	/*
-                                                                                listaAtributos = NULL;
-                                                                              	listaEnsinou = NULL;
-                                                                              	listaAprendeu = NULL;
-                                                                              	listaColaborou = NULL; */                                                                                 	
+                                                                                writeDotObra($2);
+                                                                              	writeHtmlObra($2, $4);
+                                                                              	listaExposta = NULL;
                                                                             }
         ;
 
 
 
 
-ObraInfo : AtributosObra Relacoes                                       	{
+ObraInfo : AtributosObra RelacoesObra                                      {
 																				asprintf(&$$, "<table>\n<tr>\n<th>Atributo</th>\n<th>Valor</th>\n</tr>%s</table>", $1);
 																			}
             ;
@@ -305,12 +361,12 @@ AtributosObra : AtributosObra AtributoObra   	                           	{
           																	}
           ;
 
-AtributoObra : TipoAtributoObra '=' VALOR                                         {	
+AtributoObra : TipoAtributoObra '=' VALOR                                   {	
 																				asprintf(&$$, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", $1, $3);
 																				ats = malloc(sizeof(struct atributoStruct));
                                                                                 ats->atribNome = $1;  
                                                                                 ats->atribValor = $3;
-                                                                              }
+                                                                            }
          ;
 
 
@@ -324,40 +380,29 @@ TipoAtributoObra : NOME                                                         
 
 
 
-Evento : EVENTOKEYWORD VALOR '{' EventoInfo '}'                              {  	
+Evento : EVENTOKEYWORD VALOR '{' EventoInfo '}'                             {  	
                                                                                 gboolean naoExistia = g_hash_table_insert(eventosEncontrados, $2, $2);
 																			    if(naoExistia == FALSE){
                                                                                    	char * mensagemErro;
                                                                                     asprintf(&mensagemErro, "Obra %s repetida\n", $2);
                                                                                     yyerror(mensagemErro);
-                                                                                }
-                                                                                /*ArtistaStruct ats = malloc(sizeof(struct artistaStruct));
-                                                                                ats->nome = $2;
-                                                                                ats->listaAtributos = listaAtributos;
-                                                                                ats->listaEnsinou = listaEnsinou;	
-                                                                                ats->listaAprendeu = listaAprendeu;   
-                                                                                ats->listaColaborou = listaColaborou; 
-                                                                                */  	 
+                                                                                }	 
 
-                                                                                writeDotArtista($2);
-                                                                              	writeHtml($2, $4);
-                                                                              	/*
-                                                                                listaAtributos = NULL;
-                                                                              	listaEnsinou = NULL;
-                                                                              	listaAprendeu = NULL;
-                                                                              	listaColaborou = NULL; */                                                                                 	
+                                                                                writeDotEvento($2);
+                                                                              	writeHtmlEvento($2, $4);
+                                                                              	listaExpoe = NULL;                                                                             	
                                                                             }
         ;
 
 
 
 
-EventoInfo : AtributosEvento Relacoes                                       	{
+EventoInfo : AtributosEvento RelacoesEvento                                 {
 																				asprintf(&$$, "<table>\n<tr>\n<th>Atributo</th>\n<th>Valor</th>\n</tr>%s</table>", $1);
 																			}
             ;
 
-AtributosEvento : AtributosEvento AtributoEvento   	                           	{
+AtributosEvento : AtributosEvento AtributoEvento   	                        {
 																				asprintf(&$$, "%s\n%s", $1, $2);
 																				listaAtributos = g_slist_append(listaAtributos, ats);
 																			}
@@ -414,6 +459,36 @@ Relacao : ENSINOU '=' '{' ListaEntidades '}'                                {
         																		listaRelacoesTemp = NULL;
         																	}
         ;
+
+RelacoesObra : RelacoesObra RelacaoObra   	                                {
+																				
+																			}
+      	 	 | %empty                                                       {
+      																			
+      																		}
+         	 ;
+
+RelacaoObra : EXPOSTA '=' '{' ListaEntidades '}'                            {	
+                                                                                eventosEsperados = g_slist_concat(eventosEsperados, listaRelacoesTemp);
+																				listaExposta = g_slist_concat(listaExposta, listaRelacoesTemp);
+																				listaRelacoesTemp = NULL;
+                                                                            }
+       		;
+
+RelacoesEvento : RelacoesEvento RelacaoEvento   	                        {
+																				
+																			}
+      	 	 | %empty                                                       {
+      																			
+      																		}
+         	 ;
+
+RelacaoEvento : EXPOE '=' '{' ListaEntidades '}'                            {	
+                                                                                obrasEsperadas = g_slist_concat(obrasEsperadas, listaRelacoesTemp);
+																				listaExpoe = g_slist_concat(listaExpoe, listaRelacoesTemp);
+																				listaRelacoesTemp = NULL;
+                                                                            }
+       		;
 
 ListaEntidades : ListaEntidades ';' VALOR 									{
 																				listaRelacoesTemp = g_slist_append(listaRelacoesTemp, $3);

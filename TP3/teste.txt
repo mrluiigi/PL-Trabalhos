@@ -2,7 +2,7 @@ ARTISTA "Banksy" {
 	Nome Completo = "Anónimo"
 	Pais = "Reino Unido"
 	Seculo = "XXI"
-	Periodo =  "Contemporâneo ; Arte de rua" 
+	Periodo =  "Contemporâneo ; Arte de rua"
 	participou = {"Balloon Girl Shredding"}
 }
 
@@ -20,7 +20,7 @@ ARTISTA "da Vinci" {
 	Seculo = "XV/XVI"
 	Periodo = "Renascentismo"
 	aprendeuCom = {"Verrocchio"}
-	produziu = {"Mona lisa"}
+	produziu = {"Mona Lisa"}
 }
 
 ARTISTA "Van Gogh" {
@@ -30,12 +30,13 @@ ARTISTA "Van Gogh" {
 	Periodo = "Renascentista/Pós-Impressionismo"
 }
 
-OBRA "Mona lisa" {
-	Nome = "Mona lisa"
+OBRA "Mona Lisa" {
+	Nome = "Mona Lisa"
 	Data = "1503"
 	Tecnica = "Tinta a óleo" 
 	Valor = "2,5 mil milhões"
 	Local Exposicao = "Museu do Louvre"
+	Exposta em = {"Exposição no museu do Louvre"}
 }
 
 
@@ -52,6 +53,13 @@ EVENTO "Balloon Girl Shredding" {
 	Tipo = "Leilão"
 	Localizacao = "Inglaterra"
 	Data = "2018"
+}
+
+EVENTO "Exposição no museu do Louvre" {
+	Tipo = "Exposição"
+	Localizacao = "França"
+	Data = "A decorrer"
+	Expoe = {"Mona Lisa"}
 }
 
 	

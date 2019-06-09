@@ -38,6 +38,9 @@ colaborouCom		{return COLABOROU;}
 produziu			{return PRODUZIU;}
 participou			{return PARTICIPOU;}
 
+Exposta" "em 		{return EXPOSTA;}
+Expoe				{return EXPOE;}
+
 
 [{}=";]				{return yytext[0];}
 \"[^"]*\"	    	{	yytext[yyleng -	1] = '\0';
