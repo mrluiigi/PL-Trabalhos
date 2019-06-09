@@ -53,6 +53,11 @@
     GSList* listaExposta = NULL;
     GSList* listaExpoe = NULL;
 
+    GSList* listaVendida = NULL;
+    GSList* listaVendidos = NULL;
+
+
+
     char * imagem = NULL;
 
 
@@ -173,6 +178,17 @@
             temp = temp->next;
           } 
         }
+        if(listaVendida != NULL){
+          temp = listaVendida;
+          fwrite("<h2>Vendida:</h2>\n",1,20, fd);
+          while(temp != NULL){
+            outraEntidade = (char*)temp->data;
+            printf("\"%s\" -> \"%s\" [label=\"Vendida em\"]\n", title, outraEntidade);
+            asprintf(&href,"<a href=\"Evento %s.html\">%s</a>\n", outraEntidade,outraEntidade);
+            fwrite(href,1,strlen(href), fd);
+            temp = temp->next;
+          } 
+        }
 
         fwrite("</body>\n</html>" , 1 , 15, fd );
 
@@ -200,6 +216,17 @@
           while(temp != NULL){
             outraEntidade = (char*)temp->data;
             printf("\"%s\" -> \"%s\" [label=\"Expoe\"]\n", title, outraEntidade);
+            asprintf(&href,"<a href=\"Obra %s.html\">%s</a>\n", outraEntidade,outraEntidade);
+            fwrite(href,1,strlen(href), fd);
+            temp = temp->next;
+          } 
+        }
+        if(listaVendidos != NULL){
+          temp = listaVendidos;
+          fwrite("<h2>Vendidos:</h2>\n",1,18, fd);
+          while(temp != NULL){
+            outraEntidade = (char*)temp->data;
+            printf("\"%s\" -> \"%s\" [label=\"Vendidos\"]\n", title, outraEntidade);
             asprintf(&href,"<a href=\"Obra %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
             temp = temp->next;
@@ -251,6 +278,9 @@
 %token EXPOE
 
 %token PRODUZIDA
+
+%token VENDIDA
+%token VENDEU
 
 %token NOMECOMPLETO
 %token PAIS
@@ -316,7 +346,7 @@ Artista : ART VALOR '{' ArtistaInfo '}'                                         
                                                                                     listaAprendeu = NULL;
                                                                                     listaColaborou = NULL;  
                                                                                     listaProduziu = NULL;
-                                                                                    listaParticipou = NULL;  
+                                                                                    listaParticipou = NULL;
                                                                                     imagem = NULL;                                                                               
                                                                                 }
         ;
@@ -367,6 +397,7 @@ Obra : OBRAKEYWORD VALOR '{' ObraInfo '}'                                   {
                                                                                 writeHtmlObra($2, $4);
                                                                                 listaExposta = NULL;
                                                                                 listaProduzida = NULL;
+                                                                                listaVendida = NULL;  
                                                                             }
         ;
 
@@ -416,7 +447,8 @@ Evento : EVENTOKEYWORD VALOR '{' EventoInfo '}'                             {
 
                                                                                 writeDotEvento($2);
                                                                                 writeHtmlEvento($2, $4);
-                                                                                listaExpoe = NULL;                                                                              
+                                                                                listaExpoe = NULL;
+                                                                                listaVendidos = NULL;                                                                              
                                                                             }
         ;
 
@@ -513,6 +545,12 @@ RelacaoObra : EXPOSTA '=' '{' ListaEntidades '}'                            {
                                                                                 listaProduzida = g_slist_concat(listaProduzida, listaRelacoesTemp);
                                                                                 listaRelacoesTemp = NULL;
                                                                             }
+            | VENDIDA '=' '{' ListaEntidades '}'							{
+            																	GSList * l = g_slist_copy(listaRelacoesTemp);
+                                                                                eventosEsperados = g_slist_concat(eventosEsperados, l);
+                                                                                listaVendida = g_slist_concat(listaVendida, listaRelacoesTemp);
+                                                                                listaRelacoesTemp = NULL;
+            																}
             ;
 
 RelacoesEvento : RelacoesEvento RelacaoEvento                               {
@@ -529,6 +567,12 @@ RelacaoEvento : EXPOE '=' '{' ListaEntidades '}'                            {
                                                                                 listaExpoe = g_slist_concat(listaExpoe, listaRelacoesTemp);
                                                                                 listaRelacoesTemp = NULL;
                                                                             }
+              | VENDEU '=' '{' ListaEntidades '}'							{
+              																	GSList * l = g_slist_copy(listaRelacoesTemp);
+                                                                                obrasEsperadas = g_slist_concat(obrasEsperadas, l);
+                                                                                listaVendidos = g_slist_concat(listaVendidos, listaRelacoesTemp);
+                                                                                listaRelacoesTemp = NULL;
+              																}
             ;
 
 ListaEntidades : ListaEntidades ';' VALOR                                   {

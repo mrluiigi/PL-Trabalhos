@@ -42,6 +42,8 @@ participou			{return PARTICIPOU;}
 Exposta" "em 		{return EXPOSTA;}
 Expoe				{return EXPOE;}
 Produzida" "por 	{return PRODUZIDA;}
+Vendida				{return VENDIDA;}
+Vendeu				{return VENDEU;}
 
 
 [{}=";]				{return yytext[0];}

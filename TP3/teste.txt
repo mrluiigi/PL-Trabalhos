@@ -69,11 +69,21 @@ OBRA "O Batismo de Cristo" {
 	Local Exposicao = "Galleria degli Uffizi"
 }
 
+OBRA "Balloon Girl" {
+	Nome = "Balloon Girl"
+	Data = "2002"
+	Tecnica = "Estêncil" 
+	Valor = "£1,042,000"
+	Local Exposicao = "Staatsgalerie Stuttgart"
+	Vendida = {"Balloon Girl Shredding"}
+}
+
 
 EVENTO "Balloon Girl Shredding" {
 	Tipo = "Leilão"
 	Localizacao = "Inglaterra"
 	Data = "2018"
+	Vendeu = {"Balloon Girl"}
 }
 
 
