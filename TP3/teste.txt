@@ -20,8 +20,9 @@ ARTISTA "da Vinci" {
 	Pais = "Itália"
 	Seculo = "XV/XVI"
 	Periodo = "Renascentismo"
+	Imagem = "davinci.jpg"
 	aprendeuCom = {"Verrocchio"}
-	produziu = {"Mona Lisa";"A última ceia"}
+	produziu = {"Mona Lisa";"A última ceia";"O Batismo de Cristo"}
 	colaborouCom = {"Verrocchio"}
 }
 
@@ -40,7 +41,6 @@ OBRA "Mona Lisa" {
 	Valor = "2,5 mil milhões"
 	Local Exposicao = "Museu do Louvre"
 	Exposta em = {"Exposição no museu do Louvre"}
-	Produzida por = {"da Vinci"}
 }
 
 OBRA "A última ceia" {
@@ -49,7 +49,6 @@ OBRA "A última ceia" {
 	Tecnica = "Da têmpera e óleo sobre duas camadas de gesso aplicadas em estuque " 
 	Valor = "Indeterminado"
 	Local Exposicao = "Santa Maria delle Grazie"
-	Produzida por = {"da Vinci"}
 }
 
 
@@ -68,7 +67,6 @@ OBRA "O Batismo de Cristo" {
 	Tecnica = "Tinta a óleo" 
 	Valor = "Indeterminado"
 	Local Exposicao = "Galleria degli Uffizi"
-	Produzida por = {"Verrocchio"}
 }
 
 

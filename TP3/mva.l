@@ -13,6 +13,7 @@ Nome" "Completo		{yylval.string = strdup(yytext); return NOMECOMPLETO;}
 Pais				{yylval.string = strdup(yytext); return PAIS;}
 Seculo				{yylval.string = strdup(yytext); return SECULO;}
 Periodo				{yylval.string = strdup(yytext); return PERIODO;}
+Imagem              {return IMAGEM;}
 
 
 OBRA				{return OBRAKEYWORD;}

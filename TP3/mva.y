@@ -53,7 +53,7 @@
     GSList* listaExposta = NULL;
     GSList* listaExpoe = NULL;
 
-    
+    char * imagem = NULL;
 
 
 
@@ -99,7 +99,7 @@
           fwrite("<h2>Colaborou com:</h2>\n",1,24, fd);
           while(temp != NULL){
             outraEntidade = (char*)temp->data;
-            printf("\"%s\" -> \"%s\" [label=\"colaborou\"]\n", title, outraEntidade);
+            printf("\"%s\" -> \"%s\" [label=\"colaborou\" dir=\"both\"]\n", title, outraEntidade);
             asprintf(&href,"<a href=\"Artista %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
             temp = temp->next;
@@ -213,7 +213,12 @@
 
 
     void writeDotArtista(char* nome){
-        printf("\"%s\" [URL=\"file:Artista %s.html\" style=filled, color=\".3 .4 .8\"]\n", nome, nome);
+        if(imagem == NULL){
+            printf("\"%s\" [URL=\"file:Artista %s.html\" style=filled, color=\".3 .4 .8\"]\n", nome, nome);
+        }
+        else{
+             printf("\"%s\" [nojustify=true shape=\"none\" label=\"\" xlabel=\"%s\" image=\"%s\" URL=\"file:Artista %s.html\" width=\"1\" height=\"1\" imagescale=both  fixedsize=true]\n", nome, nome, imagem, nome);   
+        }
     }
 
     void writeDotObra(char* nome){
@@ -261,7 +266,7 @@
 %token TIPO
 %token LOCALIZACAO
 
-
+%token IMAGEM
 
 
 
@@ -311,7 +316,8 @@ Artista : ART VALOR '{' ArtistaInfo '}'                                         
                                                                                     listaAprendeu = NULL;
                                                                                     listaColaborou = NULL;  
                                                                                     listaProduziu = NULL;
-                                                                                    listaParticipou = NULL;                                                                                 
+                                                                                    listaParticipou = NULL;  
+                                                                                    imagem = NULL;                                                                               
                                                                                 }
         ;
 
@@ -331,6 +337,9 @@ Atributos : Atributos Atributo                                                  
 
 Atributo : TipoAtributoArtista'=' VALOR                                         {   
                                                                                 asprintf(&$$, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", $1, $3);
+                                                                                if(strcmp($1,"Imagem") == 0){
+                                                                                    imagem = $3;
+                                                                                }
                                                                                 ats = malloc(sizeof(struct atributoStruct));
                                                                                 ats->atribNome = $1;  
                                                                                 ats->atribValor = $3;
@@ -341,7 +350,8 @@ Atributo : TipoAtributoArtista'=' VALOR                                         
 TipoAtributoArtista : NOMECOMPLETO                                              {$$ = "Nome completo";}
                     | PAIS                                                      {$$ = "País";}
                     | SECULO                                                    {$$ = "Século";}
-                    | PERIODO                                                   {$$ = "Período";}                                                              
+                    | PERIODO                                                   {$$ = "Período";}  
+                    | IMAGEM                                                    {$$ = "Imagem";}                                                            
                     ;
 
 
@@ -538,7 +548,7 @@ int yyerror (char *s) {
 }
 
 void writeDotBeginning() {
-  printf("/*\n* @command = dot\n* @imageurl = TRUE\n *\n*/\ndigraph g {\nrankdir=LR;\n ratio=fill; node[fontsize=24]; edge[fontsize=16];\n");
+  printf("/*\n* @command = dot\n* @imageurl = TRUE\n *\n*/\ndigraph g {\nrankdir=LR;forcelabels=true; ratio=fill; node[fontsize=16]; edge[fontsize=16];\n");
 }
 
 
