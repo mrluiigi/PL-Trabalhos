@@ -46,6 +46,8 @@
     GSList* listaColaborou = NULL;
 
     GSList* listaProduziu = NULL;
+    GSList* listaProduzida = NULL;
+
     GSList* listaParticipou = NULL;
 
 	GSList* listaExposta = NULL;
@@ -151,11 +153,22 @@
         char* outraEntidade;
         if(listaExposta != NULL){
           temp = listaExposta;
-          fwrite("<h2>Ensinou:</h2>\n",1,18, fd);
+          fwrite("<h2>Exposta:</h2>\n",1,18, fd);
           while(temp != NULL){
             outraEntidade = (char*)temp->data;
             printf("\"%s\" -> \"%s\" [label=\"Exposta em\"]\n", title, outraEntidade);
             asprintf(&href,"<a href=\"Evento %s.html\">%s</a>\n", outraEntidade,outraEntidade);
+            fwrite(href,1,strlen(href), fd);
+            temp = temp->next;
+          } 
+        }
+        if(listaProduzida != NULL){
+          temp = listaProduzida;
+          fwrite("<h2>Produzida:</h2>\n",1,18, fd);
+          while(temp != NULL){
+            outraEntidade = (char*)temp->data;
+            printf("\"%s\" -> \"%s\" [label=\"Produzida por\"]\n", title, outraEntidade);
+            asprintf(&href,"<a href=\"Artista %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
             temp = temp->next;
           } 
@@ -200,15 +213,15 @@
 
 
     void writeDotArtista(char* nome){
-        printf("\"%s\" [URL=\"file:Artista %s.html\"]\n", nome, nome);
+        printf("\"%s\" [URL=\"file:Artista %s.html\" style=filled, color=\".3 .4 .8\"]\n", nome, nome);
     }
 
     void writeDotObra(char* nome){
-        printf("\"%s\" [URL=\"file:Obra %s.html\"]\n", nome, nome);
+        printf("\"%s\" [URL=\"file:Obra %s.html\" style=filled, color=\"1.0 .6 1.0\"]\n", nome, nome);
     }
 
     void writeDotEvento(char* nome){
-        printf("\"%s\" [URL=\"file:Evento %s.html\"]\n", nome, nome);
+        printf("\"%s\" [URL=\"file:Evento %s.html\" style=filled, color=\".5 .5 1.0\"]\n", nome, nome);
     }
 
 
@@ -231,6 +244,8 @@
 %token EXPOSTA
 
 %token EXPOE
+
+%token PRODUZIDA
 
 %token NOMECOMPLETO
 %token PAIS
@@ -341,6 +356,7 @@ Obra : OBRAKEYWORD VALOR '{' ObraInfo '}'                                   {
                                                                                 writeDotObra($2);
                                                                               	writeHtmlObra($2, $4);
                                                                               	listaExposta = NULL;
+                                                                              	listaProduzida = NULL;
                                                                             }
         ;
 
@@ -473,6 +489,11 @@ RelacaoObra : EXPOSTA '=' '{' ListaEntidades '}'                            {
 																				listaExposta = g_slist_concat(listaExposta, listaRelacoesTemp);
 																				listaRelacoesTemp = NULL;
                                                                             }
+            | PRODUZIDA '=' '{' ListaEntidades '}'							{	
+                                                                                artistasEsperados = g_slist_concat(artistasEsperados, listaRelacoesTemp);
+																				listaProduzida = g_slist_concat(listaProduzida, listaRelacoesTemp);
+																				listaRelacoesTemp = NULL;
+                                                                            }
        		;
 
 RelacoesEvento : RelacoesEvento RelacaoEvento   	                        {
@@ -509,7 +530,7 @@ int yyerror (char *s) {
 }
 
 void writeDotBeginning() {
-  printf("/*\n* @command = dot\n* @imageurl = TRUE\n *\n*/\ndigraph g {\n");
+  printf("/*\n* @command = dot\n* @imageurl = TRUE\n *\n*/\ndigraph g {\nrankdir=LR;\n ratio=fill; node[fontsize=24]; edge[fontsize=16];\n");
 }
 
 

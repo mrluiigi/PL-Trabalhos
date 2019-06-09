@@ -12,6 +12,7 @@ ARTISTA "Verrocchio" {
 	Seculo = "XV"
 	Periodo = "Renascentismo"
 	ensinouCom = {"da Vinci"}
+	produziu = {"O Batismo de Cristo"}
 }
 
 ARTISTA "da Vinci" {
@@ -20,7 +21,8 @@ ARTISTA "da Vinci" {
 	Seculo = "XV/XVI"
 	Periodo = "Renascentismo"
 	aprendeuCom = {"Verrocchio"}
-	produziu = {"Mona Lisa"}
+	produziu = {"Mona Lisa";"A última ceia"}
+	colaborouCom = {"Verrocchio"}
 }
 
 ARTISTA "Van Gogh" {
@@ -28,6 +30,7 @@ ARTISTA "Van Gogh" {
 	Pais = "Holanda"
 	Seculo = "XIX"
 	Periodo = "Renascentista/Pós-Impressionismo"
+	produziu = {"The Starry Night"}
 }
 
 OBRA "Mona Lisa" {
@@ -37,6 +40,16 @@ OBRA "Mona Lisa" {
 	Valor = "2,5 mil milhões"
 	Local Exposicao = "Museu do Louvre"
 	Exposta em = {"Exposição no museu do Louvre"}
+	Produzida por = {"da Vinci"}
+}
+
+OBRA "A última ceia" {
+	Nome = "Ultima Cena (Cenacolo vinciano)"
+	Data = "1495–1498"
+	Tecnica = "Da têmpera e óleo sobre duas camadas de gesso aplicadas em estuque " 
+	Valor = "Indeterminado"
+	Local Exposicao = "Santa Maria delle Grazie"
+	Produzida por = {"da Vinci"}
 }
 
 
@@ -44,8 +57,18 @@ OBRA "The Starry Night" {
 	Nome = "The Starry Night"
 	Data = "1889"
 	Tecnica = "Tinta a óleo" 
-	Valor = "indeterminado"
+	Valor = "Indeterminado"
 	Local Exposicao = "Museu de Arte Moderna"
+	Produzida por = {"Van Gogh"}
+}
+
+OBRA "O Batismo de Cristo" {
+	Nome = "Battesimo di Cristo"
+	Data = "1472–1475"
+	Tecnica = "Tinta a óleo" 
+	Valor = "Indeterminado"
+	Local Exposicao = "Galleria degli Uffizi"
+	Produzida por = {"Verrocchio"}
 }
 
 
