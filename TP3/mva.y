@@ -228,7 +228,7 @@
             //Aresta do dot
             printf("\"%s\" -> \"%s\" [label=\"ensinou\"]\n", nome, outraEntidade);
             //Link html
-            asprintf(&href,"<a href=\"HTML/Artista %s.html\">%s</a>\n", outraEntidade,outraEntidade);
+            asprintf(&href,"<a href=\"Artista %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
             free(href);
             temp = temp->next;
@@ -242,7 +242,7 @@
             //Aresta do dot
             printf("\"%s\" -> \"%s\" [label=\"aprendeu com\"]\n", nome, outraEntidade);
             //Link html
-            asprintf(&href,"<a href=\"HTML/Artista %s.html\">%s</a>\n", outraEntidade,outraEntidade);
+            asprintf(&href,"<a href=\"Artista %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
             free(href);
             temp = temp->next;
@@ -256,7 +256,7 @@
             //Aresta do dot
             printf("\"%s\" -> \"%s\" [label=\"colaborou com\" dir=\"both\"]\n", nome, outraEntidade);
             //Link html
-            asprintf(&href,"<a href=\"HTML/Artista %s.html\">%s</a>\n", outraEntidade,outraEntidade);
+            asprintf(&href,"<a href=\"Artista %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
             free(href);
             temp = temp->next;
@@ -271,7 +271,7 @@
             //Aresta do dot
             printf("\"%s\" -> \"%s\" [label=\"produziu\"]\n", nome, outraEntidade);
             //Link html
-            asprintf(&href,"<a href=\"HTML/Obra %s.html\">%s</a>\n", outraEntidade, outraEntidade);
+            asprintf(&href,"<a href=\"Obra %s.html\">%s</a>\n", outraEntidade, outraEntidade);
             fwrite(href,1,strlen(href), fd);
             free(href);
             temp = temp->next;
@@ -286,7 +286,7 @@
             //Aresta do dot
             printf("\"%s\" -> \"%s\" [label=\"participou\"]\n", nome, outraEntidade);
             //Link html
-            asprintf(&href,"<a href=\"HTML/Evento %s.html\">%s</a>\n", outraEntidade,outraEntidade);
+            asprintf(&href,"<a href=\"Evento %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
             temp = temp->next;
             free(href);
@@ -372,7 +372,7 @@
             //Aresta do dot
             printf("\"%s\" -> \"%s\" [label=\"exposta em\"]\n", nome, outraEntidade);
             //Link html
-            asprintf(&href,"<a href=\"HTML/Evento %s.html\">%s</a>\n", outraEntidade,outraEntidade);
+            asprintf(&href,"<a href=\"Evento %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
             free(href);
             temp = temp->next;
@@ -386,7 +386,7 @@
             //Aresta do dot
             printf("\"%s\" -> \"%s\" [label=\"produzida por\"]\n", nome, outraEntidade);
             //Link html
-            asprintf(&href,"<a href=\"HTML/Artista %s.html\">%s</a>\n", outraEntidade,outraEntidade);
+            asprintf(&href,"<a href=\"Artista %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
             free(href);
             temp = temp->next;
@@ -400,7 +400,7 @@
             //Aresta do dot
             printf("\"%s\" -> \"%s\" [label=\"vendida em\"]\n", nome, outraEntidade);
             //Link html
-            asprintf(&href,"<a href=\"HTML/Evento %s.html\">%s</a>\n", outraEntidade,outraEntidade);
+            asprintf(&href,"<a href=\"Evento %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
             free(href);
             temp = temp->next;
@@ -475,7 +475,7 @@
             //Aresta do dot
             printf("\"%s\" -> \"%s\" [label=\"expõe\"]\n", nome, outraEntidade);
             //Link html
-            asprintf(&href,"<a href=\"HTML/Obra %s.html\">%s</a>\n", outraEntidade,outraEntidade);
+            asprintf(&href,"<a href=\"Obra %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
             free(href);
             temp = temp->next;
@@ -489,7 +489,7 @@
             //Aresta do dot
             printf("\"%s\" -> \"%s\" [label=\"vendeu\"]\n", nome, outraEntidade);
             //Link html
-            asprintf(&href,"<a href=\"HTML/Obra %s.html\">%s</a>\n", outraEntidade,outraEntidade);
+            asprintf(&href,"<a href=\"Obra %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
             free(href);
             temp = temp->next;
