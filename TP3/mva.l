@@ -7,7 +7,7 @@
 
 %%
 
-ARTISTA 	    	{return ART;}
+ARTISTA 	    	{return ARTISTAKEYWORD;}
 
 Nome" "Completo		{yylval.string = strdup(yytext); return NOMECOMPLETO;}
 Pais				{yylval.string = strdup(yytext); return PAIS;}

@@ -124,8 +124,7 @@
     //Imprime no ficheiro dado uma tabela em HTML com os atributos do artista atual
     void writeTabelaAtributosArtista(FILE* fd){
 
-        fwrite("<table>\n", 1 , 7, fd);
-        
+        fwrite("<table>\n", 1 , 7, fd);        
 	    char* linhaTabela;
 	    if(artAtrib->nome != NULL){
             asprintf(&linhaTabela, "<tr>\n<th>%s</th>\n<td>%s</td>\n</tr>", "Nome Completo", artAtrib->nome);
@@ -146,22 +145,39 @@
         fwrite("</table>\n", 1 , 9, fd);
     }
 
-    void writeHtmlArtista(char* title) {
+    //Escreve nodo para o artista
+    void writeDotArtista(char* nome){
+        if(artAtrib->imagem == NULL){
+            printf("\"%s\" [URL=\"file:Artista %s.html\" style=filled, color=\".3 .4 .8\"]\n", nome, nome);
+        }
+        else{
+            printf("\"%s\" [style=filled fillcolor=\".3 .4 .8\" URL=\"file:Artista %s.html\" shape=box label=<<table border=\"0\"><tr><td border=\"0\" fixedsize=\"true\" width=\"200\" height=\"200\" ><img src=\"%s\"/></td></tr><tr><td>%s</td></tr></table> >]",
+                   nome, nome, artAtrib->imagem, nome); 
+        }
+    }
+
+    void writeArtista(char* nome) {
+        //Escrever nodo para o artista
+        writeDotArtista(nome);
+
+        //Abrir ficheiro html
         char* fileName;
-
-        asprintf(&fileName, "Artista %s.html", title);
-
+        asprintf(&fileName, "Artista %s.html", nome);
         FILE* fd = fopen(fileName,"w");
 
+        //Escrever inicio e titulo
         fwrite("<!DOCTYPE html>\n<html>\n<head>\n<h1>" , 1 , 34, fd );
-        fwrite(title, 1, strlen(title), fd);
+        fwrite(nome, 1, strlen(nome), fd);
         fwrite("</h1>\n</head>\n<body>" , 1 , 20, fd );
+        //Adicionar imagem
         if(artAtrib->imagem != NULL){
         	char* linhaTabela;
             asprintf(&linhaTabela, "<img src=\"%s\">", artAtrib->imagem);
 			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);	
         }
+        //Escrever a tabela html de atributps
         writeTabelaAtributosArtista(fd);
+        //Processar as relações
         GSList* temp;
         char * href;
         char* outraEntidade;
@@ -170,7 +186,9 @@
           fwrite("<h2>Ensinou:</h2>\n",1,18, fd);
           while(temp != NULL){
             outraEntidade = (char*)temp->data;
-            printf("\"%s\" -> \"%s\" [label=\"ensinou\"]\n", title, outraEntidade);
+            //Aresta do dot
+            printf("\"%s\" -> \"%s\" [label=\"ensinou\"]\n", nome, outraEntidade);
+            //Link html
             asprintf(&href,"<a href=\"Artista %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
             temp = temp->next;
@@ -181,7 +199,9 @@
           fwrite("<h2>Aprendeu com:</h2>\n",1,23, fd);
           while(temp != NULL){
             outraEntidade = (char*)temp->data;
-            printf("\"%s\" -> \"%s\" [label=\"aprendeu com\"]\n", title, outraEntidade);
+            //Aresta do dot
+            printf("\"%s\" -> \"%s\" [label=\"aprendeu com\"]\n", nome, outraEntidade);
+            //Link html
             asprintf(&href,"<a href=\"Artista %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
             temp = temp->next;
@@ -192,7 +212,9 @@
           fwrite("<h2>Colaborou com:</h2>\n",1,24, fd);
           while(temp != NULL){
             outraEntidade = (char*)temp->data;
-            printf("\"%s\" -> \"%s\" [label=\"colaborou com\" dir=\"both\"]\n", title, outraEntidade);
+            //Aresta do dot
+            printf("\"%s\" -> \"%s\" [label=\"colaborou com\" dir=\"both\"]\n", nome, outraEntidade);
+            //Link html
             asprintf(&href,"<a href=\"Artista %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
             temp = temp->next;
@@ -204,7 +226,9 @@
           fwrite("<h2>Produziu:</h2>\n",1,19, fd);
           while(temp != NULL){
             outraEntidade = (char*)temp->data;
-            printf("\"%s\" -> \"%s\" [label=\"produziu\"]\n", title, outraEntidade);
+            //Aresta do dot
+            printf("\"%s\" -> \"%s\" [label=\"produziu\"]\n", nome, outraEntidade);
+            //Link html
             asprintf(&href,"<a href=\"Obra %s.html\">%s</a>\n", outraEntidade, outraEntidade);
             fwrite(href,1,strlen(href), fd);
             temp = temp->next;
@@ -216,7 +240,9 @@
           fwrite("<h2>Participou:</h2>\n",1,20, fd);
           while(temp != NULL){
             outraEntidade = (char*)temp->data;
-            printf("\"%s\" -> \"%s\" [label=\"participou\"]\n", title, outraEntidade);
+            //Aresta do dot
+            printf("\"%s\" -> \"%s\" [label=\"participou\"]\n", nome, outraEntidade);
+            //Link html
             asprintf(&href,"<a href=\"Evento %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
             temp = temp->next;
@@ -253,23 +279,37 @@
         fwrite("</table>\n", 1 , 9, fd);
     }
 
-    void writeHtmlObra(char* title) {
+    //Escreve nodo para a obra
+    void writeDotObra(char* nome){
+        if(obrAtrib->imagem == NULL){
+            printf("\"%s\" [URL=\"file:Obra %s.html\" style=filled, color=\"1.0 .6 1.0\"]\n", nome, nome);
+        }
+        else{
+            printf("\"%s\" [style=filled fillcolor=\"1.0 .6 1.0\" URL=\"file:Obra %s.html\" shape=box label=<<table border=\"0\"><tr><td border=\"0\" fixedsize=\"true\" width=\"200\" height=\"200\" ><img src=\"%s\"/></td></tr><tr><td>%s</td></tr></table> >]",
+                   nome, nome, obrAtrib->imagem, nome); 
+        }
+    }
+
+    void writeObra(char* nome) {
+        //Escrever nodo para obra
+        writeDotObra(nome);
+        //Abrir ficheiro html
         char* fileName;
-
-        asprintf(&fileName, "Obra %s.html", title);
-
+        asprintf(&fileName, "Obra %s.html", nome);
         FILE* fd = fopen(fileName,"w");
-
+        //Escrever inicio e titulo
         fwrite("<!DOCTYPE html>\n<html>\n<head>\n<h1>" , 1 , 34, fd );
-        fwrite(title, 1, strlen(title), fd);
+        fwrite(nome, 1, strlen(nome), fd);
         fwrite("</h1>\n</head>\n<body>" , 1 , 20, fd );
+        //Adicionar imagem
         if(obrAtrib->imagem != NULL){
         	char* linhaTabela;
             asprintf(&linhaTabela, "<img src=\"%s\">", obrAtrib->imagem);
 			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);	
         }
+        //Escrever tabela html dos atributos
         writeTabelaAtributosObra(fd);
-
+        //Processar relações
         GSList* temp;
         char * href;
         char* outraEntidade;
@@ -278,7 +318,9 @@
           fwrite("<h2>Exposta:</h2>\n",1,18, fd);
           while(temp != NULL){
             outraEntidade = (char*)temp->data;
-            printf("\"%s\" -> \"%s\" [label=\"exposta em\"]\n", title, outraEntidade);
+            //Aresta do dot
+            printf("\"%s\" -> \"%s\" [label=\"exposta em\"]\n", nome, outraEntidade);
+            //Link html
             asprintf(&href,"<a href=\"Evento %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
             temp = temp->next;
@@ -289,7 +331,9 @@
           fwrite("<h2>Produzida:</h2>\n",1,20, fd);
           while(temp != NULL){
             outraEntidade = (char*)temp->data;
-            printf("\"%s\" -> \"%s\" [label=\"produzida por\"]\n", title, outraEntidade);
+            //Aresta do dot
+            printf("\"%s\" -> \"%s\" [label=\"produzida por\"]\n", nome, outraEntidade);
+            //Link html
             asprintf(&href,"<a href=\"Artista %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
             temp = temp->next;
@@ -300,7 +344,9 @@
           fwrite("<h2>Vendida:</h2>\n",1,20, fd);
           while(temp != NULL){
             outraEntidade = (char*)temp->data;
-            printf("\"%s\" -> \"%s\" [label=\"vendida em\"]\n", title, outraEntidade);
+            //Aresta do dot
+            printf("\"%s\" -> \"%s\" [label=\"vendida em\"]\n", nome, outraEntidade);
+            //Link html
             asprintf(&href,"<a href=\"Evento %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
             temp = temp->next;
@@ -328,74 +374,7 @@
         }
         fwrite("</table>\n", 1 , 9, fd);
     }
-
-    void writeHtmlEvento(char* title) {
-        char* fileName;
-
-        asprintf(&fileName, "Evento %s.html", title);
-
-        FILE* fd = fopen(fileName,"w");
-
-        fwrite("<!DOCTYPE html>\n<html>\n<head>\n<h1>" , 1 , 34, fd );
-        fwrite(title, 1, strlen(title), fd);
-        fwrite("</h1>\n</head>\n<body>" , 1 , 20, fd );
-        if(eventAtrib->imagem != NULL){
-        	char* linhaTabela;
-            asprintf(&linhaTabela, "<img src=\"%s\">", eventAtrib->imagem);
-			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);	
-        }
-        writeTabelaAtributosEvento(fd);
-
-        GSList* temp;
-        char * href;
-        char* outraEntidade;
-        if(listaExpoe != NULL){
-          temp = listaExpoe;
-          fwrite("<h2>Expõe:</h2>\n",1,18, fd);
-          while(temp != NULL){
-            outraEntidade = (char*)temp->data;
-            printf("\"%s\" -> \"%s\" [label=\"expõe\"]\n", title, outraEntidade);
-            asprintf(&href,"<a href=\"Obra %s.html\">%s</a>\n", outraEntidade,outraEntidade);
-            fwrite(href,1,strlen(href), fd);
-            temp = temp->next;
-          } 
-        }
-        if(listaVendidos != NULL){
-          temp = listaVendidos;
-          fwrite("<h2>Vendeu:</h2>\n",1,18, fd);
-          while(temp != NULL){
-            outraEntidade = (char*)temp->data;
-            printf("\"%s\" -> \"%s\" [label=\"vendeu\"]\n", title, outraEntidade);
-            asprintf(&href,"<a href=\"Obra %s.html\">%s</a>\n", outraEntidade,outraEntidade);
-            fwrite(href,1,strlen(href), fd);
-            temp = temp->next;
-          } 
-        }
-
-        fwrite("</body>\n</html>" , 1 , 15, fd );
-    }
-
-
-    void writeDotArtista(char* nome){
-        if(artAtrib->imagem == NULL){
-            printf("\"%s\" [URL=\"file:Artista %s.html\" style=filled, color=\".3 .4 .8\"]\n", nome, nome);
-        }
-        else{
-            printf("\"%s\" [style=filled fillcolor=\".3 .4 .8\" URL=\"file:Artista %s.html\" shape=box label=<<table border=\"0\"><tr><td border=\"0\" fixedsize=\"true\" width=\"200\" height=\"200\" ><img src=\"%s\"/></td></tr><tr><td>%s</td></tr></table> >]",
-                   nome, nome, artAtrib->imagem, nome); 
-        }
-    }
-
-    void writeDotObra(char* nome){
-        if(obrAtrib->imagem == NULL){
-            printf("\"%s\" [URL=\"file:Obra %s.html\" style=filled, color=\"1.0 .6 1.0\"]\n", nome, nome);
-        }
-        else{
-            printf("\"%s\" [style=filled fillcolor=\"1.0 .6 1.0\" URL=\"file:Obra %s.html\" shape=box label=<<table border=\"0\"><tr><td border=\"0\" fixedsize=\"true\" width=\"200\" height=\"200\" ><img src=\"%s\"/></td></tr><tr><td>%s</td></tr></table> >]",
-                   nome, nome, obrAtrib->imagem, nome); 
-        }
-    }
-
+    //Escreve nodo para o evento
     void writeDotEvento(char* nome){
         if(eventAtrib->imagem == NULL){
             printf("\"%s\" [URL=\"file:Evento %s.html\" style=filled, color=\".5 .5 1\"]\n", nome, nome);
@@ -406,11 +385,63 @@
         }
     }
 
+    void writeEvento(char* nome) {
+        //Escrever nodo para o artista
+        writeDotEvento(nome);
+        //Abrir ficheiro html
+        char* fileName;
+        asprintf(&fileName, "Evento %s.html", nome);
+        FILE* fd = fopen(fileName,"w");
+        //Escrever inicio e titulo
+        fwrite("<!DOCTYPE html>\n<html>\n<head>\n<h1>" , 1 , 34, fd );
+        fwrite(nome, 1, strlen(nome), fd);
+        fwrite("</h1>\n</head>\n<body>" , 1 , 20, fd );
+        //Adicionar imagem
+        if(eventAtrib->imagem != NULL){
+        	char* linhaTabela;
+            asprintf(&linhaTabela, "<img src=\"%s\">", eventAtrib->imagem);
+			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);	
+        }
+        //Escrever tabela html dos atributos
+        writeTabelaAtributosEvento(fd);
+        //Processar relacoes
+        GSList* temp;
+        char * href;
+        char* outraEntidade;
+        if(listaExpoe != NULL){
+          temp = listaExpoe;
+          fwrite("<h2>Expõe:</h2>\n",1,18, fd);
+          while(temp != NULL){
+            outraEntidade = (char*)temp->data;
+            //Aresta do dot
+            printf("\"%s\" -> \"%s\" [label=\"expõe\"]\n", nome, outraEntidade);
+            //Link html
+            asprintf(&href,"<a href=\"Obra %s.html\">%s</a>\n", outraEntidade,outraEntidade);
+            fwrite(href,1,strlen(href), fd);
+            temp = temp->next;
+          } 
+        }
+        if(listaVendidos != NULL){
+          temp = listaVendidos;
+          fwrite("<h2>Vendeu:</h2>\n",1,18, fd);
+          while(temp != NULL){
+            outraEntidade = (char*)temp->data;
+            //Aresta do dot
+            printf("\"%s\" -> \"%s\" [label=\"vendeu\"]\n", nome, outraEntidade);
+            //Link html
+            asprintf(&href,"<a href=\"Obra %s.html\">%s</a>\n", outraEntidade,outraEntidade);
+            fwrite(href,1,strlen(href), fd);
+            temp = temp->next;
+          } 
+        }
+
+        fwrite("</body>\n</html>" , 1 , 15, fd );
+    }
 %}
 
 %union { char* VARNAME; int CONSTINT; char* string;}
 
-%token ART
+%token ARTISTAKEYWORD
 %token OBRAKEYWORD
 %token EVENTOKEYWORD
 
@@ -466,16 +497,15 @@ Entidade : Artista
          ;
 
 
-Artista : ART VALOR '{' ArtistaInformacoes '}'                                  {   
+Artista : ARTISTAKEYWORD VALOR '{' ArtistaInformacoes '}'                       {   
                                                                                     gboolean naoExistia = g_hash_table_insert(artistasEncontrados, $2, $2);
                                                                                     if(naoExistia == FALSE){
                                                                                         char * mensagemErro;
                                                                                         asprintf(&mensagemErro, "Artista %s repetido\n", $2);
                                                                                         yyerror(mensagemErro);
                                                                                     }
-                                                                                    writeDotArtista($2);
-                                                                                    writeHtmlArtista($2);
-
+                                                                                    writeArtista($2);
+                                                                                    //Remover das variáveis globais a informação do artista
                                                                                     limparRelacoesArtista();
                                                                                     initArtistaAtributos();
                                                                                 }
@@ -535,6 +565,37 @@ TipoAtributoArtista : NOMECOMPLETO                                              
                     | IMAGEM                                                    {$$ = "Imagem";}                                                            
                     ;
 
+RelacaoArtista : ENSINOU '=' '{' ListaEntidades '}'                         {   
+                                                                                GSList * l = g_slist_copy(listaRelacoesTemp);
+                                                                                artistasEsperados = g_slist_concat(artistasEsperados, l);
+                                                                                listaEnsinou = g_slist_concat(listaEnsinou, listaRelacoesTemp);
+                                                                                listaRelacoesTemp = NULL;
+                                                                            }
+               | APRENDEU '=' '{' ListaEntidades '}'                        {   
+                                                                                GSList * l = g_slist_copy(listaRelacoesTemp);
+                                                                                artistasEsperados = g_slist_concat(artistasEsperados, l);
+                                                                                listaAprendeu = g_slist_concat(listaAprendeu, listaRelacoesTemp);
+                                                                                listaRelacoesTemp = NULL;
+                                                                            }
+               | COLABOROU '=' '{' ListaEntidades '}'                       {   
+                                                                                GSList * l = g_slist_copy(listaRelacoesTemp);
+                                                                                artistasEsperados = g_slist_concat(artistasEsperados, l);
+                                                                                listaColaborou = g_slist_concat(listaColaborou, listaRelacoesTemp);
+                                                                                listaRelacoesTemp = NULL;
+                                                                            }
+               | PRODUZIU '=' '{' ListaEntidades '}'                        {
+                                                                                GSList * l = g_slist_copy(listaRelacoesTemp);
+                                                                                obrasEsperadas = g_slist_concat(obrasEsperadas, l);
+                                                                                listaProduziu = g_slist_concat(listaProduziu, listaRelacoesTemp);
+                                                                                listaRelacoesTemp = NULL;
+                                                                            }
+               | PARTICIPOU '=' '{' ListaEntidades '}'                      {
+                                                                                GSList * l = g_slist_copy(listaRelacoesTemp);
+                                                                                eventosEsperados = g_slist_concat(eventosEsperados, l);
+                                                                                listaParticipou = g_slist_concat(listaParticipou, listaRelacoesTemp);
+                                                                                listaRelacoesTemp = NULL;
+                                                                            }
+               ;
 
 Obra : OBRAKEYWORD VALOR '{' ObraInformacoes '}'                            {   
                                                                                 gboolean naoExistia = g_hash_table_insert(obrasEncontradas, $2, $2);
@@ -543,18 +604,12 @@ Obra : OBRAKEYWORD VALOR '{' ObraInformacoes '}'                            {
                                                                                     asprintf(&mensagemErro, "Obra %s repetida\n", $2);
                                                                                     yyerror(mensagemErro);
                                                                                 }    
-
-                                                                                writeDotObra($2);
-                                                                                writeHtmlObra($2);
+                                                                                writeObra($2);
+                                                                                //Remover das variáveis globais a informação da obra
                                                                                 initObraAtributos();
                                                                                 limparRelacoesObra();
                                                                             }
      ;
-
-
-
-
-
 
 ObraInformacoes : ObraInformacoes  ObraInformacao
                 | %empty
@@ -613,8 +668,25 @@ TipoAtributoObra : NOME                                                         
                  | IMAGEM                                                       {$$ = "Imagem";}
                  ;
 
-
-
+RelacaoObra : EXPOSTA '=' '{' ListaEntidades '}'                            {   
+                                                                                GSList * l = g_slist_copy(listaRelacoesTemp);
+                                                                                eventosEsperados = g_slist_concat(eventosEsperados, l);
+                                                                                listaExposta = g_slist_concat(listaExposta, listaRelacoesTemp);
+                                                                                listaRelacoesTemp = NULL;
+                                                                            }
+            | PRODUZIDA '=' '{' ListaEntidades '}'                          {   
+                                                                                GSList * l = g_slist_copy(listaRelacoesTemp);
+                                                                                artistasEsperados = g_slist_concat(artistasEsperados, l);
+                                                                                listaProduzida = g_slist_concat(listaProduzida, listaRelacoesTemp);
+                                                                                listaRelacoesTemp = NULL;
+                                                                            }
+            | VENDIDA '=' '{' ListaEntidades '}'                            {
+                                                                                GSList * l = g_slist_copy(listaRelacoesTemp);
+                                                                                eventosEsperados = g_slist_concat(eventosEsperados, l);
+                                                                                listaVendida = g_slist_concat(listaVendida, listaRelacoesTemp);
+                                                                                listaRelacoesTemp = NULL;
+                                                                            }
+            ;
 
 Evento : EVENTOKEYWORD VALOR '{' EventoInformacoes '}'                      {   
                                                                                 gboolean naoExistia = g_hash_table_insert(eventosEncontrados, $2, $2);
@@ -623,16 +695,12 @@ Evento : EVENTOKEYWORD VALOR '{' EventoInformacoes '}'                      {
                                                                                     asprintf(&mensagemErro, "Evento %s repetido\n", $2);
                                                                                     yyerror(mensagemErro);
                                                                                 }    
-
-                                                                                writeDotEvento($2);
-                                                                                writeHtmlEvento($2);
+                                                                                writeEvento($2);
+                                                                                //Remover das variáveis globais a informação do evento
                                                                                 initEventoAtributos();
                                                                                 limparRelacoesEvento();                                                                             
                                                                             }
        ;
-
-
-
 
 EventoInformacoes : EventoInformacoes  EventoInformacao
                 | %empty
@@ -670,71 +738,11 @@ AtributoEvento : TipoAtributoEvento '=' VALOR                               {
                                                                             }
                ;
 
-
 TipoAtributoEvento : TIPO                                                      {$$ = "Tipo";}
                    | LOCALIZACAO                                               {$$ = "Localização";}
                    | DATA                                                      {$$ = "Data";} 
                    | IMAGEM                                                    {$$ = "Imagem";}
                    ;
-
-
-
-
-RelacaoArtista : ENSINOU '=' '{' ListaEntidades '}'                         {   
-                                                                                GSList * l = g_slist_copy(listaRelacoesTemp);
-                                                                                artistasEsperados = g_slist_concat(artistasEsperados, l);
-                                                                                listaEnsinou = g_slist_concat(listaEnsinou, listaRelacoesTemp);
-                                                                                listaRelacoesTemp = NULL;
-                                                                            }
-        	   | APRENDEU '=' '{' ListaEntidades '}'                        {   
-                                                                                GSList * l = g_slist_copy(listaRelacoesTemp);
-                                                                                artistasEsperados = g_slist_concat(artistasEsperados, l);
-                                                                                listaAprendeu = g_slist_concat(listaAprendeu, listaRelacoesTemp);
-                                                                                listaRelacoesTemp = NULL;
-                                                                            }
-       		   | COLABOROU '=' '{' ListaEntidades '}'                       {   
-                                                                                GSList * l = g_slist_copy(listaRelacoesTemp);
-                                                                                artistasEsperados = g_slist_concat(artistasEsperados, l);
-                                                                                listaColaborou = g_slist_concat(listaColaborou, listaRelacoesTemp);
-                                                                                listaRelacoesTemp = NULL;
-                                                                            }
-               | PRODUZIU '=' '{' ListaEntidades '}'                        {
-                                                                                GSList * l = g_slist_copy(listaRelacoesTemp);
-                                                                                obrasEsperadas = g_slist_concat(obrasEsperadas, l);
-                                                                                listaProduziu = g_slist_concat(listaProduziu, listaRelacoesTemp);
-                                                                                listaRelacoesTemp = NULL;
-                                                                            }
-               | PARTICIPOU '=' '{' ListaEntidades '}'                      {
-                                                                                GSList * l = g_slist_copy(listaRelacoesTemp);
-                                                                                eventosEsperados = g_slist_concat(eventosEsperados, l);
-                                                                                listaParticipou = g_slist_concat(listaParticipou, listaRelacoesTemp);
-                                                                                listaRelacoesTemp = NULL;
-                                                                            }
-               ;
-
-
-
-RelacaoObra : EXPOSTA '=' '{' ListaEntidades '}'                            {   
-                                                                                GSList * l = g_slist_copy(listaRelacoesTemp);
-                                                                                eventosEsperados = g_slist_concat(eventosEsperados, l);
-                                                                                listaExposta = g_slist_concat(listaExposta, listaRelacoesTemp);
-                                                                                listaRelacoesTemp = NULL;
-                                                                            }
-            | PRODUZIDA '=' '{' ListaEntidades '}'                          {   
-                                                                                GSList * l = g_slist_copy(listaRelacoesTemp);
-                                                                                artistasEsperados = g_slist_concat(artistasEsperados, l);
-                                                                                listaProduzida = g_slist_concat(listaProduzida, listaRelacoesTemp);
-                                                                                listaRelacoesTemp = NULL;
-                                                                            }
-            | VENDIDA '=' '{' ListaEntidades '}'							{
-            																	GSList * l = g_slist_copy(listaRelacoesTemp);
-                                                                                eventosEsperados = g_slist_concat(eventosEsperados, l);
-                                                                                listaVendida = g_slist_concat(listaVendida, listaRelacoesTemp);
-                                                                                listaRelacoesTemp = NULL;
-            																}
-            ;
-
-
 
 RelacaoEvento : EXPOE '=' '{' ListaEntidades '}'                            {   
                                                                                 GSList * l = g_slist_copy(listaRelacoesTemp);
@@ -770,7 +778,7 @@ void writeDotBeginning() {
 	printf("/*\n* @command = dot\n* @imageurl = TRUE\n *\n*/\ndigraph MuseuVirtualDoArtista {\nrankdir=LR;forcelabels=true; ratio=fill; node[fontsize=16]; edge[fontsize=16];\n");
 }
 
-
+//Verifica se todos os artistas referidos nas relações estão definidos
 void testeArtistasEsperados(){
     GSList* temp = artistasEsperados;
     while(temp != NULL){
@@ -785,7 +793,7 @@ void testeArtistasEsperados(){
     }     
 }
 
-
+//Verifica se todos os obras referidas nas relações estão definidos
 void testeObrasEsperadas(){
     GSList* temp = obrasEsperadas;
     while(temp != NULL){
@@ -800,7 +808,7 @@ void testeObrasEsperadas(){
     }     
 }
 
-
+//Verifica se todos os eventos referidos nas relações estão definidos
 void testeEventosEsperados(){
     GSList* temp = eventosEsperados;
     while(temp != NULL){
@@ -816,15 +824,19 @@ void testeEventosEsperados(){
 }
 
 int main() {
+    //Inicializar variáveis globais
 	initArtistaAtributos();
     initObraAtributos();
     initEventoAtributos();
     artistasEncontrados = g_hash_table_new(g_str_hash,g_str_equal);
     obrasEncontradas = g_hash_table_new(g_str_hash,g_str_equal);
     eventosEncontrados = g_hash_table_new(g_str_hash,g_str_equal);
+    //Escrever inicio do ficheiro dot
     writeDotBeginning();
+    //Processar
     yyparse();
     printf("}");
+    //Validar referências a entidades
     testeArtistasEsperados();
     testeObrasEsperadas();
     testeEventosEsperados();
