@@ -4,6 +4,7 @@ ARTISTA "Banksy" {
 	Seculo = "XXI"
 	Periodo =  "Contemporâneo ; Arte de rua"
 	Participou = {"Balloon Girl Shredding"}
+	Produziu = {"Balloon Girl"}
 }
 
 ARTISTA "Verrocchio" {
