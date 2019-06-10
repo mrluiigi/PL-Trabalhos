@@ -378,8 +378,10 @@
             printf("\"%s\" [URL=\"file:Artista %s.html\" style=filled, color=\".3 .4 .8\"]\n", nome, nome);
         }
         else{
-             printf("\"%s\" [fontsize=\"10\" shape=\"none\" label=\"\" xlabel=\"%s\" image=\"%s\" URL=\"file:Artista %s.html\" width=\"2\" height=\"2\" imagescale=both  fixedsize=true]\n",
-                    nome, nome, artAtrib->imagem, nome);   
+            /* printf("\"%s\" [fontsize=\"10\" shape=\"box\" label=\"\" xlabel=\"%s\" image=\"%s\" URL=\"file:Artista %s.html\" width=\"1\" height=\"2\" imagescale=both  fixedsize=true]\n",
+                    nome, nome, artAtrib->imagem, nome);   */
+            printf("\"%s\" [style=filled fillcolor=\".3 .4 .8\" URL=\"file:Artista %s.html\" shape=box label=<<table border=\"0\"><tr><td border=\"0\" fixedsize=\"true\" width=\"200\" height=\"200\" ><img src=\"%s\"/></td></tr><tr><td>%s</td></tr></table> >]",
+                   nome, nome, artAtrib->imagem, nome); 
         }
     }
 
@@ -388,8 +390,10 @@
             printf("\"%s\" [URL=\"file:Obra %s.html\" style=filled, color=\"1.0 .6 1.0\"]\n", nome, nome);
         }
         else{
-             printf("\"%s\" [fontsize=\"10\" shape=\"none\" label=\"\" xlabel=\"%s\" image=\"%s\" URL=\"file:Obra %s.html\" width=\"2\" height=\"2\" imagescale=both  fixedsize=true]\n",
-                    nome, nome, obrAtrib->imagem, nome);   
+           //  printf("\"%s\" [fontsize=\"10\" shape=\"box\" label=\"\" xlabel=\"%s\" image=\"%s\" URL=\"file:Obra %s.html\" width=\"1\" height=\"2\" imagescale=both  fixedsize=true]\n",
+                  //  nome, nome, obrAtrib->imagem, nome);   
+            printf("\"%s\" [style=filled fillcolor=\"1.0 .6 1.0\" URL=\"file:Obra %s.html\" shape=box label=<<table border=\"0\"><tr><td border=\"0\" fixedsize=\"true\" width=\"200\" height=\"200\" ><img src=\"%s\"/></td></tr><tr><td>%s</td></tr></table> >]",
+                   nome, nome, obrAtrib->imagem, nome); 
         }
     }
 
@@ -398,8 +402,11 @@
             printf("\"%s\" [URL=\"file:Evento %s.html\" style=filled, color=\".5 .5 1\"]\n", nome, nome);
         }
         else{
-             printf("\"%s\" [fontsize=\"10\" shape=\"none\" label=\"\" xlabel=\"%s\" image=\"%s\" URL=\"file:Evento %s.html\" width=\"2\" height=\"2\" imagescale=both  fixedsize=true]\n",
-                    nome, nome, eventAtrib->imagem, nome);   
+            printf("\"%s\" [style=filled fillcolor=\".5 .5 1\" URL=\"file:Evento %s.html\" shape=box label=<<table border=\"0\"><tr><td border=\"0\" fixedsize=\"true\" width=\"200\" height=\"200\" ><img src=\"%s\"  /></td></tr><tr><td>%s</td></tr></table> >]",
+                   nome,nome, eventAtrib->imagem, nome);  
+
+             //printf("\"%s\" [fontsize=\"10\" shape=\"box\" label=\"\" xlabel=\"%s\" image=\"%s\" URL=\"file:Evento %s.html\" width=\"1\" height=\"2\" imagescale=both  fixedsize=true]\n",
+                 //   nome, nome, eventAtrib->imagem);   
         }
     }
 
@@ -771,7 +778,7 @@ int yyerror (char *s) {
 }
 
 void writeDotBeginning() {
-  printf("/*\n* @command = dot\n* @imageurl = TRUE\n *\n*/\ndigraph g {\nrankdir=LR;forcelabels=true; ratio=fill; node[fontsize=16]; edge[fontsize=16];\n");
+  printf("/*\n* @command = dot\n* @imageurl = TRUE\n *\n*/\ndigraph MuseuVirtualDoArtista {\nrankdir=LR;forcelabels=true; ratio=fill; node[fontsize=16]; edge[fontsize=16];\n");
 }
 
 

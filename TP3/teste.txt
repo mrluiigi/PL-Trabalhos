@@ -41,7 +41,7 @@ OBRA "Mona Lisa" {
 	Tecnica = "Tinta a óleo" 
 	Valor = "2,5 mil milhões"
 	Local Exposicao = "Museu do Louvre"
-	Exposta em = {"Exposição no museu do Louvre"}
+	Exposta em = {"Exposição no Louvre"}
 	Imagem = "monalisa.png"
 }
 
@@ -91,7 +91,7 @@ EVENTO "Balloon Girl Shredding" {
 }
 
 
-EVENTO "Exposição no museu do Louvre" {
+EVENTO "Exposição no Louvre" {
 	Tipo = "Exposição"
 	Localizacao = "França"
 	Data = "A decorrer"
