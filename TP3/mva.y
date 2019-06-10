@@ -64,6 +64,22 @@
 		obrAtrib->local = NULL;
     }
 
+
+    typedef struct eventoAtributos{
+        char* tipo;
+        char* localizacao; 
+		char* data;
+    } *EventoAtributos;
+
+    EventoAtributos eventAtrib;
+
+    void initEventoAtributos(){
+		eventAtrib = malloc(sizeof(struct eventoAtributos));
+		eventAtrib->tipo = NULL;
+		eventAtrib->localizacao = NULL;
+		eventAtrib->data = NULL;
+    }
+
     GHashTable* artistasEncontrados = NULL;
     GSList* artistasEsperados = NULL;
 
@@ -295,24 +311,16 @@
         fwrite("<table>\n<tr>\n<th>Atributo</th>\n<th>Valor</th>\n</tr>", 1 , 51, fd);
         
 	    char* linhaTabela;
-	    if(obrAtrib->nome != NULL){
-            asprintf(&linhaTabela, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", "Nome", obrAtrib->nome);
+	    if(eventAtrib->tipo != NULL){
+            asprintf(&linhaTabela, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", "Tipo", eventAtrib->tipo);
 			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
         }
-        if(obrAtrib->data != NULL){
-            asprintf(&linhaTabela, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", "País", obrAtrib->data);
+        if(eventAtrib->localizacao != NULL){
+            asprintf(&linhaTabela, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", "Localização", eventAtrib->localizacao);
 			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
         }
-        if(obrAtrib->tecnica != NULL){
-            asprintf(&linhaTabela, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", "Técnica", obrAtrib->tecnica);
-			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
-        }
-        if(obrAtrib->valor != NULL){
-            asprintf(&linhaTabela, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", "Valor", obrAtrib->valor);
-			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
-        }
-        if(obrAtrib->local != NULL){
-            asprintf(&linhaTabela, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", "Local de exposição", obrAtrib->local);
+        if(eventAtrib->data != NULL){
+            asprintf(&linhaTabela, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", "Data", eventAtrib->data);
 			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
         }
         fwrite("</table>\n", 1 , 9, fd);
@@ -633,6 +641,7 @@ Evento : EVENTOKEYWORD VALOR '{' EventoInformacoes '}'                          
 
                                                                                 writeDotEvento($2);
                                                                                 writeHtmlEvento($2);
+                                                                                initEventoAtributos();
                                                                                 listaAtributos = NULL;
                                                                                 listaExpoe = NULL;
                                                                                 listaVendidos = NULL;                                                                              
@@ -655,6 +664,27 @@ AtributoEvento : TipoAtributoEvento '=' VALOR                               {
                                                                                 asprintf(&linhaTabela, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", $1, $3);
                                                                                 listaAtributos = g_slist_append(listaAtributos, linhaTabela);
                                                                                 asprintf(&$$, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", $1, $3);
+
+																				if(strcmp($1,"Tipo") == 0){
+                                                                                    if(eventAtrib->tipo != NULL){
+                                                                                    	yyerror("Tipo repetido");
+                                                                                    }
+                                                                                    eventAtrib->tipo = $3;
+                                                                                }
+                                                                                else if(strcmp($1,"Localização") == 0){
+                                                                                	if(eventAtrib->localizacao != NULL){
+                                                                                    	yyerror("Localização repetido");
+                                                                                    }
+                                                                                    eventAtrib->localizacao = $3;
+                                                                                }
+                                                                                else if(strcmp($1,"Data") == 0){
+                                                                                	if(eventAtrib->data != NULL){
+                                                                                    	yyerror("Data repetida");
+                                                                                    }
+                                                                                    eventAtrib->data = $3;
+                                                                                }
+                                                                                
+
                                                                                 ats = malloc(sizeof(struct atributoStruct));
                                                                                 ats->atribNome = $1;  
                                                                                 ats->atribValor = $3;
@@ -808,6 +838,7 @@ void testeEventosEsperados(){
 int main() {
 	initArtistaAtributos();
     initObraAtributos();
+    initEventoAtributos();
     artistasEncontrados = g_hash_table_new(g_str_hash,g_str_equal);
     obrasEncontradas = g_hash_table_new(g_str_hash,g_str_equal);
     eventosEncontrados = g_hash_table_new(g_str_hash,g_str_equal);
