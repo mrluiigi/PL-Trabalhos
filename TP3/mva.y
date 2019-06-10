@@ -378,7 +378,7 @@
             printf("\"%s\" [URL=\"file:Artista %s.html\" style=filled, color=\".3 .4 .8\"]\n", nome, nome);
         }
         else{
-             printf("\"%s\" [nojustify=true shape=\"none\" label=\"\" xlabel=\"%s\" image=\"%s\" URL=\"file:Artista %s.html\" width=\"1\" height=\"1\" imagescale=both  fixedsize=true]\n",
+             printf("\"%s\" [fontsize=\"10\" shape=\"none\" label=\"\" xlabel=\"%s\" image=\"%s\" URL=\"file:Artista %s.html\" width=\"2\" height=\"2\" imagescale=both  fixedsize=true]\n",
                     nome, nome, artAtrib->imagem, nome);   
         }
     }
@@ -388,7 +388,7 @@
             printf("\"%s\" [URL=\"file:Obra %s.html\" style=filled, color=\"1.0 .6 1.0\"]\n", nome, nome);
         }
         else{
-             printf("\"%s\" [nojustify=true shape=\"none\" label=\"\" xlabel=\"%s\" image=\"%s\" URL=\"file:Obra %s.html\" width=\"1\" height=\"1\" imagescale=both  fixedsize=true]\n",
+             printf("\"%s\" [fontsize=\"10\" shape=\"none\" label=\"\" xlabel=\"%s\" image=\"%s\" URL=\"file:Obra %s.html\" width=\"2\" height=\"2\" imagescale=both  fixedsize=true]\n",
                     nome, nome, obrAtrib->imagem, nome);   
         }
     }
@@ -398,7 +398,7 @@
             printf("\"%s\" [URL=\"file:Evento %s.html\" style=filled, color=\".5 .5 1\"]\n", nome, nome);
         }
         else{
-             printf("\"%s\" [nojustify=true shape=\"none\" label=\"\" xlabel=\"%s\" image=\"%s\" URL=\"file:Evento %s.html\" width=\"1\" height=\"1\" imagescale=both  fixedsize=true]\n",
+             printf("\"%s\" [fontsize=\"10\" shape=\"none\" label=\"\" xlabel=\"%s\" image=\"%s\" URL=\"file:Evento %s.html\" width=\"2\" height=\"2\" imagescale=both  fixedsize=true]\n",
                     nome, nome, eventAtrib->imagem, nome);   
         }
     }

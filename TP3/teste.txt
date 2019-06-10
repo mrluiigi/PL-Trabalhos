@@ -13,6 +13,7 @@ ARTISTA "Verrocchio" {
 	Periodo = "Renascentismo"
 	Ensinou = {"da Vinci"}
 	Produziu = {"O Batismo de Cristo"}
+	Imagem = "verrocchio.png"
 }
 
 ARTISTA "da Vinci" {
@@ -41,7 +42,7 @@ OBRA "Mona Lisa" {
 	Valor = "2,5 mil milhões"
 	Local Exposicao = "Museu do Louvre"
 	Exposta em = {"Exposição no museu do Louvre"}
-	Imagem = "monalisa.jpg"
+	Imagem = "monalisa.png"
 }
 
 OBRA "A última ceia" {
@@ -50,6 +51,7 @@ OBRA "A última ceia" {
 	Tecnica = "Da têmpera e óleo sobre duas camadas de gesso aplicadas em estuque " 
 	Valor = "Indeterminado"
 	Local Exposicao = "Santa Maria delle Grazie"
+	Imagem = "aultimaceia.jpg"
 }
 
 
@@ -68,6 +70,7 @@ OBRA "O Batismo de Cristo" {
 	Tecnica = "Tinta a óleo" 
 	Valor = "Indeterminado"
 	Local Exposicao = "Galleria degli Uffizi"
+	Imagem = "batismocristo.png"
 }
 
 OBRA "Balloon Girl" {
