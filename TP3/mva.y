@@ -5,26 +5,11 @@
     #include <string.h>
     #include <glib.h>
     #include "lex.yy.c"
+
     int yylex();
     int yyerror(char *s);
 
-    typedef struct atributoStruct{
-        char* atribNome;
-        char* atribValor;
-    } *AtributoStruct;
-
-
-    typedef struct artistaStruct{
-        char* nome;
-        GSList* listaAtributos;
-        GSList* listaEnsinou;
-        GSList* listaAprendeu;
-        GSList* listaColaborou;
-        GSList* listaProduziu;
-        GSList* listaParticipou;
-    } *ArtistaStruct;
-
-
+    //Estrutura para armazenar os atributos de um artista
     typedef struct artistaAtributos{
         char* nome;
         char* pais; 
@@ -35,6 +20,7 @@
 
     ArtistaAtributos artAtrib;
 
+    //Chamar no final de processar cada artista
     void initArtistaAtributos(){
 		artAtrib = malloc(sizeof(struct artistaAtributos));
 		artAtrib->nome = NULL;
@@ -44,17 +30,19 @@
 		artAtrib->imagem = NULL;
     }
 
-
+    //Estrutura para armazenar os atributos de uma obra
     typedef struct obraAtributos{
         char* nome;
         char* data; 
 		char* tecnica;
 		char* valor;
 		char* local;
+        char* imagem;
     } *ObraAtributos;
 
     ObraAtributos obrAtrib;
 
+    //Chamar no final de processar cada obra
     void initObraAtributos(){
 		obrAtrib = malloc(sizeof(struct obraAtributos));
 		obrAtrib->nome = NULL;
@@ -62,63 +50,78 @@
 		obrAtrib->tecnica = NULL;
 		obrAtrib->valor = NULL;
 		obrAtrib->local = NULL;
+        obrAtrib->imagem = NULL;
     }
 
-
+    //Estrutura para armazenar os atributos de um evento
     typedef struct eventoAtributos{
         char* tipo;
         char* localizacao; 
 		char* data;
+        char* imagem;
     } *EventoAtributos;
 
     EventoAtributos eventAtrib;
 
+    //Chamar no final de processar cada artista
     void initEventoAtributos(){
 		eventAtrib = malloc(sizeof(struct eventoAtributos));
 		eventAtrib->tipo = NULL;
 		eventAtrib->localizacao = NULL;
 		eventAtrib->data = NULL;
+        eventAtrib->imagem = NULL;
     }
-
+    //Estruturas de dados para armazenar todas as entidades encontradas
     GHashTable* artistasEncontrados = NULL;
-    GSList* artistasEsperados = NULL;
-
     GHashTable* obrasEncontradas = NULL;
-    GSList* obrasEsperadas = NULL;
-
-
     GHashTable* eventosEncontrados = NULL;
+    //Estruturas de dados para armazenar todas as entidades que são referidas nas relações
+    GSList* artistasEsperados = NULL;
+    GSList* obrasEsperadas = NULL;
     GSList* eventosEsperados = NULL;
 
-
-    GSList* listaAtributos;
-
-    AtributoStruct ats;
-
+    //Lista para guardar as entidades mencionadas numa relação antes da relação ser determinada
     GSList* listaRelacoesTemp = NULL;
 
+    //Relações entre artista e artista
     GSList* listaEnsinou = NULL;
     GSList* listaAprendeu = NULL;
     GSList* listaColaborou = NULL;
-
+    //Relação entre artista e obra
     GSList* listaProduziu = NULL;
-    GSList* listaProduzida = NULL;
-
+    //Relação entre artista e evento
     GSList* listaParticipou = NULL;
+    //Chamar no final de cada artista para outros artistas não ficarem com as mesmas relações
+    void limparRelacoesArtista(){
+        listaEnsinou = NULL;
+        listaAprendeu = NULL;
+        listaColaborou = NULL;  
+        listaProduziu = NULL;
+        listaParticipou = NULL;
+    }
 
+    //Relação entre obra e artista
+    GSList* listaProduzida = NULL;
+    //Relações entre obra e evento
     GSList* listaExposta = NULL;
-    GSList* listaExpoe = NULL;
-
     GSList* listaVendida = NULL;
+    //Chamar no final de cada obra para outras obras não ficarem com as mesmas relações
+    void limparRelacoesObra(){
+        listaProduzida = NULL;
+        listaExposta = NULL;
+        listaVendida = NULL;  
+    }
+
+    //Relações entre evento e obra
+    GSList* listaExpoe = NULL;
     GSList* listaVendidos = NULL;
+    //Chamar no final de cada evento para outros eventos não ficarem com as mesmas relações
+    void limparRelacoesEvento(){
+        listaExpoe = NULL;
+        listaVendidos = NULL; 
+    }
 
-
-
-    char * imagem = NULL;
-
-
-
-
+    //Imprime no ficheiro dado uma tabela em HTML com os atributos do artista atual
     void writeTabelaAtributosArtista(FILE* fd){
 
         fwrite("<table>\n<tr>\n<th>Atributo</th>\n<th>Valor</th>\n</tr>", 1 , 51, fd);
@@ -223,7 +226,7 @@
 
         fwrite("</body>\n</html>" , 1 , 15, fd );
     }
-
+    //Imprime no ficheiro dado uma tabela em HTML com os atributos da obra atual
     void writeTabelaAtributosObra(FILE* fd){
 
         fwrite("<table>\n<tr>\n<th>Atributo</th>\n<th>Valor</th>\n</tr>", 1 , 51, fd);
@@ -305,7 +308,7 @@
 
 
     }
-
+    //Imprime no ficheiro dado uma tabela em HTML com os atributos do evento atual
     void writeTabelaAtributosEvento(FILE* fd){
 
         fwrite("<table>\n<tr>\n<th>Atributo</th>\n<th>Valor</th>\n</tr>", 1 , 51, fd);
@@ -371,21 +374,36 @@
 
 
     void writeDotArtista(char* nome){
-        if(imagem == NULL){
+        if(artAtrib->imagem == NULL){
             printf("\"%s\" [URL=\"file:Artista %s.html\" style=filled, color=\".3 .4 .8\"]\n", nome, nome);
         }
         else{
-             printf("\"%s\" [nojustify=true shape=\"none\" label=\"\" xlabel=\"%s\" image=\"%s\" URL=\"file:Artista %s.html\" width=\"1\" height=\"1\" imagescale=both  fixedsize=true]\n", nome, nome, imagem, nome);   
+             printf("\"%s\" [nojustify=true shape=\"none\" label=\"\" xlabel=\"%s\" image=\"%s\" URL=\"file:Artista %s.html\" width=\"1\" height=\"1\" imagescale=both  fixedsize=true]\n",
+                    nome, nome, artAtrib->imagem, nome);   
         }
     }
 
     void writeDotObra(char* nome){
-        printf("\"%s\" [URL=\"file:Obra %s.html\" style=filled, color=\"1.0 .6 1.0\"]\n", nome, nome);
+        if(obrAtrib->imagem == NULL){
+            printf("\"%s\" [URL=\"file:Obra %s.html\" style=filled, color=\"1.0 .6 1.0\"]\n", nome, nome);
+        }
+        else{
+             printf("\"%s\" [nojustify=true shape=\"none\" label=\"\" xlabel=\"%s\" image=\"%s\" URL=\"file:Obra %s.html\" width=\"1\" height=\"1\" imagescale=both  fixedsize=true]\n",
+                    nome, nome, obrAtrib->imagem, nome);   
+        }
     }
 
     void writeDotEvento(char* nome){
-        printf("\"%s\" [URL=\"file:Evento %s.html\" style=filled, color=\".5 .5 1.0\"]\n", nome, nome);
+        if(eventAtrib->imagem == NULL){
+            printf("\"%s\" [URL=\"file:Evento %s.html\" style=filled, color=\".5 .5 1\"]\n", nome, nome);
+        }
+        else{
+             printf("\"%s\" [nojustify=true shape=\"none\" label=\"\" xlabel=\"%s\" image=\"%s\" URL=\"file:Evento %s.html\" width=\"1\" height=\"1\" imagescale=both  fixedsize=true]\n",
+                    nome, nome, eventAtrib->imagem, nome);   
+        }
     }
+
+
 
 
 %}
@@ -459,27 +477,11 @@ Artista : ART VALOR '{' ArtistaInformacoes '}'                                  
                                                                                         asprintf(&mensagemErro, "Artista %s repetido\n", $2);
                                                                                         yyerror(mensagemErro);
                                                                                     }
-                                                                                    ArtistaStruct ats = malloc(sizeof(struct artistaStruct));
-                                                                                    ats->nome = $2;
-                                                                                    ats->listaAtributos = listaAtributos;
-                                                                                    ats->listaEnsinou = listaEnsinou;   
-                                                                                    ats->listaAprendeu = listaAprendeu;   
-                                                                                    ats->listaColaborou = listaColaborou;
-                                                                                    ats->listaProduziu = listaProduziu;
-                                                                                    ats->listaParticipou = listaParticipou;
-
-
                                                                                     writeDotArtista($2);
                                                                                     writeHtmlArtista($2);
 
-                                                                                    listaAtributos = NULL;
-                                                                                    listaEnsinou = NULL;
-                                                                                    listaAprendeu = NULL;
-                                                                                    listaColaborou = NULL;  
-                                                                                    listaProduziu = NULL;
-                                                                                    listaParticipou = NULL;
+                                                                                    limparRelacoesArtista();
                                                                                     initArtistaAtributos();
-                                                                                    imagem = NULL;                                                                               
                                                                                 }
         ;
 
@@ -496,10 +498,6 @@ ArtistaInformacao : AtributoArtista
 
 
 AtributoArtista : TipoAtributoArtista'=' VALOR                              {   
-                                                                                char* linhaTabela;
-                                                                                asprintf(&linhaTabela, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", $1, $3);
-                                                                                listaAtributos = g_slist_append(listaAtributos, linhaTabela);
-                                                                                asprintf(&$$, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", $1, $3);
                                                                                 if(strcmp($1,"Nome completo") == 0){
                                                                                     if(artAtrib->nome != NULL){
                                                                                     	yyerror("Nome repetido");
@@ -528,12 +526,8 @@ AtributoArtista : TipoAtributoArtista'=' VALOR                              {
                                                                                 	if(artAtrib->imagem != NULL){
                                                                                     	yyerror("Imagem repetido");
                                                                                     }
-                                                                                    imagem = $3;
                                                                                     artAtrib->imagem = $3;
                                                                                 }
-                                                                                ats = malloc(sizeof(struct atributoStruct));
-                                                                                ats->atribNome = $1;  
-                                                                                ats->atribValor = $3;
                                                                             }
          ;
 
@@ -557,10 +551,7 @@ Obra : OBRAKEYWORD VALOR '{' ObraInformacoes '}'                                
                                                                                 writeDotObra($2);
                                                                                 writeHtmlObra($2);
                                                                                 initObraAtributos();
-                                                                                listaExposta = NULL;
-                                                                                listaProduzida = NULL;
-                                                                                listaVendida = NULL;  
-                                                                                listaAtributos = NULL;
+                                                                                limparRelacoesObra();
                                                                             }
         ;
 
@@ -578,11 +569,6 @@ ObraInformacao : AtributoObra
                ;
 
 AtributoObra : TipoAtributoObra '=' VALOR                                   {   
-                                                                                char* linhaTabela;
-                                                                                asprintf(&linhaTabela, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", $1, $3);
-                                                                                listaAtributos = g_slist_append(listaAtributos, linhaTabela);
-                                                                                asprintf(&$$, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", $1, $3);
-
 																				if(strcmp($1,"Nome") == 0){
                                                                                     if(obrAtrib->nome != NULL){
                                                                                     	yyerror("Nome repetido");
@@ -613,10 +599,12 @@ AtributoObra : TipoAtributoObra '=' VALOR                                   {
                                                                                     }
                                                                                     obrAtrib->local = $3;
                                                                                 }
-
-                                                                                ats = malloc(sizeof(struct atributoStruct));
-                                                                                ats->atribNome = $1;  
-                                                                                ats->atribValor = $3;
+                                                                                else if(strcmp($1,"Imagem") == 0){
+                                                                                    if(obrAtrib->imagem != NULL){
+                                                                                        yyerror("Imagem repetido");
+                                                                                    }
+                                                                                    obrAtrib->imagem = $3;
+                                                                                }
                                                                             }
          ;
 
@@ -626,6 +614,7 @@ TipoAtributoObra : NOME                                                         
                  | TECNICA                                                      {$$ = "Técnica";}
                  | VALORMONETARIO                                               {$$ = "Valor";}                                                              
                  | LOCALEXPOSICAO                                               {$$ = "Local de exposição";}   
+                 | IMAGEM                                                       {$$ = "Imagem";}
                  ;
 
 
@@ -642,9 +631,7 @@ Evento : EVENTOKEYWORD VALOR '{' EventoInformacoes '}'                          
                                                                                 writeDotEvento($2);
                                                                                 writeHtmlEvento($2);
                                                                                 initEventoAtributos();
-                                                                                listaAtributos = NULL;
-                                                                                listaExpoe = NULL;
-                                                                                listaVendidos = NULL;                                                                              
+                                                                                limparRelacoesEvento();                                                                             
                                                                             }
         ;
 
@@ -660,12 +647,7 @@ EventoInformacao : AtributoEvento
                  ;
 
 AtributoEvento : TipoAtributoEvento '=' VALOR                               { 
-                                                                                char* linhaTabela;
-                                                                                asprintf(&linhaTabela, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", $1, $3);
-                                                                                listaAtributos = g_slist_append(listaAtributos, linhaTabela);
-                                                                                asprintf(&$$, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", $1, $3);
-
-																				if(strcmp($1,"Tipo") == 0){
+                                                                                if(strcmp($1,"Tipo") == 0){
                                                                                     if(eventAtrib->tipo != NULL){
                                                                                     	yyerror("Tipo repetido");
                                                                                     }
@@ -683,11 +665,12 @@ AtributoEvento : TipoAtributoEvento '=' VALOR                               {
                                                                                     }
                                                                                     eventAtrib->data = $3;
                                                                                 }
-                                                                                
-
-                                                                                ats = malloc(sizeof(struct atributoStruct));
-                                                                                ats->atribNome = $1;  
-                                                                                ats->atribValor = $3;
+                                                                                else if(strcmp($1,"Imagem") == 0){
+                                                                                    if(eventAtrib->imagem != NULL){
+                                                                                        yyerror("Imagem repetido");
+                                                                                    }
+                                                                                    eventAtrib->imagem = $3;
+                                                                                }
                                                                             }
          ;
 
@@ -695,6 +678,7 @@ AtributoEvento : TipoAtributoEvento '=' VALOR                               {
 TipoAtributoEvento : TIPO                                                      {$$ = "Tipo";}
                    | LOCALIZACAO                                               {$$ = "Localização";}
                    | DATA                                                      {$$ = "Data";} 
+                   | IMAGEM                                                    {$$ = "Imagem";}
                    ;
 
 

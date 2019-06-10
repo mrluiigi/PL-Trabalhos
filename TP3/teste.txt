@@ -3,7 +3,7 @@ ARTISTA "Banksy" {
 	Pais = "Reino Unido"
 	Seculo = "XXI"
 	Periodo =  "Contemporâneo ; Arte de rua"
-	participou = {"Balloon Girl Shredding"}
+	Participou = {"Balloon Girl Shredding"}
 }
 
 ARTISTA "Verrocchio" {
@@ -11,19 +11,19 @@ ARTISTA "Verrocchio" {
 	Pais = "Itália"
 	Seculo = "XV"
 	Periodo = "Renascentismo"
-	ensinouCom = {"da Vinci"}
-	produziu = {"O Batismo de Cristo"}
+	Ensinou = {"da Vinci"}
+	Produziu = {"O Batismo de Cristo"}
 }
 
 ARTISTA "da Vinci" {
-	produziu = {"Mona Lisa";"A última ceia";"O Batismo de Cristo"}
+	Produziu = {"Mona Lisa";"A última ceia";"O Batismo de Cristo"}
 	Nome Completo = "Leonardo da Vinci"
 	Pais = "Itália"
 	Seculo = "XV/XVI"
-	colaborouCom = {"Verrocchio"}
+	Colaborou com = {"Verrocchio"}
 	Periodo = "Renascentismo"
 	Imagem = "davinci.jpg"
-	aprendeuCom = {"Verrocchio"}
+	Aprendeu com = {"Verrocchio"}
 }
 
 ARTISTA "Van Gogh" {
@@ -31,7 +31,7 @@ ARTISTA "Van Gogh" {
 	Pais = "Holanda"
 	Seculo = "XIX"
 	Periodo = "Renascentista/Pós-Impressionismo"
-	produziu = {"The Starry Night"}
+	Produziu = {"The Starry Night"}
 }
 
 OBRA "Mona Lisa" {
@@ -41,6 +41,7 @@ OBRA "Mona Lisa" {
 	Valor = "2,5 mil milhões"
 	Local Exposicao = "Museu do Louvre"
 	Exposta em = {"Exposição no museu do Louvre"}
+	Imagem = "monalisa.jpg"
 }
 
 OBRA "A última ceia" {
@@ -92,6 +93,7 @@ EVENTO "Exposição no museu do Louvre" {
 	Localizacao = "França"
 	Data = "A decorrer"
 	Expoe = {"Mona Lisa"}
+	Imagem = "louvre.jpg"
 }
 
 	

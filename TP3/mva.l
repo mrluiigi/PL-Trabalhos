@@ -32,12 +32,12 @@ Localizacao			{yylval.string = strdup(yytext); return LOCALIZACAO;}
 
 
 
-ensinouCom			{return ENSINOU;}
-aprendeuCom			{return APRENDEU;}
-colaborouCom		{return COLABOROU;}
+Ensinou 			{return ENSINOU;}
+Aprendeu" "com		{return APRENDEU;}
+Colaborou" "com		{return COLABOROU;}
 
-produziu			{return PRODUZIU;}
-participou			{return PARTICIPOU;}
+Produziu			{return PRODUZIU;}
+Participou			{return PARTICIPOU;}
 
 Exposta" "em 		{return EXPOSTA;}
 Expoe				{return EXPOE;}
