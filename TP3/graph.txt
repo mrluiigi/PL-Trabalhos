@@ -1,0 +1,130 @@
+/*
+* @command = dot
+* @imageurl = TRUE
+ *
+*/
+digraph MuseuVirtualDoArtista {
+rankdir=LR;forcelabels=true; ratio=fill; node[fontsize=16]; edge[fontsize=16];
+  
+	  
+	  
+	  
+	   
+	  
+	  
+"Banksy" [URL="file:Artista Banksy.html" style=filled, color=".3 .4 .8"]
+"Banksy" -> "Balloon Girl" [label="produziu"]
+"Banksy" -> "Balloon Girl Shredding" [label="participou"]
+
+
+  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+"Verrocchio" [style=filled fillcolor=".3 .4 .8" URL="file:Artista Verrocchio.html" shape=box label=<<table border="0"><tr><td border="0" fixedsize="true" width="200" height="200" ><img src="verrocchio.png"/></td></tr><tr><td>Verrocchio</td></tr></table> >]"Verrocchio" -> "da Vinci" [label="ensinou"]
+"Verrocchio" -> "O Batismo de Cristo" [label="produziu"]
+
+
+  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+"da Vinci" [style=filled fillcolor=".3 .4 .8" URL="file:Artista da Vinci.html" shape=box label=<<table border="0"><tr><td border="0" fixedsize="true" width="200" height="200" ><img src="davinci.jpg"/></td></tr><tr><td>da Vinci</td></tr></table> >]"da Vinci" -> "Verrocchio" [label="aprendeu com"]
+"da Vinci" -> "Verrocchio" [label="colaborou com" dir="both"]
+"da Vinci" -> "Mona Lisa" [label="produziu"]
+"da Vinci" -> "A última ceia" [label="produziu"]
+"da Vinci" -> "O Batismo de Cristo" [label="produziu"]
+
+
+  
+	  
+	  
+	  
+	  
+	  
+"Van Gogh" [URL="file:Artista Van Gogh.html" style=filled, color=".3 .4 .8"]
+"Van Gogh" -> "The Starry Night" [label="produziu"]
+
+
+  
+	  
+	  
+	   
+	  
+	  
+	  
+	  
+"Mona Lisa" [style=filled fillcolor="1.0 .6 1.0" URL="file:Obra Mona Lisa.html" shape=box label=<<table border="0"><tr><td border="0" fixedsize="true" width="200" height="200" ><img src="monalisa.png"/></td></tr><tr><td>Mona Lisa</td></tr></table> >]"Mona Lisa" -> "Exposição no Louvre" [label="exposta em"]
+
+
+  
+	  
+	  
+	   
+	  
+	  
+	  
+"A última ceia" [style=filled fillcolor="1.0 .6 1.0" URL="file:Obra A última ceia.html" shape=box label=<<table border="0"><tr><td border="0" fixedsize="true" width="200" height="200" ><img src="aultimaceia.jpg"/></td></tr><tr><td>A última ceia</td></tr></table> >]
+
+
+  
+	  
+	  
+	   
+	  
+	  
+	  
+"The Starry Night" [URL="file:Obra The Starry Night.html" style=filled, color="1.0 .6 1.0"]
+"The Starry Night" -> "Van Gogh" [label="produzida por"]
+
+
+  
+	  
+	  
+	   
+	  
+	  
+	  
+"O Batismo de Cristo" [style=filled fillcolor="1.0 .6 1.0" URL="file:Obra O Batismo de Cristo.html" shape=box label=<<table border="0"><tr><td border="0" fixedsize="true" width="200" height="200" ><img src="batismocristo.png"/></td></tr><tr><td>O Batismo de Cristo</td></tr></table> >]
+
+  
+	  
+	  
+	   
+	  
+	  
+	  
+"Balloon Girl" [URL="file:Obra Balloon Girl.html" style=filled, color="1.0 .6 1.0"]
+"Balloon Girl" -> "Balloon Girl Shredding" [label="vendida em"]
+
+
+
+  
+	  
+	  
+	  
+	  
+"Balloon Girl Shredding" [URL="file:Evento Balloon Girl Shredding.html" style=filled, color=".5 .5 1"]
+"Balloon Girl Shredding" -> "Balloon Girl" [label="vendeu"]
+
+
+
+  
+	  
+	  
+	  
+	  
+	  
+"Exposição no Louvre" [style=filled fillcolor=".5 .5 1" URL="file:Evento Exposição no Louvre.html" shape=box label=<<table border="0"><tr><td border="0" fixedsize="true" width="200" height="200" ><img src="louvre.jpg"  /></td></tr><tr><td>Exposição no Louvre</td></tr></table> >]"Exposição no Louvre" -> "Mona Lisa" [label="expõe"]
+
+
+	}
