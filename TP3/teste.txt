@@ -8,7 +8,7 @@ ARTISTA "Banksy" {
 }
 
 ARTISTA "Verrocchio" {
-	Nome Completo = "Andrea del Verrocchio"
+	Nome Completo = "Andrea di Francesco di Cione"
 	Pais = "Itália"
 	Seculo = "XV"
 	Periodo = "Renascentismo"
@@ -19,7 +19,7 @@ ARTISTA "Verrocchio" {
 
 ARTISTA "da Vinci" {
 	Produziu = {"Mona Lisa";"A última ceia";"O Batismo de Cristo"}
-	Nome Completo = "Leonardo da Vinci"
+	Nome Completo = "Leonardo di Ser Piero da Vinci"
 	Pais = "Itália"
 	Seculo = "XV/XVI"
 	Colaborou com = {"Verrocchio"}
