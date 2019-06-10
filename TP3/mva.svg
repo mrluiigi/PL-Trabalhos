@@ -12,7 +12,7 @@
 <!-- Banksy -->
 <g id="node1" class="node">
 <title>Banksy</title>
-<g id="a_node1"><a xlink:href="file:Artista Banksy.html" xlink:title="Banksy">
+<g id="a_node1"><a xlink:href="file:HTML/Artista Banksy.html" xlink:title="Banksy">
 <ellipse fill="#8acc7a" stroke="#8acc7a" cx="110" cy="-18.3848" rx="45.9239" ry="18.2703"/>
 <text text-anchor="middle" x="110" y="-14.5848" font-family="Times,serif" font-size="16.00" fill="#000000">Banksy</text>
 </a>
@@ -21,7 +21,7 @@
 <!-- Balloon Girl -->
 <g id="node2" class="node">
 <title>Balloon Girl</title>
-<g id="a_node2"><a xlink:href="file:Obra Balloon Girl.html" xlink:title="Balloon Girl">
+<g id="a_node2"><a xlink:href="file:HTML/Obra Balloon Girl.html" xlink:title="Balloon Girl">
 <ellipse fill="#ff6666" stroke="#ff6666" cx="463" cy="-50.3848" rx="68.6788" ry="18.2703"/>
 <text text-anchor="middle" x="463" y="-46.5848" font-family="Times,serif" font-size="16.00" fill="#000000">Balloon Girl</text>
 </a>
@@ -37,7 +37,7 @@
 <!-- Balloon Girl Shredding -->
 <g id="node3" class="node">
 <title>Balloon Girl Shredding</title>
-<g id="a_node3"><a xlink:href="file:Evento Balloon Girl Shredding.html" xlink:title="Balloon Girl Shredding">
+<g id="a_node3"><a xlink:href="file:HTML/Evento Balloon Girl Shredding.html" xlink:title="Balloon Girl Shredding">
 <ellipse fill="#7fffff" stroke="#7fffff" cx="802.0868" cy="-29.3848" rx="118.1737" ry="18.2703"/>
 <text text-anchor="middle" x="802.0868" y="-25.5848" font-family="Times,serif" font-size="16.00" fill="#000000">Balloon Girl Shredding</text>
 </a>
@@ -67,7 +67,7 @@
 <!-- Verrocchio -->
 <g id="node4" class="node">
 <title>Verrocchio</title>
-<g id="a_node4"><a xlink:href="file:Artista Verrocchio.html" xlink:title="&lt;TABLE&gt;">
+<g id="a_node4"><a xlink:href="file:HTML/Artista Verrocchio.html" xlink:title="&lt;TABLE&gt;">
 <polygon fill="#8acc7a" stroke="#000000" points="220,-671.3848 0,-671.3848 0,-435.3848 220,-435.3848 220,-671.3848"/>
 <image xlink:href="Imagens/verrocchio.png" width="196px" height="196px" preserveAspectRatio="xMinYMin meet" x="12" y="-663.385"/>
 <text text-anchor="start" x="74" y="-448.5848" font-family="Times,serif" font-size="16.00" fill="#000000">Verrocchio</text>
@@ -77,7 +77,7 @@
 <!-- da Vinci -->
 <g id="node5" class="node">
 <title>da Vinci</title>
-<g id="a_node5"><a xlink:href="file:Artista da Vinci.html" xlink:title="&lt;TABLE&gt;">
+<g id="a_node5"><a xlink:href="file:HTML/Artista da Vinci.html" xlink:title="&lt;TABLE&gt;">
 <polygon fill="#8acc7a" stroke="#000000" points="573,-630.3848 353,-630.3848 353,-394.3848 573,-394.3848 573,-630.3848"/>
 <image xlink:href="Imagens/davinci.jpg" width="196px" height="196px" preserveAspectRatio="xMinYMin meet" x="365" y="-622.385"/>
 <text text-anchor="start" x="435.5" y="-407.5848" font-family="Times,serif" font-size="16.00" fill="#000000">da Vinci</text>
@@ -94,7 +94,7 @@
 <!-- O Batismo de Cristo -->
 <g id="node6" class="node">
 <title>O Batismo de Cristo</title>
-<g id="a_node6"><a xlink:href="file:Obra O Batismo de Cristo.html" xlink:title="&lt;TABLE&gt;">
+<g id="a_node6"><a xlink:href="file:HTML/Obra O Batismo de Cristo.html" xlink:title="&lt;TABLE&gt;">
 <polygon fill="#ff6666" stroke="#000000" points="912.0868,-809.3848 692.0868,-809.3848 692.0868,-573.3848 912.0868,-573.3848 912.0868,-809.3848"/>
 <image xlink:href="Imagens/batismocristo.png" width="196px" height="196px" preserveAspectRatio="xMinYMin meet" x="704.087" y="-801.385"/>
 <text text-anchor="start" x="737.0868" y="-586.5848" font-family="Times,serif" font-size="16.00" fill="#000000">O Batismo de Cristo</text>
@@ -133,7 +133,7 @@
 <!-- Mona Lisa -->
 <g id="node7" class="node">
 <title>Mona Lisa</title>
-<g id="a_node7"><a xlink:href="file:Obra Mona Lisa.html" xlink:title="&lt;TABLE&gt;">
+<g id="a_node7"><a xlink:href="file:HTML/Obra Mona Lisa.html" xlink:title="&lt;TABLE&gt;">
 <polygon fill="#ff6666" stroke="#000000" points="912.0868,-555.3848 692.0868,-555.3848 692.0868,-319.3848 912.0868,-319.3848 912.0868,-555.3848"/>
 <image xlink:href="Imagens/monalisa.png" width="196px" height="196px" preserveAspectRatio="xMinYMin meet" x="704.087" y="-547.385"/>
 <text text-anchor="start" x="767.5868" y="-332.5848" font-family="Times,serif" font-size="16.00" fill="#000000">Mona Lisa</text>
@@ -150,7 +150,7 @@
 <!-- A última ceia -->
 <g id="node8" class="node">
 <title>A última ceia</title>
-<g id="a_node8"><a xlink:href="file:Obra A última ceia.html" xlink:title="&lt;TABLE&gt;">
+<g id="a_node8"><a xlink:href="file:HTML/Obra A última ceia.html" xlink:title="&lt;TABLE&gt;">
 <polygon fill="#ff6666" stroke="#000000" points="912.0868,-301.3848 692.0868,-301.3848 692.0868,-65.3848 912.0868,-65.3848 912.0868,-301.3848"/>
 <image xlink:href="Imagens/aultimaceia.jpg" width="196px" height="196px" preserveAspectRatio="xMinYMin meet" x="704.087" y="-293.385"/>
 <text text-anchor="start" x="759.5868" y="-78.5848" font-family="Times,serif" font-size="16.00" fill="#000000">A última ceia</text>
@@ -167,7 +167,7 @@
 <!-- Exposição no Louvre -->
 <g id="node11" class="node">
 <title>Exposição no Louvre</title>
-<g id="a_node11"><a xlink:href="file:Evento Exposição no Louvre.html" xlink:title="&lt;TABLE&gt;">
+<g id="a_node11"><a xlink:href="file:HTML/Evento Exposição no Louvre.html" xlink:title="&lt;TABLE&gt;">
 <polygon fill="#7fffff" stroke="#000000" points="1249.1737,-554.3848 1029.1737,-554.3848 1029.1737,-318.3848 1249.1737,-318.3848 1249.1737,-554.3848"/>
 <image xlink:href="Imagens/louvre.jpg" width="196px" height="196px" preserveAspectRatio="xMinYMin meet" x="1041.17" y="-546.385"/>
 <text text-anchor="start" x="1070.1737" y="-331.5848" font-family="Times,serif" font-size="16.00" fill="#000000">Exposição no Louvre</text>
@@ -184,7 +184,7 @@
 <!-- Van Gogh -->
 <g id="node9" class="node">
 <title>Van Gogh</title>
-<g id="a_node9"><a xlink:href="file:Artista Van Gogh.html" xlink:title="Van Gogh">
+<g id="a_node9"><a xlink:href="file:HTML/Artista Van Gogh.html" xlink:title="Van Gogh">
 <ellipse fill="#8acc7a" stroke="#8acc7a" cx="110" cy="-732.3848" rx="58.8803" ry="18.2703"/>
 <text text-anchor="middle" x="110" y="-728.5848" font-family="Times,serif" font-size="16.00" fill="#000000">Van Gogh</text>
 </a>
@@ -193,7 +193,7 @@
 <!-- The Starry Night -->
 <g id="node10" class="node">
 <title>The Starry Night</title>
-<g id="a_node10"><a xlink:href="file:Obra The Starry Night.html" xlink:title="The Starry Night">
+<g id="a_node10"><a xlink:href="file:HTML/Obra The Starry Night.html" xlink:title="The Starry Night">
 <ellipse fill="#ff6666" stroke="#ff6666" cx="463" cy="-742.3848" rx="88.2768" ry="18.2703"/>
 <text text-anchor="middle" x="463" y="-738.5848" font-family="Times,serif" font-size="16.00" fill="#000000">The Starry Night</text>
 </a>

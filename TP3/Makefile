@@ -11,7 +11,7 @@ open:
 	xdg-open mva.svg
 
 clean:
-	rm -f *.html
+	rm -f HTML/*.html
 	rm -f y.tab.c
 	rm -f y.tab.h
 	rm -f mva

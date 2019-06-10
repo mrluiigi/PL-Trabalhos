@@ -13,9 +13,9 @@
     typedef struct artistaAtributos{
         char* nome;
         char* pais; 
-		char* seculo;
-		char* periodo;
-		char* imagem;
+        char* seculo;
+        char* periodo;
+        char* imagem;
     } *ArtistaAtributos;
 
     ArtistaAtributos artAtrib;
@@ -30,21 +30,21 @@
             free(artAtrib->imagem);
             free(artAtrib);
         }
-		artAtrib = malloc(sizeof(struct artistaAtributos));
-		artAtrib->nome = NULL;
-		artAtrib->pais = NULL;
-		artAtrib->seculo = NULL;
-		artAtrib->periodo = NULL;
-		artAtrib->imagem = NULL;
+        artAtrib = malloc(sizeof(struct artistaAtributos));
+        artAtrib->nome = NULL;
+        artAtrib->pais = NULL;
+        artAtrib->seculo = NULL;
+        artAtrib->periodo = NULL;
+        artAtrib->imagem = NULL;
     }
 
     //Estrutura para armazenar os atributos de uma obra
     typedef struct obraAtributos{
         char* nome;
         char* data; 
-		char* tecnica;
-		char* valor;
-		char* local;
+        char* tecnica;
+        char* valor;
+        char* local;
         char* imagem;
     } *ObraAtributos;
 
@@ -60,12 +60,12 @@
             free(obrAtrib->local);
             free(obrAtrib);
         }
-		obrAtrib = malloc(sizeof(struct obraAtributos));
-		obrAtrib->nome = NULL;
-		obrAtrib->data = NULL;
-		obrAtrib->tecnica = NULL;
-		obrAtrib->valor = NULL;
-		obrAtrib->local = NULL;
+        obrAtrib = malloc(sizeof(struct obraAtributos));
+        obrAtrib->nome = NULL;
+        obrAtrib->data = NULL;
+        obrAtrib->tecnica = NULL;
+        obrAtrib->valor = NULL;
+        obrAtrib->local = NULL;
         obrAtrib->imagem = NULL;
     }
 
@@ -73,7 +73,7 @@
     typedef struct eventoAtributos{
         char* tipo;
         char* localizacao; 
-		char* data;
+        char* data;
         char* imagem;
     } *EventoAtributos;
 
@@ -89,9 +89,9 @@
             free(eventAtrib);
         }
         eventAtrib = malloc(sizeof(struct eventoAtributos));
-		eventAtrib->tipo = NULL;
-		eventAtrib->localizacao = NULL;
-		eventAtrib->data = NULL;
+        eventAtrib->tipo = NULL;
+        eventAtrib->localizacao = NULL;
+        eventAtrib->data = NULL;
         eventAtrib->imagem = NULL;
     }
     //Estruturas de dados para armazenar todas as entidades encontradas
@@ -158,25 +158,25 @@
     void writeTabelaAtributosArtista(FILE* fd){
 
         fwrite("<table>\n", 1 , 7, fd);        
-	    char* linhaTabela;
-	    if(artAtrib->nome != NULL){
+        char* linhaTabela;
+        if(artAtrib->nome != NULL){
             asprintf(&linhaTabela, "<tr>\n<th>%s</th>\n<td>%s</td>\n</tr>", "Nome Completo", artAtrib->nome);
-			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
+            fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
             free(linhaTabela);
         }
         if(artAtrib->pais != NULL){
             asprintf(&linhaTabela, "<tr>\n<th>%s</th>\n<td>%s</td>\n</tr>", "País", artAtrib->pais);
-			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
+            fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
             free(linhaTabela);
         }
         if(artAtrib->seculo != NULL){
             asprintf(&linhaTabela, "<tr>\n<th>%s</th>\n<td>%s</td>\n</tr>", "Século", artAtrib->seculo);
-			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
+            fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
             free(linhaTabela);
         }
         if(artAtrib->periodo != NULL){
             asprintf(&linhaTabela, "<tr>\n<th>%s</th>\n<td>%s</td>\n</tr>", "Período", artAtrib->periodo);
-			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
+            fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
             free(linhaTabela);
         }
         fwrite("</table>\n", 1 , 9, fd);
@@ -185,10 +185,10 @@
     //Escreve nodo para o artista
     void writeDotArtista(char* nome){
         if(artAtrib->imagem == NULL){
-            printf("\"%s\" [URL=\"file:Artista %s.html\" style=filled, color=\".3 .4 .8\"]\n", nome, nome);
+            printf("\"%s\" [URL=\"file:HTML/Artista %s.html\" style=filled, color=\".3 .4 .8\"]\n", nome, nome);
         }
         else{
-            printf("\"%s\" [style=filled fillcolor=\".3 .4 .8\" URL=\"file:Artista %s.html\" shape=box label=<<table border=\"0\"><tr><td border=\"0\" fixedsize=\"true\" width=\"200\" height=\"200\" ><img src=\"%s\"/></td></tr><tr><td>%s</td></tr></table> >]",
+            printf("\"%s\" [style=filled fillcolor=\".3 .4 .8\" URL=\"file:HTML/Artista %s.html\" shape=box label=<<table border=\"0\"><tr><td border=\"0\" fixedsize=\"true\" width=\"200\" height=\"200\" ><img src=\"%s\"/></td></tr><tr><td>%s</td></tr></table> >]",
                    nome, nome, artAtrib->imagem, nome); 
         }
     }
@@ -199,7 +199,7 @@
 
         //Abrir ficheiro html
         char* fileName;
-        asprintf(&fileName, "Artista %s.html", nome);
+        asprintf(&fileName, "HTML/Artista %s.html", nome);
         FILE* fd = fopen(fileName,"w");
         free(fileName);
 
@@ -209,9 +209,9 @@
         fwrite("</h1>\n</head>\n<body>" , 1 , 20, fd );
         //Adicionar imagem
         if(artAtrib->imagem != NULL){
-        	char* img;
-            asprintf(&img, "<img src=\"%s\">", artAtrib->imagem);
-			fwrite(img, 1, strlen(img), fd);	
+            char* img;
+            asprintf(&img, "<img src=\"../%s\">", artAtrib->imagem);
+            fwrite(img, 1, strlen(img), fd);    
             free(img);
         }
         //Escrever a tabela html de atributps
@@ -228,7 +228,7 @@
             //Aresta do dot
             printf("\"%s\" -> \"%s\" [label=\"ensinou\"]\n", nome, outraEntidade);
             //Link html
-            asprintf(&href,"<a href=\"Artista %s.html\">%s</a>\n", outraEntidade,outraEntidade);
+            asprintf(&href,"<a href=\"HTML/Artista %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
             free(href);
             temp = temp->next;
@@ -242,7 +242,7 @@
             //Aresta do dot
             printf("\"%s\" -> \"%s\" [label=\"aprendeu com\"]\n", nome, outraEntidade);
             //Link html
-            asprintf(&href,"<a href=\"Artista %s.html\">%s</a>\n", outraEntidade,outraEntidade);
+            asprintf(&href,"<a href=\"HTML/Artista %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
             free(href);
             temp = temp->next;
@@ -256,7 +256,7 @@
             //Aresta do dot
             printf("\"%s\" -> \"%s\" [label=\"colaborou com\" dir=\"both\"]\n", nome, outraEntidade);
             //Link html
-            asprintf(&href,"<a href=\"Artista %s.html\">%s</a>\n", outraEntidade,outraEntidade);
+            asprintf(&href,"<a href=\"HTML/Artista %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
             free(href);
             temp = temp->next;
@@ -271,7 +271,7 @@
             //Aresta do dot
             printf("\"%s\" -> \"%s\" [label=\"produziu\"]\n", nome, outraEntidade);
             //Link html
-            asprintf(&href,"<a href=\"Obra %s.html\">%s</a>\n", outraEntidade, outraEntidade);
+            asprintf(&href,"<a href=\"HTML/Obra %s.html\">%s</a>\n", outraEntidade, outraEntidade);
             fwrite(href,1,strlen(href), fd);
             free(href);
             temp = temp->next;
@@ -286,7 +286,7 @@
             //Aresta do dot
             printf("\"%s\" -> \"%s\" [label=\"participou\"]\n", nome, outraEntidade);
             //Link html
-            asprintf(&href,"<a href=\"Evento %s.html\">%s</a>\n", outraEntidade,outraEntidade);
+            asprintf(&href,"<a href=\"HTML/Evento %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
             temp = temp->next;
             free(href);
@@ -299,30 +299,30 @@
 
         fwrite("<table>\n", 1 , 7, fd);
         
-	    char* linhaTabela;
-	    if(obrAtrib->nome != NULL){
+        char* linhaTabela;
+        if(obrAtrib->nome != NULL){
             asprintf(&linhaTabela, "<tr>\n<th>%s</th>\n<td>%s</td>\n</tr>", "Nome", obrAtrib->nome);
-			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
+            fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
             free(linhaTabela);
         }
         if(obrAtrib->data != NULL){
             asprintf(&linhaTabela, "<tr>\n<th>%s</th>\n<td>%s</td>\n</tr>", "País", obrAtrib->data);
-			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
+            fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
             free(linhaTabela);
         }
         if(obrAtrib->tecnica != NULL){
             asprintf(&linhaTabela, "<tr>\n<th>%s</th>\n<td>%s</td>\n</tr>", "Técnica", obrAtrib->tecnica);
-			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
+            fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
             free(linhaTabela);
         }
         if(obrAtrib->valor != NULL){
             asprintf(&linhaTabela, "<tr>\n<th>%s</th>\n<td>%s</td>\n</tr>", "Valor", obrAtrib->valor);
-			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
+            fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
             free(linhaTabela);
         }
         if(obrAtrib->local != NULL){
             asprintf(&linhaTabela, "<tr>\n<th>%s</th>\n<td>%s</td>\n</tr>", "Local de exposição", obrAtrib->local);
-			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
+            fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
             free(linhaTabela);
         }
         fwrite("</table>\n", 1 , 9, fd);
@@ -331,10 +331,10 @@
     //Escreve nodo para a obra
     void writeDotObra(char* nome){
         if(obrAtrib->imagem == NULL){
-            printf("\"%s\" [URL=\"file:Obra %s.html\" style=filled, color=\"1.0 .6 1.0\"]\n", nome, nome);
+            printf("\"%s\" [URL=\"file:HTML/Obra %s.html\" style=filled, color=\"1.0 .6 1.0\"]\n", nome, nome);
         }
         else{
-            printf("\"%s\" [style=filled fillcolor=\"1.0 .6 1.0\" URL=\"file:Obra %s.html\" shape=box label=<<table border=\"0\"><tr><td border=\"0\" fixedsize=\"true\" width=\"200\" height=\"200\" ><img src=\"%s\"/></td></tr><tr><td>%s</td></tr></table> >]",
+            printf("\"%s\" [style=filled fillcolor=\"1.0 .6 1.0\" URL=\"file:HTML/Obra %s.html\" shape=box label=<<table border=\"0\"><tr><td border=\"0\" fixedsize=\"true\" width=\"200\" height=\"200\" ><img src=\"%s\"/></td></tr><tr><td>%s</td></tr></table> >]",
                    nome, nome, obrAtrib->imagem, nome); 
         }
     }
@@ -344,7 +344,7 @@
         writeDotObra(nome);
         //Abrir ficheiro html
         char* fileName;
-        asprintf(&fileName, "Obra %s.html", nome);
+        asprintf(&fileName, "HTML/Obra %s.html", nome);
         FILE* fd = fopen(fileName,"w");
         free(fileName);
         //Escrever inicio e titulo
@@ -353,10 +353,10 @@
         fwrite("</h1>\n</head>\n<body>" , 1 , 20, fd );
         //Adicionar imagem
         if(obrAtrib->imagem != NULL){
-        	char* img;
-            asprintf(&img, "<img src=\"%s\">", obrAtrib->imagem);
-			fwrite(img, 1, strlen(img), fd);
-            free(img);	
+            char* img;
+            asprintf(&img, "<img src=\"../%s\">", obrAtrib->imagem);
+            fwrite(img, 1, strlen(img), fd);
+            free(img);  
         }
         //Escrever tabela html dos atributos
         writeTabelaAtributosObra(fd);
@@ -372,7 +372,7 @@
             //Aresta do dot
             printf("\"%s\" -> \"%s\" [label=\"exposta em\"]\n", nome, outraEntidade);
             //Link html
-            asprintf(&href,"<a href=\"Evento %s.html\">%s</a>\n", outraEntidade,outraEntidade);
+            asprintf(&href,"<a href=\"HTML/Evento %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
             free(href);
             temp = temp->next;
@@ -386,7 +386,7 @@
             //Aresta do dot
             printf("\"%s\" -> \"%s\" [label=\"produzida por\"]\n", nome, outraEntidade);
             //Link html
-            asprintf(&href,"<a href=\"Artista %s.html\">%s</a>\n", outraEntidade,outraEntidade);
+            asprintf(&href,"<a href=\"HTML/Artista %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
             free(href);
             temp = temp->next;
@@ -400,7 +400,7 @@
             //Aresta do dot
             printf("\"%s\" -> \"%s\" [label=\"vendida em\"]\n", nome, outraEntidade);
             //Link html
-            asprintf(&href,"<a href=\"Evento %s.html\">%s</a>\n", outraEntidade,outraEntidade);
+            asprintf(&href,"<a href=\"HTML/Evento %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
             free(href);
             temp = temp->next;
@@ -413,20 +413,20 @@
 
         fwrite("<table>\n", 1 , 7, fd);
         
-	    char* linhaTabela;
-	    if(eventAtrib->tipo != NULL){
+        char* linhaTabela;
+        if(eventAtrib->tipo != NULL){
             asprintf(&linhaTabela, "<tr>\n<th>%s</th>\n<td>%s</td>\n</tr>", "Tipo", eventAtrib->tipo);
-			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
+            fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
             free(linhaTabela);
         }
         if(eventAtrib->localizacao != NULL){
             asprintf(&linhaTabela, "<tr>\n<th>%s</th>\n<td>%s</td>\n</tr>", "Localização", eventAtrib->localizacao);
-			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
+            fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
             free(linhaTabela);
         }
         if(eventAtrib->data != NULL){
             asprintf(&linhaTabela, "<tr>\n<th>%s</th>\n<td>%s</td>\n</tr>", "Data", eventAtrib->data);
-			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
+            fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
             free(linhaTabela);
         }
         fwrite("</table>\n", 1 , 9, fd);
@@ -434,10 +434,10 @@
     //Escreve nodo para o evento
     void writeDotEvento(char* nome){
         if(eventAtrib->imagem == NULL){
-            printf("\"%s\" [URL=\"file:Evento %s.html\" style=filled, color=\".5 .5 1\"]\n", nome, nome);
+            printf("\"%s\" [URL=\"file:HTML/Evento %s.html\" style=filled, color=\".5 .5 1\"]\n", nome, nome);
         }
         else{
-            printf("\"%s\" [style=filled fillcolor=\".5 .5 1\" URL=\"file:Evento %s.html\" shape=box label=<<table border=\"0\"><tr><td border=\"0\" fixedsize=\"true\" width=\"200\" height=\"200\" ><img src=\"%s\"  /></td></tr><tr><td>%s</td></tr></table> >]",
+            printf("\"%s\" [style=filled fillcolor=\".5 .5 1\" URL=\"file:HTML/Evento %s.html\" shape=box label=<<table border=\"0\"><tr><td border=\"0\" fixedsize=\"true\" width=\"200\" height=\"200\" ><img src=\"%s\"  /></td></tr><tr><td>%s</td></tr></table> >]",
                    nome,nome, eventAtrib->imagem, nome);
         }
     }
@@ -447,7 +447,7 @@
         writeDotEvento(nome);
         //Abrir ficheiro html
         char* fileName;
-        asprintf(&fileName, "Evento %s.html", nome);
+        asprintf(&fileName, "HTML/Evento %s.html", nome);
         FILE* fd = fopen(fileName,"w");
         free(fileName);
         //Escrever inicio e titulo
@@ -456,9 +456,9 @@
         fwrite("</h1>\n</head>\n<body>" , 1 , 20, fd );
         //Adicionar imagem
         if(eventAtrib->imagem != NULL){
-        	char* img;
-            asprintf(&img, "<img src=\"%s\">", eventAtrib->imagem);
-			fwrite(img, 1, strlen(img), fd);	
+            char* img;
+            asprintf(&img, "<img src=\"../%s\">", eventAtrib->imagem);
+            fwrite(img, 1, strlen(img), fd);    
             free(img);
         }
         //Escrever tabela html dos atributos
@@ -475,7 +475,7 @@
             //Aresta do dot
             printf("\"%s\" -> \"%s\" [label=\"expõe\"]\n", nome, outraEntidade);
             //Link html
-            asprintf(&href,"<a href=\"Obra %s.html\">%s</a>\n", outraEntidade,outraEntidade);
+            asprintf(&href,"<a href=\"HTML/Obra %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
             free(href);
             temp = temp->next;
@@ -489,7 +489,7 @@
             //Aresta do dot
             printf("\"%s\" -> \"%s\" [label=\"vendeu\"]\n", nome, outraEntidade);
             //Link html
-            asprintf(&href,"<a href=\"Obra %s.html\">%s</a>\n", outraEntidade,outraEntidade);
+            asprintf(&href,"<a href=\"HTML/Obra %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
             free(href);
             temp = temp->next;
@@ -587,31 +587,31 @@ ArtistaInformacao : AtributoArtista
 AtributoArtista : TipoAtributoArtista'=' VALOR                              {   
                                                                                 if(strcmp($1,"Nome completo") == 0){
                                                                                     if(artAtrib->nome != NULL){
-                                                                                    	yyerror("Nome repetido");
+                                                                                        yyerror("Nome repetido");
                                                                                     }
                                                                                     artAtrib->nome = $3;
                                                                                 }
                                                                                 else if(strcmp($1,"País") == 0){
-                                                                                	if(artAtrib->pais != NULL){
-                                                                                    	yyerror("País repetido");
+                                                                                    if(artAtrib->pais != NULL){
+                                                                                        yyerror("País repetido");
                                                                                     }
                                                                                     artAtrib->pais = $3;
                                                                                 }
                                                                                 else if(strcmp($1,"Século") == 0){
-                                                                                	if(artAtrib->seculo != NULL){
-                                                                                    	yyerror("Século repetido");
+                                                                                    if(artAtrib->seculo != NULL){
+                                                                                        yyerror("Século repetido");
                                                                                     }
                                                                                     artAtrib->seculo = $3;
                                                                                 }
                                                                                 else if(strcmp($1,"Período") == 0){
-                                                                                	if(artAtrib->periodo != NULL){
-                                                                                    	yyerror("Período repetido");
+                                                                                    if(artAtrib->periodo != NULL){
+                                                                                        yyerror("Período repetido");
                                                                                     }
                                                                                     artAtrib->periodo = $3;
                                                                                 }
                                                                                 else if(strcmp($1,"Imagem") == 0){
-                                                                                	if(artAtrib->imagem != NULL){
-                                                                                    	yyerror("Imagem repetido");
+                                                                                    if(artAtrib->imagem != NULL){
+                                                                                        yyerror("Imagem repetido");
                                                                                     }
                                                                                     artAtrib->imagem = $3;
                                                                                 }
@@ -681,33 +681,33 @@ ObraInformacao : AtributoObra
                ;
 
 AtributoObra : TipoAtributoObra '=' VALOR                                   {   
-																				if(strcmp($1,"Nome") == 0){
+                                                                                if(strcmp($1,"Nome") == 0){
                                                                                     if(obrAtrib->nome != NULL){
-                                                                                    	yyerror("Nome repetido");
+                                                                                        yyerror("Nome repetido");
                                                                                     }
                                                                                     obrAtrib->nome = $3;
                                                                                 }
                                                                                 else if(strcmp($1,"Data") == 0){
-                                                                                	if(obrAtrib->data != NULL){
-                                                                                    	yyerror("Data repetido");
+                                                                                    if(obrAtrib->data != NULL){
+                                                                                        yyerror("Data repetido");
                                                                                     }
                                                                                     obrAtrib->data = $3;
                                                                                 }
                                                                                 else if(strcmp($1,"Técnica") == 0){
-                                                                                	if(obrAtrib->tecnica != NULL){
-                                                                                    	yyerror("Técnica repetido");
+                                                                                    if(obrAtrib->tecnica != NULL){
+                                                                                        yyerror("Técnica repetido");
                                                                                     }
                                                                                     obrAtrib->tecnica = $3;
                                                                                 }
                                                                                 else if(strcmp($1,"Valor") == 0){
-                                                                                	if(obrAtrib->valor != NULL){
-                                                                                    	yyerror("Valor repetido");
+                                                                                    if(obrAtrib->valor != NULL){
+                                                                                        yyerror("Valor repetido");
                                                                                     }
                                                                                     obrAtrib->valor = $3;
                                                                                 }
                                                                                 else if(strcmp($1,"Local de exposição") == 0){
-                                                                                	if(obrAtrib->local != NULL){
-                                                                                    	yyerror("Local de exposição repetido");
+                                                                                    if(obrAtrib->local != NULL){
+                                                                                        yyerror("Local de exposição repetido");
                                                                                     }
                                                                                     obrAtrib->local = $3;
                                                                                 }
@@ -774,19 +774,19 @@ EventoInformacao : AtributoEvento
 AtributoEvento : TipoAtributoEvento '=' VALOR                               { 
                                                                                 if(strcmp($1,"Tipo") == 0){
                                                                                     if(eventAtrib->tipo != NULL){
-                                                                                    	yyerror("Tipo repetido");
+                                                                                        yyerror("Tipo repetido");
                                                                                     }
                                                                                     eventAtrib->tipo = $3;
                                                                                 }
                                                                                 else if(strcmp($1,"Localização") == 0){
-                                                                                	if(eventAtrib->localizacao != NULL){
-                                                                                    	yyerror("Localização repetido");
+                                                                                    if(eventAtrib->localizacao != NULL){
+                                                                                        yyerror("Localização repetido");
                                                                                     }
                                                                                     eventAtrib->localizacao = $3;
                                                                                 }
                                                                                 else if(strcmp($1,"Data") == 0){
-                                                                                	if(eventAtrib->data != NULL){
-                                                                                    	yyerror("Data repetida");
+                                                                                    if(eventAtrib->data != NULL){
+                                                                                        yyerror("Data repetida");
                                                                                     }
                                                                                     eventAtrib->data = $3;
                                                                                 }
@@ -811,12 +811,12 @@ RelacaoEvento : EXPOE '=' '{' ListaEntidades '}'                            {
                                                                                 listaExpoe = g_slist_concat(listaExpoe, listaRelacoesTemp);
                                                                                 listaRelacoesTemp = NULL;
                                                                             }
-              | VENDEU '=' '{' ListaEntidades '}'							{
-              																	GSList * l = g_slist_copy(listaRelacoesTemp);
+              | VENDEU '=' '{' ListaEntidades '}'                           {
+                                                                                GSList * l = g_slist_copy(listaRelacoesTemp);
                                                                                 obrasEsperadas = g_slist_concat(obrasEsperadas, l);
                                                                                 listaVendidos = g_slist_concat(listaVendidos, listaRelacoesTemp);
                                                                                 listaRelacoesTemp = NULL;
-              																}
+                                                                            }
               ;
 
 ListaEntidades : ListaEntidades ';' VALOR                                   {
@@ -836,21 +836,21 @@ int yyerror (char *s) {
 
 
 void writeDotBeginning() {
-	printf("/*\n* @command = dot\n* @imageurl = TRUE\n *\n*/\ndigraph MuseuVirtualDoArtista {\nrankdir=LR;forcelabels=true; ratio=fill; node[fontsize=16]; edge[fontsize=16];\n");
+    printf("/*\n* @command = dot\n* @imageurl = TRUE\n *\n*/\ndigraph MuseuVirtualDoArtista {\nrankdir=LR;forcelabels=true; ratio=fill; node[fontsize=16]; edge[fontsize=16];\n");
 }
 
 //Verifica se todos os artistas referidos nas relações estão definidos
 void testeArtistasEsperados(){
     GSList* temp = artistasEsperados;
     while(temp != NULL){
-	    char* esperado = (char*)temp->data;
-	    gpointer res = g_hash_table_lookup (artistasEncontrados,esperado);
-	    if(res == NULL){
-	        char * mensagemErro;
-	        asprintf(&mensagemErro, "Esperado encontrar artista %s\n", esperado);
-	        yyerror(mensagemErro);
-	    }
-	    temp = temp->next;
+        char* esperado = (char*)temp->data;
+        gpointer res = g_hash_table_lookup (artistasEncontrados,esperado);
+        if(res == NULL){
+            char * mensagemErro;
+            asprintf(&mensagemErro, "Esperado encontrar artista %s\n", esperado);
+            yyerror(mensagemErro);
+        }
+        temp = temp->next;
     }  
     g_slist_free_full(artistasEsperados, g_free);  
     g_hash_table_destroy(artistasEncontrados);
@@ -860,14 +860,14 @@ void testeArtistasEsperados(){
 void testeObrasEsperadas(){
     GSList* temp = obrasEsperadas;
     while(temp != NULL){
-	    char* esperado = (char*)temp->data;
-	    gpointer res = g_hash_table_lookup (obrasEncontradas,esperado);
-	    if(res == NULL){
-	        char * mensagemErro;
-	        asprintf(&mensagemErro, "Esperado encontrar obra %s\n", esperado);
-	        yyerror(mensagemErro);
-	    }
-	    temp = temp->next;
+        char* esperado = (char*)temp->data;
+        gpointer res = g_hash_table_lookup (obrasEncontradas,esperado);
+        if(res == NULL){
+            char * mensagemErro;
+            asprintf(&mensagemErro, "Esperado encontrar obra %s\n", esperado);
+            yyerror(mensagemErro);
+        }
+        temp = temp->next;
     }     
     g_slist_free_full(obrasEsperadas, g_free); 
     g_hash_table_destroy(obrasEncontradas);
@@ -877,14 +877,14 @@ void testeObrasEsperadas(){
 void testeEventosEsperados(){
     GSList* temp = eventosEsperados;
     while(temp != NULL){
-	    char* esperado = (char*)temp->data;
-	    gpointer res = g_hash_table_lookup (eventosEncontrados,esperado);
-	    if(res == NULL){
-	        char * mensagemErro;
-	        asprintf(&mensagemErro, "Esperado encontrar evento %s\n", esperado);
-	        yyerror(mensagemErro);
-	    }
-	    temp = temp->next;
+        char* esperado = (char*)temp->data;
+        gpointer res = g_hash_table_lookup (eventosEncontrados,esperado);
+        if(res == NULL){
+            char * mensagemErro;
+            asprintf(&mensagemErro, "Esperado encontrar evento %s\n", esperado);
+            yyerror(mensagemErro);
+        }
+        temp = temp->next;
     }     
     g_slist_free_full(eventosEsperados, g_free); 
     g_hash_table_destroy(eventosEncontrados);
@@ -892,7 +892,7 @@ void testeEventosEsperados(){
 
 int main() {
     //Inicializar variáveis globais
-	initArtistaAtributos();
+    initArtistaAtributos();
     initObraAtributos();
     initEventoAtributos();
     artistasEncontrados = g_hash_table_new_full(g_str_hash,g_str_equal, g_free,NULL);
