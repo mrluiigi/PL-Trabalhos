@@ -69,7 +69,7 @@
 <title>Verrocchio</title>
 <g id="a_node4"><a xlink:href="file:Artista Verrocchio.html" xlink:title="&lt;TABLE&gt;">
 <polygon fill="#8acc7a" stroke="#000000" points="220,-671.3848 0,-671.3848 0,-435.3848 220,-435.3848 220,-671.3848"/>
-<image xlink:href="verrocchio.png" width="196px" height="196px" preserveAspectRatio="xMinYMin meet" x="12" y="-663.385"/>
+<image xlink:href="Imagens/verrocchio.png" width="196px" height="196px" preserveAspectRatio="xMinYMin meet" x="12" y="-663.385"/>
 <text text-anchor="start" x="74" y="-448.5848" font-family="Times,serif" font-size="16.00" fill="#000000">Verrocchio</text>
 </a>
 </g>
@@ -79,7 +79,7 @@
 <title>da Vinci</title>
 <g id="a_node5"><a xlink:href="file:Artista da Vinci.html" xlink:title="&lt;TABLE&gt;">
 <polygon fill="#8acc7a" stroke="#000000" points="573,-630.3848 353,-630.3848 353,-394.3848 573,-394.3848 573,-630.3848"/>
-<image xlink:href="davinci.jpg" width="196px" height="196px" preserveAspectRatio="xMinYMin meet" x="365" y="-622.385"/>
+<image xlink:href="Imagens/davinci.jpg" width="196px" height="196px" preserveAspectRatio="xMinYMin meet" x="365" y="-622.385"/>
 <text text-anchor="start" x="435.5" y="-407.5848" font-family="Times,serif" font-size="16.00" fill="#000000">da Vinci</text>
 </a>
 </g>
@@ -96,7 +96,7 @@
 <title>O Batismo de Cristo</title>
 <g id="a_node6"><a xlink:href="file:Obra O Batismo de Cristo.html" xlink:title="&lt;TABLE&gt;">
 <polygon fill="#ff6666" stroke="#000000" points="912.0868,-809.3848 692.0868,-809.3848 692.0868,-573.3848 912.0868,-573.3848 912.0868,-809.3848"/>
-<image xlink:href="batismocristo.png" width="196px" height="196px" preserveAspectRatio="xMinYMin meet" x="704.087" y="-801.385"/>
+<image xlink:href="Imagens/batismocristo.png" width="196px" height="196px" preserveAspectRatio="xMinYMin meet" x="704.087" y="-801.385"/>
 <text text-anchor="start" x="737.0868" y="-586.5848" font-family="Times,serif" font-size="16.00" fill="#000000">O Batismo de Cristo</text>
 </a>
 </g>
@@ -135,7 +135,7 @@
 <title>Mona Lisa</title>
 <g id="a_node7"><a xlink:href="file:Obra Mona Lisa.html" xlink:title="&lt;TABLE&gt;">
 <polygon fill="#ff6666" stroke="#000000" points="912.0868,-555.3848 692.0868,-555.3848 692.0868,-319.3848 912.0868,-319.3848 912.0868,-555.3848"/>
-<image xlink:href="monalisa.png" width="196px" height="196px" preserveAspectRatio="xMinYMin meet" x="704.087" y="-547.385"/>
+<image xlink:href="Imagens/monalisa.png" width="196px" height="196px" preserveAspectRatio="xMinYMin meet" x="704.087" y="-547.385"/>
 <text text-anchor="start" x="767.5868" y="-332.5848" font-family="Times,serif" font-size="16.00" fill="#000000">Mona Lisa</text>
 </a>
 </g>
@@ -152,7 +152,7 @@
 <title>A última ceia</title>
 <g id="a_node8"><a xlink:href="file:Obra A última ceia.html" xlink:title="&lt;TABLE&gt;">
 <polygon fill="#ff6666" stroke="#000000" points="912.0868,-301.3848 692.0868,-301.3848 692.0868,-65.3848 912.0868,-65.3848 912.0868,-301.3848"/>
-<image xlink:href="aultimaceia.jpg" width="196px" height="196px" preserveAspectRatio="xMinYMin meet" x="704.087" y="-293.385"/>
+<image xlink:href="Imagens/aultimaceia.jpg" width="196px" height="196px" preserveAspectRatio="xMinYMin meet" x="704.087" y="-293.385"/>
 <text text-anchor="start" x="759.5868" y="-78.5848" font-family="Times,serif" font-size="16.00" fill="#000000">A última ceia</text>
 </a>
 </g>
@@ -169,7 +169,7 @@
 <title>Exposição no Louvre</title>
 <g id="a_node11"><a xlink:href="file:Evento Exposição no Louvre.html" xlink:title="&lt;TABLE&gt;">
 <polygon fill="#7fffff" stroke="#000000" points="1249.1737,-554.3848 1029.1737,-554.3848 1029.1737,-318.3848 1249.1737,-318.3848 1249.1737,-554.3848"/>
-<image xlink:href="louvre.jpg" width="196px" height="196px" preserveAspectRatio="xMinYMin meet" x="1041.17" y="-546.385"/>
+<image xlink:href="Imagens/louvre.jpg" width="196px" height="196px" preserveAspectRatio="xMinYMin meet" x="1041.17" y="-546.385"/>
 <text text-anchor="start" x="1070.1737" y="-331.5848" font-family="Times,serif" font-size="16.00" fill="#000000">Exposição no Louvre</text>
 </a>
 </g>
