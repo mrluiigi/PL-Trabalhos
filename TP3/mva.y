@@ -22,6 +22,14 @@
 
     //Chamar no final de processar cada artista
     void initArtistaAtributos(){
+        if(artAtrib != NULL){
+            free(artAtrib->nome);
+            free(artAtrib->pais);
+            free(artAtrib->seculo);
+            free(artAtrib->periodo);
+            free(artAtrib->imagem);
+            free(artAtrib);
+        }
 		artAtrib = malloc(sizeof(struct artistaAtributos));
 		artAtrib->nome = NULL;
 		artAtrib->pais = NULL;
@@ -44,6 +52,14 @@
 
     //Chamar no final de processar cada obra
     void initObraAtributos(){
+        if(obrAtrib != NULL){
+            free(obrAtrib->nome);
+            free(obrAtrib->data);
+            free(obrAtrib->tecnica);
+            free(obrAtrib->valor);
+            free(obrAtrib->local);
+            free(obrAtrib);
+        }
 		obrAtrib = malloc(sizeof(struct obraAtributos));
 		obrAtrib->nome = NULL;
 		obrAtrib->data = NULL;
@@ -65,7 +81,14 @@
 
     //Chamar no final de processar cada artista
     void initEventoAtributos(){
-		eventAtrib = malloc(sizeof(struct eventoAtributos));
+        if(eventAtrib != NULL){
+            free(eventAtrib->tipo);
+            free(eventAtrib->localizacao);
+            free(eventAtrib->data);
+            free(eventAtrib->imagem);
+            free(eventAtrib);
+        }
+        eventAtrib = malloc(sizeof(struct eventoAtributos));
 		eventAtrib->tipo = NULL;
 		eventAtrib->localizacao = NULL;
 		eventAtrib->data = NULL;
@@ -93,6 +116,11 @@
     GSList* listaParticipou = NULL;
     //Chamar no final de cada artista para outros artistas não ficarem com as mesmas relações
     void limparRelacoesArtista(){
+        g_slist_free(listaEnsinou);
+        g_slist_free(listaAprendeu);
+        g_slist_free(listaColaborou);
+        g_slist_free(listaProduziu);
+        g_slist_free(listaParticipou);
         listaEnsinou = NULL;
         listaAprendeu = NULL;
         listaColaborou = NULL;  
@@ -107,6 +135,9 @@
     GSList* listaVendida = NULL;
     //Chamar no final de cada obra para outras obras não ficarem com as mesmas relações
     void limparRelacoesObra(){
+        g_slist_free(listaProduzida);
+        g_slist_free(listaExposta);
+        g_slist_free(listaVendida);
         listaProduzida = NULL;
         listaExposta = NULL;
         listaVendida = NULL;  
@@ -117,6 +148,8 @@
     GSList* listaVendidos = NULL;
     //Chamar no final de cada evento para outros eventos não ficarem com as mesmas relações
     void limparRelacoesEvento(){
+        g_slist_free(listaExpoe);
+        g_slist_free(listaVendidos);
         listaExpoe = NULL;
         listaVendidos = NULL; 
     }
@@ -129,18 +162,22 @@
 	    if(artAtrib->nome != NULL){
             asprintf(&linhaTabela, "<tr>\n<th>%s</th>\n<td>%s</td>\n</tr>", "Nome Completo", artAtrib->nome);
 			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
+            free(linhaTabela);
         }
         if(artAtrib->pais != NULL){
             asprintf(&linhaTabela, "<tr>\n<th>%s</th>\n<td>%s</td>\n</tr>", "Pais", artAtrib->pais);
 			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
+            free(linhaTabela);
         }
         if(artAtrib->seculo != NULL){
             asprintf(&linhaTabela, "<tr>\n<th>%s</th>\n<td>%s</td>\n</tr>", "Seculo", artAtrib->seculo);
 			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
+            free(linhaTabela);
         }
         if(artAtrib->periodo != NULL){
             asprintf(&linhaTabela, "<tr>\n<th>%s</th>\n<td>%s</td>\n</tr>", "Periodo", artAtrib->periodo);
 			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
+            free(linhaTabela);
         }
         fwrite("</table>\n", 1 , 9, fd);
     }
@@ -164,6 +201,7 @@
         char* fileName;
         asprintf(&fileName, "Artista %s.html", nome);
         FILE* fd = fopen(fileName,"w");
+        free(fileName);
 
         //Escrever inicio e titulo
         fwrite("<!DOCTYPE html>\n<html>\n<head>\n<h1>" , 1 , 34, fd );
@@ -171,9 +209,10 @@
         fwrite("</h1>\n</head>\n<body>" , 1 , 20, fd );
         //Adicionar imagem
         if(artAtrib->imagem != NULL){
-        	char* linhaTabela;
-            asprintf(&linhaTabela, "<img src=\"%s\">", artAtrib->imagem);
-			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);	
+        	char* img;
+            asprintf(&img, "<img src=\"%s\">", artAtrib->imagem);
+			fwrite(img, 1, strlen(img), fd);	
+            free(img);
         }
         //Escrever a tabela html de atributps
         writeTabelaAtributosArtista(fd);
@@ -191,6 +230,7 @@
             //Link html
             asprintf(&href,"<a href=\"Artista %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
+            free(href);
             temp = temp->next;
           } 
         }
@@ -204,6 +244,7 @@
             //Link html
             asprintf(&href,"<a href=\"Artista %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
+            free(href);
             temp = temp->next;
           }
         }
@@ -217,6 +258,7 @@
             //Link html
             asprintf(&href,"<a href=\"Artista %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
+            free(href);
             temp = temp->next;
           }    
         }
@@ -231,6 +273,7 @@
             //Link html
             asprintf(&href,"<a href=\"Obra %s.html\">%s</a>\n", outraEntidade, outraEntidade);
             fwrite(href,1,strlen(href), fd);
+            free(href);
             temp = temp->next;
           }    
         }
@@ -246,6 +289,7 @@
             asprintf(&href,"<a href=\"Evento %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
             temp = temp->next;
+            free(href);
           }    
         }
         fwrite("</body>\n</html>" , 1 , 15, fd );
@@ -259,22 +303,27 @@
 	    if(obrAtrib->nome != NULL){
             asprintf(&linhaTabela, "<tr>\n<th>%s</th>\n<td>%s</td>\n</tr>", "Nome", obrAtrib->nome);
 			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
+            free(linhaTabela);
         }
         if(obrAtrib->data != NULL){
             asprintf(&linhaTabela, "<tr>\n<th>%s</th>\n<td>%s</td>\n</tr>", "País", obrAtrib->data);
 			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
+            free(linhaTabela);
         }
         if(obrAtrib->tecnica != NULL){
             asprintf(&linhaTabela, "<tr>\n<th>%s</th>\n<td>%s</td>\n</tr>", "Técnica", obrAtrib->tecnica);
 			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
+            free(linhaTabela);
         }
         if(obrAtrib->valor != NULL){
             asprintf(&linhaTabela, "<tr>\n<th>%s</th>\n<td>%s</td>\n</tr>", "Valor", obrAtrib->valor);
 			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
+            free(linhaTabela);
         }
         if(obrAtrib->local != NULL){
             asprintf(&linhaTabela, "<tr>\n<th>%s</th>\n<td>%s</td>\n</tr>", "Local de exposição", obrAtrib->local);
 			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
+            free(linhaTabela);
         }
         fwrite("</table>\n", 1 , 9, fd);
     }
@@ -297,15 +346,17 @@
         char* fileName;
         asprintf(&fileName, "Obra %s.html", nome);
         FILE* fd = fopen(fileName,"w");
+        free(fileName);
         //Escrever inicio e titulo
         fwrite("<!DOCTYPE html>\n<html>\n<head>\n<h1>" , 1 , 34, fd );
         fwrite(nome, 1, strlen(nome), fd);
         fwrite("</h1>\n</head>\n<body>" , 1 , 20, fd );
         //Adicionar imagem
         if(obrAtrib->imagem != NULL){
-        	char* linhaTabela;
-            asprintf(&linhaTabela, "<img src=\"%s\">", obrAtrib->imagem);
-			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);	
+        	char* img;
+            asprintf(&img, "<img src=\"%s\">", obrAtrib->imagem);
+			fwrite(img, 1, strlen(img), fd);
+            free(img);	
         }
         //Escrever tabela html dos atributos
         writeTabelaAtributosObra(fd);
@@ -323,6 +374,7 @@
             //Link html
             asprintf(&href,"<a href=\"Evento %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
+            free(href);
             temp = temp->next;
           } 
         }
@@ -336,6 +388,7 @@
             //Link html
             asprintf(&href,"<a href=\"Artista %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
+            free(href);
             temp = temp->next;
           } 
         }
@@ -349,6 +402,7 @@
             //Link html
             asprintf(&href,"<a href=\"Evento %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
+            free(href);
             temp = temp->next;
           } 
         }
@@ -363,14 +417,17 @@
 	    if(eventAtrib->tipo != NULL){
             asprintf(&linhaTabela, "<tr>\n<th>%s</th>\n<td>%s</td>\n</tr>", "Tipo", eventAtrib->tipo);
 			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
+            free(linhaTabela);
         }
         if(eventAtrib->localizacao != NULL){
             asprintf(&linhaTabela, "<tr>\n<th>%s</th>\n<td>%s</td>\n</tr>", "Localização", eventAtrib->localizacao);
 			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
+            free(linhaTabela);
         }
         if(eventAtrib->data != NULL){
             asprintf(&linhaTabela, "<tr>\n<th>%s</th>\n<td>%s</td>\n</tr>", "Data", eventAtrib->data);
 			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
+            free(linhaTabela);
         }
         fwrite("</table>\n", 1 , 9, fd);
     }
@@ -392,15 +449,17 @@
         char* fileName;
         asprintf(&fileName, "Evento %s.html", nome);
         FILE* fd = fopen(fileName,"w");
+        free(fileName);
         //Escrever inicio e titulo
         fwrite("<!DOCTYPE html>\n<html>\n<head>\n<h1>" , 1 , 34, fd );
         fwrite(nome, 1, strlen(nome), fd);
         fwrite("</h1>\n</head>\n<body>" , 1 , 20, fd );
         //Adicionar imagem
         if(eventAtrib->imagem != NULL){
-        	char* linhaTabela;
-            asprintf(&linhaTabela, "<img src=\"%s\">", eventAtrib->imagem);
-			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);	
+        	char* img;
+            asprintf(&img, "<img src=\"%s\">", eventAtrib->imagem);
+			fwrite(img, 1, strlen(img), fd);	
+            free(img);
         }
         //Escrever tabela html dos atributos
         writeTabelaAtributosEvento(fd);
@@ -418,6 +477,7 @@
             //Link html
             asprintf(&href,"<a href=\"Obra %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
+            free(href);
             temp = temp->next;
           } 
         }
@@ -431,6 +491,7 @@
             //Link html
             asprintf(&href,"<a href=\"Obra %s.html\">%s</a>\n", outraEntidade,outraEntidade);
             fwrite(href,1,strlen(href), fd);
+            free(href);
             temp = temp->next;
           } 
         }
@@ -790,7 +851,9 @@ void testeArtistasEsperados(){
 	        yyerror(mensagemErro);
 	    }
 	    temp = temp->next;
-    }     
+    }  
+    g_slist_free_full(artistasEsperados, g_free);  
+    g_hash_table_destroy(artistasEncontrados);
 }
 
 //Verifica se todos os obras referidas nas relações estão definidos
@@ -806,6 +869,8 @@ void testeObrasEsperadas(){
 	    }
 	    temp = temp->next;
     }     
+    g_slist_free_full(obrasEsperadas, g_free); 
+    g_hash_table_destroy(obrasEncontradas);
 }
 
 //Verifica se todos os eventos referidos nas relações estão definidos
@@ -821,6 +886,8 @@ void testeEventosEsperados(){
 	    }
 	    temp = temp->next;
     }     
+    g_slist_free_full(eventosEsperados, g_free); 
+    g_hash_table_destroy(eventosEncontrados);
 }
 
 int main() {
@@ -828,9 +895,9 @@ int main() {
 	initArtistaAtributos();
     initObraAtributos();
     initEventoAtributos();
-    artistasEncontrados = g_hash_table_new(g_str_hash,g_str_equal);
-    obrasEncontradas = g_hash_table_new(g_str_hash,g_str_equal);
-    eventosEncontrados = g_hash_table_new(g_str_hash,g_str_equal);
+    artistasEncontrados = g_hash_table_new_full(g_str_hash,g_str_equal, g_free,NULL);
+    obrasEncontradas = g_hash_table_new_full(g_str_hash,g_str_equal, g_free,NULL);
+    eventosEncontrados = g_hash_table_new_full(g_str_hash,g_str_equal, g_free,NULL);
     //Escrever inicio do ficheiro dot
     writeDotBeginning();
     //Processar

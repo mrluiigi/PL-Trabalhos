@@ -9,26 +9,26 @@
 
 ARTISTA 	    	{return ARTISTAKEYWORD;}
 
-Nome" "Completo		{yylval.string = strdup(yytext); return NOMECOMPLETO;}
-Pais				{yylval.string = strdup(yytext); return PAIS;}
-Seculo				{yylval.string = strdup(yytext); return SECULO;}
-Periodo				{yylval.string = strdup(yytext); return PERIODO;}
+Nome" "Completo		{return NOMECOMPLETO;}
+Pais				{return PAIS;}
+Seculo				{return SECULO;}
+Periodo				{return PERIODO;}
 Imagem              {return IMAGEM;}
 
 
 OBRA				{return OBRAKEYWORD;}
 
-Nome				{yylval.string = strdup(yytext); return NOME;}
-Data				{yylval.string = strdup(yytext); return DATA;}
-Tecnica				{yylval.string = strdup(yytext); return TECNICA;}
-Valor				{yylval.string = strdup(yytext); return VALORMONETARIO;}
-Local" "Exposicao 	{yylval.string = strdup(yytext); return LOCALEXPOSICAO;}
+Nome				{return NOME;}
+Data				{return DATA;}
+Tecnica				{return TECNICA;}
+Valor				{return VALORMONETARIO;}
+Local" "Exposicao 	{return LOCALEXPOSICAO;}
 
 
 EVENTO				{return EVENTOKEYWORD;}
 
-Tipo				{yylval.string = strdup(yytext); return TIPO;}
-Localizacao			{yylval.string = strdup(yytext); return LOCALIZACAO;}
+Tipo				{return TIPO;}
+Localizacao			{return LOCALIZACAO;}
 
 
 
