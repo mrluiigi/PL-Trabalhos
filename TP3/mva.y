@@ -24,6 +24,46 @@
         GSList* listaParticipou;
     } *ArtistaStruct;
 
+
+    typedef struct artistaAtributos{
+        char* nome;
+        char* pais; 
+		char* seculo;
+		char* periodo;
+		char* imagem;
+    } *ArtistaAtributos;
+
+    ArtistaAtributos artAtrib;
+
+    void initArtistaAtributos(){
+		artAtrib = malloc(sizeof(struct artistaAtributos));
+		artAtrib->nome = NULL;
+		artAtrib->pais = NULL;
+		artAtrib->seculo = NULL;
+		artAtrib->periodo = NULL;
+		artAtrib->imagem = NULL;
+    }
+
+
+    typedef struct obraAtributos{
+        char* nome;
+        char* data; 
+		char* tecnica;
+		char* valor;
+		char* local;
+    } *ObraAtributos;
+
+    ObraAtributos obrAtrib;
+
+    void initObraAtributos(){
+		obrAtrib = malloc(sizeof(struct obraAtributos));
+		obrAtrib->nome = NULL;
+		obrAtrib->data = NULL;
+		obrAtrib->tecnica = NULL;
+		obrAtrib->valor = NULL;
+		obrAtrib->local = NULL;
+    }
+
     GHashTable* artistasEncontrados = NULL;
     GSList* artistasEsperados = NULL;
 
@@ -62,19 +102,32 @@
 
 
 
-    void writeTabelaAtributos(FILE* fd){
+
+    void writeTabelaAtributosArtista(FILE* fd){
 
         fwrite("<table>\n<tr>\n<th>Atributo</th>\n<th>Valor</th>\n</tr>", 1 , 51, fd);
-        if(listaAtributos != NULL){
-            GSList* temp = listaAtributos;
-            // fwrite("<h2>Ensinou:</h2>\n",1,18, fd);
-            char * atributo;
-            while(temp != NULL){
-                atributo = (char*)temp->data;
-                fwrite(atributo,1,strlen(atributo), fd);
-                temp = temp->next;
-            } 
-            }
+        
+	    char* linhaTabela;
+	    if(artAtrib->nome != NULL){
+            asprintf(&linhaTabela, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", "Nome Completo", artAtrib->nome);
+			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
+        }
+        if(artAtrib->pais != NULL){
+            asprintf(&linhaTabela, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", "Pais", artAtrib->pais);
+			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
+        }
+        if(artAtrib->seculo != NULL){
+            asprintf(&linhaTabela, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", "Seculo", artAtrib->seculo);
+			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
+        }
+        if(artAtrib->periodo != NULL){
+            asprintf(&linhaTabela, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", "Periodo", artAtrib->periodo);
+			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
+        }
+        if(artAtrib->imagem != NULL){
+            asprintf(&linhaTabela, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", "Imagem", artAtrib->imagem);
+			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
+        }
         fwrite("</table>\n", 1 , 9, fd);
     }
 
@@ -88,7 +141,7 @@
         fwrite("<!DOCTYPE html>\n<html>\n<head>\n<h1>" , 1 , 34, fd );
         fwrite(title, 1, strlen(title), fd);
         fwrite("</h1>\n</head>\n<body>" , 1 , 20, fd );
-        writeTabelaAtributos(fd);
+        writeTabelaAtributosArtista(fd);
         GSList* temp;
         char * href;
         char* outraEntidade;
@@ -155,6 +208,33 @@
         fwrite("</body>\n</html>" , 1 , 15, fd );
     }
 
+    void writeTabelaAtributosObra(FILE* fd){
+
+        fwrite("<table>\n<tr>\n<th>Atributo</th>\n<th>Valor</th>\n</tr>", 1 , 51, fd);
+        
+	    char* linhaTabela;
+	    if(obrAtrib->nome != NULL){
+            asprintf(&linhaTabela, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", "Nome", obrAtrib->nome);
+			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
+        }
+        if(obrAtrib->data != NULL){
+            asprintf(&linhaTabela, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", "País", obrAtrib->data);
+			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
+        }
+        if(obrAtrib->tecnica != NULL){
+            asprintf(&linhaTabela, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", "Técnica", obrAtrib->tecnica);
+			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
+        }
+        if(obrAtrib->valor != NULL){
+            asprintf(&linhaTabela, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", "Valor", obrAtrib->valor);
+			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
+        }
+        if(obrAtrib->local != NULL){
+            asprintf(&linhaTabela, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", "Local de exposição", obrAtrib->local);
+			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
+        }
+        fwrite("</table>\n", 1 , 9, fd);
+    }
 
     void writeHtmlObra(char* title) {
         char* fileName;
@@ -166,7 +246,7 @@
         fwrite("<!DOCTYPE html>\n<html>\n<head>\n<h1>" , 1 , 34, fd );
         fwrite(title, 1, strlen(title), fd);
         fwrite("</h1>\n</head>\n<body>" , 1 , 20, fd );
-        writeTabelaAtributos(fd);
+        writeTabelaAtributosObra(fd);
 
         GSList* temp;
         char * href;
@@ -210,6 +290,34 @@
 
     }
 
+    void writeTabelaAtributosEvento(FILE* fd){
+
+        fwrite("<table>\n<tr>\n<th>Atributo</th>\n<th>Valor</th>\n</tr>", 1 , 51, fd);
+        
+	    char* linhaTabela;
+	    if(obrAtrib->nome != NULL){
+            asprintf(&linhaTabela, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", "Nome", obrAtrib->nome);
+			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
+        }
+        if(obrAtrib->data != NULL){
+            asprintf(&linhaTabela, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", "País", obrAtrib->data);
+			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
+        }
+        if(obrAtrib->tecnica != NULL){
+            asprintf(&linhaTabela, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", "Técnica", obrAtrib->tecnica);
+			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
+        }
+        if(obrAtrib->valor != NULL){
+            asprintf(&linhaTabela, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", "Valor", obrAtrib->valor);
+			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
+        }
+        if(obrAtrib->local != NULL){
+            asprintf(&linhaTabela, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", "Local de exposição", obrAtrib->local);
+			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
+        }
+        fwrite("</table>\n", 1 , 9, fd);
+    }
+
     void writeHtmlEvento(char* title) {
         char* fileName;
 
@@ -220,7 +328,7 @@
         fwrite("<!DOCTYPE html>\n<html>\n<head>\n<h1>" , 1 , 34, fd );
         fwrite(title, 1, strlen(title), fd);
         fwrite("</h1>\n</head>\n<body>" , 1 , 20, fd );
-        writeTabelaAtributos(fd);
+        writeTabelaAtributosEvento(fd);
 
         GSList* temp;
         char * href;
@@ -336,7 +444,7 @@ Entidade : Artista
          | Evento                           
          ;
 
-Artista : ART VALOR '{' ArtistaInformacoes '}'                                         {   
+Artista : ART VALOR '{' ArtistaInformacoes '}'                                  {   
                                                                                     gboolean naoExistia = g_hash_table_insert(artistasEncontrados, $2, $2);
                                                                                     if(naoExistia == FALSE){
                                                                                         char * mensagemErro;
@@ -362,6 +470,7 @@ Artista : ART VALOR '{' ArtistaInformacoes '}'                                  
                                                                                     listaColaborou = NULL;  
                                                                                     listaProduziu = NULL;
                                                                                     listaParticipou = NULL;
+                                                                                    initArtistaAtributos();
                                                                                     imagem = NULL;                                                                               
                                                                                 }
         ;
@@ -378,18 +487,46 @@ ArtistaInformacao : AtributoArtista
 
 
 
-AtributoArtista : TipoAtributoArtista'=' VALOR                                         {   
+AtributoArtista : TipoAtributoArtista'=' VALOR                              {   
                                                                                 char* linhaTabela;
                                                                                 asprintf(&linhaTabela, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", $1, $3);
                                                                                 listaAtributos = g_slist_append(listaAtributos, linhaTabela);
                                                                                 asprintf(&$$, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", $1, $3);
-                                                                                if(strcmp($1,"Imagem") == 0){
+                                                                                if(strcmp($1,"Nome completo") == 0){
+                                                                                    if(artAtrib->nome != NULL){
+                                                                                    	yyerror("Nome repetido");
+                                                                                    }
+                                                                                    artAtrib->nome = $3;
+                                                                                }
+                                                                                else if(strcmp($1,"País") == 0){
+                                                                                	if(artAtrib->pais != NULL){
+                                                                                    	yyerror("País repetido");
+                                                                                    }
+                                                                                    artAtrib->pais = $3;
+                                                                                }
+                                                                                else if(strcmp($1,"Século") == 0){
+                                                                                	if(artAtrib->seculo != NULL){
+                                                                                    	yyerror("Século repetido");
+                                                                                    }
+                                                                                    artAtrib->seculo = $3;
+                                                                                }
+                                                                                else if(strcmp($1,"Período") == 0){
+                                                                                	if(artAtrib->periodo != NULL){
+                                                                                    	yyerror("Período repetido");
+                                                                                    }
+                                                                                    artAtrib->periodo = $3;
+                                                                                }
+                                                                                else if(strcmp($1,"Imagem") == 0){
+                                                                                	if(artAtrib->imagem != NULL){
+                                                                                    	yyerror("Imagem repetido");
+                                                                                    }
                                                                                     imagem = $3;
+                                                                                    artAtrib->imagem = $3;
                                                                                 }
                                                                                 ats = malloc(sizeof(struct atributoStruct));
                                                                                 ats->atribNome = $1;  
                                                                                 ats->atribValor = $3;
-                                                                              }
+                                                                            }
          ;
 
 
@@ -411,6 +548,7 @@ Obra : OBRAKEYWORD VALOR '{' ObraInformacoes '}'                                
 
                                                                                 writeDotObra($2);
                                                                                 writeHtmlObra($2);
+                                                                                initObraAtributos();
                                                                                 listaExposta = NULL;
                                                                                 listaProduzida = NULL;
                                                                                 listaVendida = NULL;  
@@ -436,6 +574,38 @@ AtributoObra : TipoAtributoObra '=' VALOR                                   {
                                                                                 asprintf(&linhaTabela, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", $1, $3);
                                                                                 listaAtributos = g_slist_append(listaAtributos, linhaTabela);
                                                                                 asprintf(&$$, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", $1, $3);
+
+																				if(strcmp($1,"Nome") == 0){
+                                                                                    if(obrAtrib->nome != NULL){
+                                                                                    	yyerror("Nome repetido");
+                                                                                    }
+                                                                                    obrAtrib->nome = $3;
+                                                                                }
+                                                                                else if(strcmp($1,"Data") == 0){
+                                                                                	if(obrAtrib->data != NULL){
+                                                                                    	yyerror("Data repetido");
+                                                                                    }
+                                                                                    obrAtrib->data = $3;
+                                                                                }
+                                                                                else if(strcmp($1,"Técnica") == 0){
+                                                                                	if(obrAtrib->tecnica != NULL){
+                                                                                    	yyerror("Técnica repetido");
+                                                                                    }
+                                                                                    obrAtrib->tecnica = $3;
+                                                                                }
+                                                                                else if(strcmp($1,"Valor") == 0){
+                                                                                	if(obrAtrib->valor != NULL){
+                                                                                    	yyerror("Valor repetido");
+                                                                                    }
+                                                                                    obrAtrib->valor = $3;
+                                                                                }
+                                                                                else if(strcmp($1,"Local de exposição") == 0){
+                                                                                	if(obrAtrib->local != NULL){
+                                                                                    	yyerror("Local de exposição repetido");
+                                                                                    }
+                                                                                    obrAtrib->local = $3;
+                                                                                }
+
                                                                                 ats = malloc(sizeof(struct atributoStruct));
                                                                                 ats->atribNome = $1;  
                                                                                 ats->atribValor = $3;
@@ -636,6 +806,8 @@ void testeEventosEsperados(){
 }
 
 int main() {
+	initArtistaAtributos();
+    initObraAtributos();
     artistasEncontrados = g_hash_table_new(g_str_hash,g_str_equal);
     obrasEncontradas = g_hash_table_new(g_str_hash,g_str_equal);
     eventosEncontrados = g_hash_table_new(g_str_hash,g_str_equal);
