@@ -16,14 +16,14 @@ ARTISTA "Verrocchio" {
 }
 
 ARTISTA "da Vinci" {
+	produziu = {"Mona Lisa";"A última ceia";"O Batismo de Cristo"}
 	Nome Completo = "Leonardo da Vinci"
 	Pais = "Itália"
 	Seculo = "XV/XVI"
+	colaborouCom = {"Verrocchio"}
 	Periodo = "Renascentismo"
 	Imagem = "davinci.jpg"
 	aprendeuCom = {"Verrocchio"}
-	produziu = {"Mona Lisa";"A última ceia";"O Batismo de Cristo"}
-	colaborouCom = {"Verrocchio"}
 }
 
 ARTISTA "Van Gogh" {

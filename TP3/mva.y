@@ -62,7 +62,23 @@
 
 
 
-    void writeHtml(char* title, char* body) {
+    void writeTabelaAtributos(FILE* fd){
+
+        fwrite("<table>\n<tr>\n<th>Atributo</th>\n<th>Valor</th>\n</tr>", 1 , 51, fd);
+        if(listaAtributos != NULL){
+            GSList* temp = listaAtributos;
+            // fwrite("<h2>Ensinou:</h2>\n",1,18, fd);
+            char * atributo;
+            while(temp != NULL){
+                atributo = (char*)temp->data;
+                fwrite(atributo,1,strlen(atributo), fd);
+                temp = temp->next;
+            } 
+            }
+        fwrite("</table>\n", 1 , 9, fd);
+    }
+
+    void writeHtmlArtista(char* title) {
         char* fileName;
 
         asprintf(&fileName, "Artista %s.html", title);
@@ -72,8 +88,7 @@
         fwrite("<!DOCTYPE html>\n<html>\n<head>\n<h1>" , 1 , 34, fd );
         fwrite(title, 1, strlen(title), fd);
         fwrite("</h1>\n</head>\n<body>" , 1 , 20, fd );
-        fwrite(body, 1, strlen(body), fd);
-
+        writeTabelaAtributos(fd);
         GSList* temp;
         char * href;
         char* outraEntidade;
@@ -141,7 +156,7 @@
     }
 
 
-    void writeHtmlObra(char* title, char* body) {
+    void writeHtmlObra(char* title) {
         char* fileName;
 
         asprintf(&fileName, "Obra %s.html", title);
@@ -151,7 +166,7 @@
         fwrite("<!DOCTYPE html>\n<html>\n<head>\n<h1>" , 1 , 34, fd );
         fwrite(title, 1, strlen(title), fd);
         fwrite("</h1>\n</head>\n<body>" , 1 , 20, fd );
-        fwrite(body, 1, strlen(body), fd);
+        writeTabelaAtributos(fd);
 
         GSList* temp;
         char * href;
@@ -195,7 +210,7 @@
 
     }
 
-    void writeHtmlEvento(char* title, char* body) {
+    void writeHtmlEvento(char* title) {
         char* fileName;
 
         asprintf(&fileName, "Evento %s.html", title);
@@ -205,7 +220,7 @@
         fwrite("<!DOCTYPE html>\n<html>\n<head>\n<h1>" , 1 , 34, fd );
         fwrite(title, 1, strlen(title), fd);
         fwrite("</h1>\n</head>\n<body>" , 1 , 20, fd );
-        fwrite(body, 1, strlen(body), fd);
+        writeTabelaAtributos(fd);
 
         GSList* temp;
         char * href;
@@ -304,7 +319,7 @@
 %token <string> ATRIBUTOOBRA
 %token <string> ATRIBUTOEVENTO
 
-%type <string> Atributo Atributos ArtistaInfo ObraInfo AtributoObra AtributosObra EventoInfo AtributosEvento AtributoEvento TipoAtributoArtista TipoAtributoObra TipoAtributoEvento
+%type <string> AtributoArtista AtributoObra AtributoEvento TipoAtributoArtista TipoAtributoObra TipoAtributoEvento
 
 %%
 
@@ -321,7 +336,7 @@ Entidade : Artista
          | Evento                           
          ;
 
-Artista : ART VALOR '{' ArtistaInfo '}'                                         {   
+Artista : ART VALOR '{' ArtistaInformacoes '}'                                         {   
                                                                                     gboolean naoExistia = g_hash_table_insert(artistasEncontrados, $2, $2);
                                                                                     if(naoExistia == FALSE){
                                                                                         char * mensagemErro;
@@ -339,7 +354,7 @@ Artista : ART VALOR '{' ArtistaInfo '}'                                         
 
 
                                                                                     writeDotArtista($2);
-                                                                                    writeHtml($2, $4);
+                                                                                    writeHtmlArtista($2);
 
                                                                                     listaAtributos = NULL;
                                                                                     listaEnsinou = NULL;
@@ -351,21 +366,22 @@ Artista : ART VALOR '{' ArtistaInfo '}'                                         
                                                                                 }
         ;
 
-ArtistaInfo : Atributos Relacoes                                                {
-                                                                                    asprintf(&$$, "<table>\n<tr>\n<th>Atributo</th>\n<th>Valor</th>\n</tr>%s</table>", $1);
-                                                                                }
-            ;
 
-Atributos : Atributos Atributo                                                  {
-                                                                                    asprintf(&$$, "%s\n%s", $1, $2);
-                                                                                    listaAtributos = g_slist_append(listaAtributos, ats);
-                                                                                }
-          | %empty                                                              {
-                                                                                    $$ = "";
-                                                                                }
-          ;
+ArtistaInformacoes : ArtistaInformacoes  ArtistaInformacao
+                   | %empty
+                   ;
 
-Atributo : TipoAtributoArtista'=' VALOR                                         {   
+ArtistaInformacao : AtributoArtista
+                  | RelacaoArtista
+                  ;
+
+
+
+
+AtributoArtista : TipoAtributoArtista'=' VALOR                                         {   
+                                                                                char* linhaTabela;
+                                                                                asprintf(&linhaTabela, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", $1, $3);
+                                                                                listaAtributos = g_slist_append(listaAtributos, linhaTabela);
                                                                                 asprintf(&$$, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", $1, $3);
                                                                                 if(strcmp($1,"Imagem") == 0){
                                                                                     imagem = $3;
@@ -385,7 +401,7 @@ TipoAtributoArtista : NOMECOMPLETO                                              
                     ;
 
 
-Obra : OBRAKEYWORD VALOR '{' ObraInfo '}'                                   {   
+Obra : OBRAKEYWORD VALOR '{' ObraInformacoes '}'                                   {   
                                                                                 gboolean naoExistia = g_hash_table_insert(obrasEncontradas, $2, $2);
                                                                                 if(naoExistia == FALSE){
                                                                                     char * mensagemErro;
@@ -394,31 +410,31 @@ Obra : OBRAKEYWORD VALOR '{' ObraInfo '}'                                   {
                                                                                 }    
 
                                                                                 writeDotObra($2);
-                                                                                writeHtmlObra($2, $4);
+                                                                                writeHtmlObra($2);
                                                                                 listaExposta = NULL;
                                                                                 listaProduzida = NULL;
                                                                                 listaVendida = NULL;  
+                                                                                listaAtributos = NULL;
                                                                             }
         ;
 
 
 
 
-ObraInfo : AtributosObra RelacoesObra                                      {
-                                                                                asprintf(&$$, "<table>\n<tr>\n<th>Atributo</th>\n<th>Valor</th>\n</tr>%s</table>", $1);
-                                                                            }
-            ;
 
-AtributosObra : AtributosObra AtributoObra                                  {
-                                                                                asprintf(&$$, "%s\n%s", $1, $2);
-                                                                                listaAtributos = g_slist_append(listaAtributos, ats);
-                                                                            }
-                | %empty                                                    {
-                                                                                    $$ = "";
-                                                                            }
-          ;
+
+ObraInformacoes : ObraInformacoes  ObraInformacao
+                | %empty
+                ; 
+
+ObraInformacao : AtributoObra 
+               | RelacaoObra
+               ;
 
 AtributoObra : TipoAtributoObra '=' VALOR                                   {   
+                                                                                char* linhaTabela;
+                                                                                asprintf(&linhaTabela, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", $1, $3);
+                                                                                listaAtributos = g_slist_append(listaAtributos, linhaTabela);
                                                                                 asprintf(&$$, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", $1, $3);
                                                                                 ats = malloc(sizeof(struct atributoStruct));
                                                                                 ats->atribNome = $1;  
@@ -437,7 +453,7 @@ TipoAtributoObra : NOME                                                         
 
 
 
-Evento : EVENTOKEYWORD VALOR '{' EventoInfo '}'                             {   
+Evento : EVENTOKEYWORD VALOR '{' EventoInformacoes '}'                             {   
                                                                                 gboolean naoExistia = g_hash_table_insert(eventosEncontrados, $2, $2);
                                                                                 if(naoExistia == FALSE){
                                                                                     char * mensagemErro;
@@ -446,7 +462,8 @@ Evento : EVENTOKEYWORD VALOR '{' EventoInfo '}'                             {
                                                                                 }    
 
                                                                                 writeDotEvento($2);
-                                                                                writeHtmlEvento($2, $4);
+                                                                                writeHtmlEvento($2);
+                                                                                listaAtributos = NULL;
                                                                                 listaExpoe = NULL;
                                                                                 listaVendidos = NULL;                                                                              
                                                                             }
@@ -455,21 +472,18 @@ Evento : EVENTOKEYWORD VALOR '{' EventoInfo '}'                             {
 
 
 
-EventoInfo : AtributosEvento RelacoesEvento                                 {
-                                                                                asprintf(&$$, "<table>\n<tr>\n<th>Atributo</th>\n<th>Valor</th>\n</tr>%s</table>", $1);
-                                                                            }
-            ;
+EventoInformacoes : EventoInformacoes  EventoInformacao
+                | %empty
+                ; 
 
-AtributosEvento : AtributosEvento AtributoEvento                            {
-                                                                                asprintf(&$$, "%s\n%s", $1, $2);
-                                                                                listaAtributos = g_slist_append(listaAtributos, ats);
-                                                                            }
-                | %empty                                                    {
-                                                                                    $$ = "";
-                                                                            }
-          ;
+EventoInformacao : AtributoEvento 
+                 | RelacaoEvento
+                 ;
 
 AtributoEvento : TipoAtributoEvento '=' VALOR                               { 
+                                                                                char* linhaTabela;
+                                                                                asprintf(&linhaTabela, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", $1, $3);
+                                                                                listaAtributos = g_slist_append(listaAtributos, linhaTabela);
                                                                                 asprintf(&$$, "<tr>\n<td>%s</td>\n<td>%s</td>\n</tr>", $1, $3);
                                                                                 ats = malloc(sizeof(struct atributoStruct));
                                                                                 ats->atribNome = $1;  
@@ -485,15 +499,8 @@ TipoAtributoEvento : TIPO                                                      {
 
 
 
-Relacoes : Relacoes Relacao                                                 {
-                                                                                
-                                                                            }
-         | %empty                                                           {
-                                                                                
-                                                                            }
-         ;
 
-Relacao : ENSINOU '=' '{' ListaEntidades '}'                                {   
+RelacaoArtista : ENSINOU '=' '{' ListaEntidades '}'                                {   
                                                                                 GSList * l = g_slist_copy(listaRelacoesTemp);
                                                                                 artistasEsperados = g_slist_concat(artistasEsperados, l);
                                                                                 listaEnsinou = g_slist_concat(listaEnsinou, listaRelacoesTemp);
@@ -525,13 +532,7 @@ Relacao : ENSINOU '=' '{' ListaEntidades '}'                                {
                                                                             }
         ;
 
-RelacoesObra : RelacoesObra RelacaoObra                                     {
-                                                                                
-                                                                            }
-             | %empty                                                       {
-                                                                                
-                                                                            }
-             ;
+
 
 RelacaoObra : EXPOSTA '=' '{' ListaEntidades '}'                            {   
                                                                                 GSList * l = g_slist_copy(listaRelacoesTemp);
@@ -553,13 +554,7 @@ RelacaoObra : EXPOSTA '=' '{' ListaEntidades '}'                            {
             																}
             ;
 
-RelacoesEvento : RelacoesEvento RelacaoEvento                               {
-                                                                                
-                                                                            }
-             | %empty                                                       {
-                                                                                
-                                                                            }
-             ;
+
 
 RelacaoEvento : EXPOE '=' '{' ListaEntidades '}'                            {   
                                                                                 GSList * l = g_slist_copy(listaRelacoesTemp);
