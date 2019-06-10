@@ -165,17 +165,17 @@
             free(linhaTabela);
         }
         if(artAtrib->pais != NULL){
-            asprintf(&linhaTabela, "<tr>\n<th>%s</th>\n<td>%s</td>\n</tr>", "Pais", artAtrib->pais);
+            asprintf(&linhaTabela, "<tr>\n<th>%s</th>\n<td>%s</td>\n</tr>", "País", artAtrib->pais);
 			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
             free(linhaTabela);
         }
         if(artAtrib->seculo != NULL){
-            asprintf(&linhaTabela, "<tr>\n<th>%s</th>\n<td>%s</td>\n</tr>", "Seculo", artAtrib->seculo);
+            asprintf(&linhaTabela, "<tr>\n<th>%s</th>\n<td>%s</td>\n</tr>", "Século", artAtrib->seculo);
 			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
             free(linhaTabela);
         }
         if(artAtrib->periodo != NULL){
-            asprintf(&linhaTabela, "<tr>\n<th>%s</th>\n<td>%s</td>\n</tr>", "Periodo", artAtrib->periodo);
+            asprintf(&linhaTabela, "<tr>\n<th>%s</th>\n<td>%s</td>\n</tr>", "Período", artAtrib->periodo);
 			fwrite(linhaTabela, 1, strlen(linhaTabela), fd);
             free(linhaTabela);
         }
